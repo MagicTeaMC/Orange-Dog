@@ -26,7 +26,7 @@ import com.jagrosh.jmusicbot.commands.music.*;
 import com.jagrosh.jmusicbot.commands.owner.*;
 import com.jagrosh.jmusicbot.entities.Prompt;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
-import com.jagrosh.jmusicbot.utils.OtherUtil;
+// import com.jagrosh.jmusicbot.utils.OtherUtil;
 import java.awt.Color;
 import java.util.Arrays;
 import javax.security.auth.login.LoginException;
@@ -110,6 +110,7 @@ public class JMusicBot
 
                         new ForceRemoveCmd(bot),
                         new ForceskipCmd(bot),
+                        new skipSegCmd(bot),
                         new MoveTrackCmd(bot),
                         new PauseCmd(bot),
                         new PlaynextCmd(bot),
