@@ -22,7 +22,7 @@ public class skipSegCmd extends MusicCommand {
 
         super(bot);
         this.name = "skipsegment";
-        this.help = "Skips to the end of the current non-music segment if it is logged in the SponsorBlock database";
+        this.help = "從 SponsorBlock 資料庫獲取無音樂片段並且自動跳過";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.botPermissions = new Permission[] { Permission.MESSAGE_EMBED_LINKS };
     }
@@ -115,7 +115,7 @@ public class skipSegCmd extends MusicCommand {
                 con.setRequestMethod("GET");
                 int responsecode = con.getResponseCode();
                 if (responsecode == 200) {
-                    event.replySuccess("Found non-music segments in database!");
+                    event.replySuccess("成功獲取資料！");
                     musicSegment = true;
                     BufferedReader in = new BufferedReader(new InputStreamReader(
                             con.getInputStream()));
@@ -151,9 +151,9 @@ public class skipSegCmd extends MusicCommand {
                 long reply = connectToAPI(videoId, handler, event);
 
                 if (reply == -2) {
-                    event.replyError("No segments found!");
+                    event.replyError("找不到資料！");
                 } else if (reply == -1) {
-                    event.replyError("Cannot skip here because no segment is currently playing!");
+                    event.replyError("沒有必須跳過的片段！");
                 } else {
                     handler.getPlayer().getPlayingTrack().setPosition(reply);
 
@@ -161,11 +161,11 @@ public class skipSegCmd extends MusicCommand {
                     long minutes = absSeconds / 60;
                     long modSeconds = absSeconds % 60;
                     String formattedSeconds = String.format("%02d", modSeconds);
-                    String msg = "Skipping ahead to " + minutes + ":" + formattedSeconds + "!";
+                    String msg = "自動跳到 " + minutes + ":" + formattedSeconds + "處！";
                     event.replySuccess(msg);
                 }
             } else {
-                event.replyError("Could not get video ID!"); //should only come up on non-youtube links
+                event.replyError("無法獲取影片ID！"); //should only come up on non-youtube links
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
