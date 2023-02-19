@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "main"
+      - "feat/Spotify-support"
 
 jobs:
   pre-release:
