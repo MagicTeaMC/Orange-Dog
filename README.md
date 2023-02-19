@@ -1,3 +1,4 @@
+(readme file written in chinese)
 # Orange-Dog
 基於 jmusicbot 花月翻譯版本進行改進，以符合我的需求。  
 當然，非常歡迎您使用 PR 做出貢獻！  
