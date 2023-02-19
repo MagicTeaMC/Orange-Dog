@@ -22,12 +22,6 @@ jobs:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
-      - name: Download lavaplayer-natives-extra from GitHub
-        run: |
-          mkdir -p ~/.m2/repository/com/sedmelluq/lavaplayer-natives-extra/1.3.13
-          wget "https://github.com/sedmelluq/lavaplayer/files/6563671/lavaplayer-natives-extra-1.3.13.zip" -O ~/.m2/repository/com/sedmelluq/lavaplayer-natives-extra/1.3.13/tmp.zip
-          unzip -o ~/.m2/repository/com/sedmelluq/lavaplayer-natives-extra/1.3.13/tmp.zip -d ~/.m2/repository/com/sedmelluq/lavaplayer-natives-extra/1.3.13/
-          rm ~/.m2/repository/com/sedmelluq/lavaplayer-natives-extra/1.3.13/tmp.zip
       - name: Build Jar file
         run: mvn clean install
       - name: Get commit SHA
@@ -36,7 +30,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "prelatest"
+          automatic_release_tag: "latest"
           prerelease: true
-          title: "Commit ${{ env.GITHUB_SHA_SHORT }}"
-          files: "target/*-All.jar"
+          title: 'Orange Dog  ver/"${{ env.GITHUB_SHA_SHORT }}"'
+          files: "target/*.jar"
