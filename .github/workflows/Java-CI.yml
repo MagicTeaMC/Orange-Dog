@@ -30,7 +30,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
+          automatic_release_tag: "${{ env.GITHUB_SHA_SHORT }}"
           prerelease: true
-          title: 'Orange Dog  ver/"${{ env.GITHUB_SHA_SHORT }}"'
+          title: 'Orange Dog dev-${{ env.GITHUB_SHA_SHORT }}'
           files: "target/*.jar"
