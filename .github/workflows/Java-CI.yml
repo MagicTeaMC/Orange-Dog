@@ -31,7 +31,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ env.GITHUB_SHA_SHORT }}"
+          automatic_release_tag: "feat/SponsorBlock-API/${{ env.GITHUB_SHA_SHORT }}"
           prerelease: true
-          title: 'Orange Dog dev-${{ env.GITHUB_SHA_SHORT }}'
+          title: 'Orange Dog (feat/SponsorBlock-API) dev-${{ env.GITHUB_SHA_SHORT }}'
           files: "target/*.jar"
