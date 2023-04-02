@@ -27,12 +27,12 @@
     <dependency>
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
-      <version>4.4.0_350</version>
+      <version>4.4.1_353</version>
     </dependency>
     <dependency>
       <groupId>com.github.walkyst</groupId>
       <artifactId>lavaplayer-fork</artifactId>
-      <version>1.3.99.2</version>
+      <version>1.4.0</version>
     </dependency>
     <dependency>
       <groupId>com.jagrosh</groupId>
