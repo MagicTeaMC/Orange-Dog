@@ -9,7 +9,7 @@
 - [ ] play 的時候可直接指定開始撥放的時間
 - [ ] 反應改為使用按鈕的方式
 - [ ] 支援 Spotify
-- [ ] 啟用 SponsorBlock API
+- [x] 透過 SponsorBlock API 跳過影片部分片段
 ## 使用到的 code
 Jmusicbot: https://github.com/jagrosh/MusicBot  
 花月: https://github.com/wolf-yuan-6115/flowermoon  
