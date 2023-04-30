@@ -35,7 +35,7 @@ public class SeekCmd extends MusicCommand {
             if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
                 if (!event.getMember().getRoles().contains(settings.getRole(event.getGuild()))) {
                     if (currentTrack.getUserData(Long.class) != event.getAuthor().getIdLong()) {
-                        event.replyError("You cannot seek **" + currentTrack.getInfo().title + "** because you didn't add it!");
+                        event.replyError("只有點播 **" + currentTrack.getInfo().title + "** 的用戶才能跳轉歌曲時間");
                         return;
                     }
                 }
@@ -58,19 +58,19 @@ public class SeekCmd extends MusicCommand {
             } else if (Pattern.matches("^([0-5]\\d)$", args)) {
                 seconds = Integer.parseInt(args.substring(0, 2));
             } else {
-                event.replyError("Invalid seek!");
+                event.replyError("時間格式錯誤！ 正確格式：`<HH:MM:SS>|<MM:SS>|<SS>`");
                 return;
             }
 
             seek_milliseconds += hours * 3600000 + minutes * 60000 + seconds * 1000;
             if (seek_milliseconds <= track_duration) {
                 handler.getPlayer().getPlayingTrack().setPosition(seek_milliseconds);
-                event.replySuccess("Successfully seeked!");
+                event.replySuccess("跳轉成功！");
             } else {
-                event.replyError("Current track is not that long!");
+                event.replyError("目前歌曲沒有所指定的時間！");
             }
         } else {
-            event.replyError("This track is not seekable.");
+            event.replyError("此歌曲無法跳轉。");
         }
     }
 }
