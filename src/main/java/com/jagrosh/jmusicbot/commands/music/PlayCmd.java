@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import com.jagrosh.jmusicbot.utils.TimeUtil;
 
 /**
  *
@@ -103,20 +104,18 @@ public class PlayCmd extends MusicCommand
             this.event = event;
             this.ytsearch = ytsearch;
         }
-        
-        private void loadSingle(AudioTrack track, AudioPlaylist playlist)
-        {
-            if(bot.getConfig().isTooLong(track))
-            {
-                m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" 這個歌曲 (**"+track.getInfo().title+"**) 太長了( `"
-                        +FormatUtil.formatTime(track.getDuration())+"` > `"+FormatUtil.formatTime(bot.getConfig().getMaxSeconds()*1000)+"` )")).queue();
+
+        private void loadSingle(AudioTrack track, AudioPlaylist playlist) {
+            if (bot.getConfig().isTooLong(track)) {
+                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 這個歌曲 (**" + track.getInfo().title + "**) 太長了 `"
+                        + TimeUtil.formatTime(track.getDuration()) + "` > `" + TimeUtil.formatTime(bot.getConfig().getMaxSeconds() * 1000) + "`")).queue();
                 return;
             }
-            AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-            int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor()))+1;
-            String addMsg = FormatUtil.filter(event.getClient().getSuccess()+" 加入 **"+track.getInfo().title
-                    +"** (`"+FormatUtil.formatTime(track.getDuration())+"`) "+(pos==0?"且即將開始播放":" 到播放清單的第 "+pos+"序列"));
-            if(playlist==null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
+            AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+            int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
+            String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " 加入 **" + track.getInfo().title
+                    + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 到播放清單的第 "+pos+"序列"));
+            if (playlist == null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
                 m.editMessage(addMsg).queue();
             else
             {

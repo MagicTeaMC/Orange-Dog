@@ -31,6 +31,7 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import com.jagrosh.jmusicbot.utils.TimeUtil;
 
 /**
  *
@@ -112,7 +113,7 @@ public class QueueCmd extends MusicCommand
                     .append(ah.getPlayer().getPlayingTrack().getInfo().title).append("**\n");
         }
         return FormatUtil.filter(sb.append(success).append(" 播放序列 | ").append(songslength)
-                .append(" 首歌 | `").append(FormatUtil.formatTime(total)).append("` ")
+                .append(" 首歌 | `").append(TimeUtil.formatTime(total)).append("` ")
                 .append(repeatmode.getEmoji() != null ? "| "+repeatmode.getEmoji() : "").toString());
     }
 }

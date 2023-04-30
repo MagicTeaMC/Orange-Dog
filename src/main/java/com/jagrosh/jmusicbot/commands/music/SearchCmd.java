@@ -30,6 +30,7 @@ import com.jagrosh.jmusicbot.commands.MusicCommand;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
+import com.jagrosh.jmusicbot.utils.TimeUtil;
 
 /**
  *
@@ -83,18 +84,16 @@ public class SearchCmd extends MusicCommand
         }
         
         @Override
-        public void trackLoaded(AudioTrack track)
-        {
-            if(bot.getConfig().isTooLong(track))
-            {
-                m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" 這首歌曲 (**"+track.getInfo().title+"**) 比可播放的總時間還長: `"
-                        +FormatUtil.formatTime(track.getDuration())+"` > `"+bot.getConfig().getMaxTime()+"`")).queue();
+        public void trackLoaded(AudioTrack track) {
+            if (bot.getConfig().isTooLong(track)) {
+                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 這首歌曲 (**" + track.getInfo().title + "**) 比可播放的時間還長： `"
+                        + TimeUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`")).queue();
                 return;
             }
             AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
             int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor()))+1;
             m.editMessage(FormatUtil.filter(event.getClient().getSuccess()+" 已新增 **"+track.getInfo().title
-                    +"** (`"+FormatUtil.formatTime(track.getDuration())+"`) "+(pos==0 ? "稍後即將開始播放" 
+                    +"** (`"+TimeUtil.formatTime(track.getDuration())+"`) "+(pos==0 ? "稍後即將開始播放"
                         : " 到位置 "+pos))).queue();
         }
 
@@ -110,13 +109,13 @@ public class SearchCmd extends MusicCommand
                         if(bot.getConfig().isTooLong(track))
                         {
                             event.replyWarning("這首歌曲 (**"+track.getInfo().title+"**) 比可播放的總時間還長: `"
-                                    +FormatUtil.formatTime(track.getDuration())+"` > `"+bot.getConfig().getMaxTime()+"`");
+                                    +TimeUtil.formatTime(track.getDuration())+"` > `"+bot.getConfig().getMaxTime()+"`");
                             return;
                         }
                         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
                         int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor()))+1;
                         event.replySuccess("已新增 **" + FormatUtil.filter(track.getInfo().title)
-                                + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos==0 ? "稍後即將開始播放" 
+                                + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos==0 ? "稍後即將開始播放"
                                     : " 到位置 "+pos));
                     })
                     .setCancel((msg) -> {})
@@ -125,7 +124,7 @@ public class SearchCmd extends MusicCommand
             for(int i=0; i<4 && i<playlist.getTracks().size(); i++)
             {
                 AudioTrack track = playlist.getTracks().get(i);
-                builder.addChoices("`["+FormatUtil.formatTime(track.getDuration())+"]` [**"+track.getInfo().title+"**]("+track.getInfo().uri+")");
+                builder.addChoices("`["+TimeUtil.formatTime(track.getDuration())+"]` [**"+track.getInfo().title+"**]("+track.getInfo().uri+")");
             }
             builder.build().display(m);
         }

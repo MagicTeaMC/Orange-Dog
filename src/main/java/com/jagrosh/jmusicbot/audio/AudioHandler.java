@@ -39,6 +39,7 @@ import net.dv8tion.jda.api.audio.AudioSendHandler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import com.jagrosh.jmusicbot.utils.TimeUtil;
 
 /**
  *
@@ -235,7 +236,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
             double progress = (double)audioPlayer.getPlayingTrack().getPosition()/track.getDuration();
             eb.setDescription((audioPlayer.isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI)
                     + " "+FormatUtil.progressBar(progress)
-                    + " `[" + FormatUtil.formatTime(track.getPosition()) + "/" + FormatUtil.formatTime(track.getDuration()) + "]` "
+                    + " `[" + TimeUtil.formatTime(track.getPosition()) + "/" + TimeUtil.formatTime(track.getDuration()) + "]` "
                     + FormatUtil.volumeIcon(audioPlayer.getVolume()));
             
             return mb.setEmbed(eb.build()).build();
@@ -266,7 +267,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
                 title = track.getInfo().uri;
             return "**"+title+"** ["+(userid==0 ? "自動播放" : "<@"+userid+">")+"]"
                     + "\n" + (audioPlayer.isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI) + " "
-                    + "[" + FormatUtil.formatTime(track.getDuration()) + "] "
+                    + "[" + TimeUtil.formatTime(track.getDuration()) + "] "
                     + FormatUtil.volumeIcon(audioPlayer.getVolume());
         }
         else return "沒有音樂正在播放 " + JMusicBot.STOP_EMOJI + " " + FormatUtil.volumeIcon(audioPlayer.getVolume());

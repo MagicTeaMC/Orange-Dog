@@ -17,7 +17,7 @@ package com.jagrosh.jmusicbot.audio;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.jagrosh.jmusicbot.queue.Queueable;
-import com.jagrosh.jmusicbot.utils.FormatUtil;
+import com.jagrosh.jmusicbot.utils.TimeUtil;
 import net.dv8tion.jda.api.entities.User;
 
 /**
@@ -53,6 +53,6 @@ public class QueuedTrack implements Queueable
     @Override
     public String toString() 
     {
-        return "`[" + FormatUtil.formatTime(track.getDuration()) + "]` **" + track.getInfo().title + "** - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
+        return "`[" + TimeUtil.formatTime(track.getDuration()) + "]` **" + track.getInfo().title + "** - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
     }
 }

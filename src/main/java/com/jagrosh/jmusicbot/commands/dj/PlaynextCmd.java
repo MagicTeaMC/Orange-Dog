@@ -21,6 +21,7 @@ import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.commands.DJCommand;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
+import com.jagrosh.jmusicbot.utils.TimeUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
@@ -73,19 +74,17 @@ public class PlaynextCmd extends DJCommand
             this.event = event;
             this.ytsearch = ytsearch;
         }
-        
-        private void loadSingle(AudioTrack track)
-        {
-            if(bot.getConfig().isTooLong(track))
-            {
-                m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" 這首歌曲 (**"+track.getInfo().title+"**) 比可播放的時間還長: `"
-                        +FormatUtil.formatTime(track.getDuration())+"` > `"+FormatUtil.formatTime(bot.getConfig().getMaxSeconds()*1000)+"`")).queue();
+
+        private void loadSingle(AudioTrack track) {
+            if (bot.getConfig().isTooLong(track)) {
+                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 這首歌曲 (**" + track.getInfo().title + "**) 比可播放的時間還長： `"
+                        + TimeUtil.formatTime(track.getDuration()) + "` > `" + TimeUtil.formatTime(bot.getConfig().getMaxSeconds() * 1000) + "`")).queue();
                 return;
             }
             AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
             int pos = handler.addTrackToFront(new QueuedTrack(track, event.getAuthor()))+1;
             String addMsg = FormatUtil.filter(event.getClient().getSuccess()+" 已加入 **"+track.getInfo().title
-                    +"** (`"+FormatUtil.formatTime(track.getDuration())+"`) "+(pos==0?"，且在稍後即將開始播放":"到序列的第"+pos+"個位置"));
+                    +"** (`"+TimeUtil.formatTime(track.getDuration())+"`) "+(pos==0?"，且在稍後即將開始播放":"到序列的第"+pos+"個位置"));
             m.editMessage(addMsg).queue();
         }
         
