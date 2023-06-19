@@ -40,7 +40,7 @@ public class BotConfig
     private final static String END_TOKEN = "/// END OF JMUSICBOT CONFIG ///";
 
     private Path path = null;
-    private String token, prefix, altprefix, helpWord, playlistsFolder,
+    private String token, prefix, altprefix, helpWord, playlistsFolder, logLevel,
             successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji;
     private boolean stayInChannel, songInGame, npImages, updatealerts, useEval, dbots;
     private long owner, maxSeconds, aloneTimeUntilStop;
@@ -92,6 +92,7 @@ public class BotConfig
             songInGame = config.getBoolean("songinstatus");
             npImages = config.getBoolean("npimages");
             updatealerts = config.getBoolean("updatealerts");
+            logLevel = config.getString("loglevel");
             useEval = config.getBoolean("eval");
             maxSeconds = config.getLong("maxtime");
             aloneTimeUntilStop = config.getLong("alonetimeuntilstop");
@@ -279,6 +280,11 @@ public class BotConfig
     public boolean useUpdateAlerts()
     {
         return updatealerts;
+    }
+
+    public String getLogLevel()
+    {
+        return logLevel;
     }
 
     public boolean useEval()

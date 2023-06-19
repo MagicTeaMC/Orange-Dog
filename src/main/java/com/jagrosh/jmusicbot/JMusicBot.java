@@ -15,6 +15,7 @@
  */
 package com.jagrosh.jmusicbot;
 
+import ch.qos.logback.classic.Level;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jdautilities.examples.command.*;
@@ -71,6 +72,10 @@ public class JMusicBot
         config.load();
         if(!config.isValid())
             return;
+
+        // set log level from config
+        ((ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(
+                Level.toLevel(config.getLogLevel(), Level.INFO));
 
         // set up the listener
         EventWaiter waiter = new EventWaiter();
