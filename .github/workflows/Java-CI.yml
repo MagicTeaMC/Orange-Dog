@@ -33,4 +33,4 @@ jobs:
           automatic_release_tag: "${{ env.GITHUB_SHA_SHORT }}"
           prerelease: true
           title: 'Orange Dog dev-${{ env.GITHUB_SHA_SHORT }}'
-          files: "target/*.jar"
+          
