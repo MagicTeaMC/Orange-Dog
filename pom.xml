@@ -47,7 +47,7 @@
     <dependency>
       <groupId>com.github.jagrosh</groupId>
       <artifactId>JLyrics</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>01cf4ee</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>

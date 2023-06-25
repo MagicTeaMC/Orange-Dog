@@ -63,7 +63,7 @@ public class AboutCommand extends Command {
 
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(event.isFromType(ChannelType.TEXT) ? event.getGuild().getSelfMember().getColor() : this.color);
-        builder.setAuthor(event.getSelfUser().getName() + " 的個人資料！", null, event.getSelfUser().getAvatarUrl());
+        builder.setAuthor(event.getSelfUser().getName() + " 的資訊！", null, event.getSelfUser().getAvatarUrl());
         boolean join = event.getClient().getServerInvite() != null && !event.getClient().getServerInvite().isEmpty();
         boolean inv = !this.oauthLink.isEmpty();
         String invline = "\n" + (join ? "Join my server [`here`](" + event.getClient().getServerInvite() + ")" : (inv ? "請 " : "")) + (inv ? (join ? ", 或 " : "") + "[`邀請`](" + this.oauthLink + ") 我到你的伺服器" : "") + "!";
@@ -81,9 +81,8 @@ public class AboutCommand extends Command {
         }
         else
         {
-            builder.addField("狀態", (event.getClient()).getTotalGuilds() + " 個伺服器\n於分片 " + (event.getJDA().getShardInfo().getShardId() + 1)
-                    + "/" + event.getJDA().getShardInfo().getShardTotal() + "上", true);
-            builder.addField("此分片有", event.getJDA().getUsers().size() + " 個使用者\n" + event.getJDA().getGuilds().size() + " 個伺服器", true);
+            builder.addField("狀態", (event.getClient()).getTotalGuilds() + " 個伺服器", true);
+            builder.addField("正在服務", event.getJDA().getUsers().size() + " 個使用者\n" + event.getJDA().getGuilds().size() + " 個伺服器", true);
             builder.addField("", event.getJDA().getTextChannels().size() + " 個文字頻道\n" + event.getJDA().getVoiceChannels().size() + " 個語音頻道", true);
         }
         builder.setFooter("最後一次重新啟動", null);
