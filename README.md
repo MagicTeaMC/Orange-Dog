@@ -11,7 +11,7 @@
 - [ ] 反應改為使用按鈕的方式
 - [ ] 支援 Spotify
 - [x] 透過 SponsorBlock API 跳過影片部分片段
-- [ ] 支援 YouTube 中有年齡限制的影片
+- [x] 支援 YouTube 中有年齡限制的影片
 ## 使用到的 code
 Jmusicbot: https://github.com/jagrosh/MusicBot  
 花月: https://github.com/wolf-yuan-6115/flowermoon  
