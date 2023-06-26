@@ -10,10 +10,6 @@ import net.dv8tion.jda.api.Permission;
 
 import java.util.regex.Pattern;
 
-
-/**
- * @author Whew., Inc.
- */
 public class SeekCmd extends MusicCommand {
     public SeekCmd(Bot bot) {
         super(bot);
@@ -65,7 +61,7 @@ public class SeekCmd extends MusicCommand {
             seek_milliseconds += hours * 3600000 + minutes * 60000 + seconds * 1000;
             if (seek_milliseconds <= track_duration) {
                 handler.getPlayer().getPlayingTrack().setPosition(seek_milliseconds);
-                event.replySuccess("跳轉成功！");
+                event.replySuccess("成功跳轉到 " + args + "！");
             } else {
                 event.replyError("目前歌曲沒有所指定的時間！");
             }
