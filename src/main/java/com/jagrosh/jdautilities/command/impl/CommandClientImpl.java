@@ -165,7 +165,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
                 }
             }
             User owner = event.getJDA().getUserById(ownerId);
-                builder.append("\n\n如果你需要額外的協助，請聯絡 **").append(owner.getName()).append("**#").append(owner.getDiscriminator()).append("\n\n支援群組：https://discord.gg/uQ4UXANnP2");
+                builder.append("\n\n如果你需要額外的協助，請聯絡 **").append(owner.getName()).append("**\n\n支援群組：https://discord.gg/uQ4UXANnP2");
             event.replyInDm(builder.toString(), unused -> {
                 if (event.isFromType(ChannelType.TEXT))
                     event.reactSuccess();

@@ -64,29 +64,45 @@ public class AboutCommand extends Command {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(event.isFromType(ChannelType.TEXT) ? event.getGuild().getSelfMember().getColor() : this.color);
         builder.setAuthor(event.getSelfUser().getName() + " 的資訊！", null, event.getSelfUser().getAvatarUrl());
-        boolean join = event.getClient().getServerInvite() != null && !event.getClient().getServerInvite().isEmpty();
-        boolean inv = !this.oauthLink.isEmpty();
-        String invline = "\n" + (join ? "Join my server [`here`](" + event.getClient().getServerInvite() + ")" : (inv ? "請 " : "")) + (inv ? (join ? ", 或 " : "") + "[`邀請`](" + this.oauthLink + ") 我到你的伺服器" : "") + "!";
         String author = event.getJDA().getUserById(event.getClient().getOwnerId()) == null ? "<@" + event.getClient().getOwnerId() + ">" : event.getJDA().getUserById(event.getClient().getOwnerId()).getName();
         StringBuilder descr = (new StringBuilder()).append("你好！ 我是 **").append(event.getSelfUser().getName()).append("**。 ").append(this.IS_AUTHOR ? "使用Java寫成" : "我的擁有者是").append(" **").append(author).append("** ，本機器人依賴於 [JDA Utilities](https://github.com/JDA-Applications/JDA-Utilities) (").append(JDAUtilitiesInfo.VERSION).append(") 以及 [JDA wrapper](https://github.com/DV8FromTheWorld/JDA) (").append(JDAInfo.VERSION).append(")\n\n請輸入 `").append(event.getClient().getTextualPrefix()).append(event.getClient().getHelpWord())
-                .append("` 來查看我的指令!").append(join || inv ? invline : "");
+                .append("` 來查看我的指令!").append("\n請 [`邀請`](" + this.oauthLink + ")"+ "我到你的伺服器!");
             descr.append("\n").append(event.getClient().getSuccess().startsWith("<") ? REPLACEMENT_ICON : event.getClient().getSuccess()).append(" ");
 
         builder.setDescription(descr);
-        if (event.getJDA().getShardInfo() == null)
-        {
-            builder.addField("狀態", event.getJDA().getGuilds().size() + " 個伺服器\n1 個分片", true);
-            builder.addField("使用者", event.getJDA().getUsers().size() + " 個用戶\n" + event.getJDA().getGuilds().stream().mapToInt(g -> g.getMembers().size()).sum() + " total", true);
-            builder.addField("頻道", event.getJDA().getTextChannels().size() + " 個文字頻道\n" + event.getJDA().getVoiceChannels().size() + " 個語音頻道", true);
-        }
-        else
-        {
-            builder.addField("狀態", (event.getClient()).getTotalGuilds() + " 個伺服器", true);
-            builder.addField("正在服務", event.getJDA().getUsers().size() + " 個使用者\n" + event.getJDA().getGuilds().size() + " 個伺服器", true);
-            builder.addField("", event.getJDA().getTextChannels().size() + " 個文字頻道\n" + event.getJDA().getVoiceChannels().size() + " 個語音頻道", true);
-        }
+        event.getJDA().getShardInfo();
+        builder.addField("狀態", "CPU 使用率 " + getCpuUsage() + "\n記憶體使用率 " + getRamUsage(), true);
+        builder.addField("正在服務", event.getJDA().getUsers().size() + " 個使用者\n" + event.getJDA().getGuilds().size() + " 個伺服器", true);
+        builder.addField("", event.getJDA().getTextChannels().size() + " 個文字頻道\n" + event.getJDA().getVoiceChannels().size() + " 個語音頻道", true);
         builder.setFooter("最後一次重新啟動", null);
         builder.setTimestamp(event.getClient().getStartTime());
         event.reply(builder.build());
+    }
+
+    private String getCpuUsage() {
+
+        com.sun.management.OperatingSystemMXBean osBean = (com.sun.management.OperatingSystemMXBean)
+                java.lang.management.ManagementFactory.getOperatingSystemMXBean();
+
+        double cpuUsage = osBean.getSystemCpuLoad() * 100;
+
+        String cpuUsageString = String.format("%.2f%%", cpuUsage);
+
+        return cpuUsageString;
+    }
+
+    private String getRamUsage() {
+
+        Runtime runtime = Runtime.getRuntime();
+
+        long usedMemory = runtime.totalMemory() - runtime.freeMemory();
+
+        long totalMemory = runtime.totalMemory();
+
+        double ramUsage = (double) usedMemory / totalMemory * 100;
+
+        String ramUsageString = String.format("%.2f%%", ramUsage);
+
+        return ramUsageString;
     }
 }
