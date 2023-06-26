@@ -161,7 +161,7 @@ public class skipSegCmd extends MusicCommand {
                     long minutes = absSeconds / 60;
                     long modSeconds = absSeconds % 60;
                     String formattedSeconds = String.format("%02d", modSeconds);
-                    String msg = "自動跳到 " + minutes + ":" + formattedSeconds + "處！";
+                    String msg = "自動跳到 `"+ minutes + ":" + formattedSeconds + "`！";
                     event.replySuccess(msg);
                 }
             } else {
