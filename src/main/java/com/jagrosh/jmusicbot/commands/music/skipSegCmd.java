@@ -25,6 +25,8 @@ public class skipSegCmd extends MusicCommand {
         this.help = "從 SponsorBlock 資料庫獲取無音樂片段並且自動跳過";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.botPermissions = new Permission[] { Permission.MESSAGE_EMBED_LINKS };
+        this.beListening = true;
+        this.bePlaying = true;
     }
 
     /**
