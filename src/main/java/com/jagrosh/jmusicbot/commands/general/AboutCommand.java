@@ -71,8 +71,8 @@ public class AboutCommand extends Command {
 
         builder.setDescription(descr);
         event.getJDA().getShardInfo();
-        builder.addField("狀態", "CPU 使用率 " + getCpuUsage() + "\n記憶體使用率 " + getRamUsage(), true);
-        builder.addField("正在服務", event.getJDA().getUsers().size() + " 個使用者\n" + event.getJDA().getGuilds().size() + " 個伺服器", true);
+        builder.addField("主機狀態", "CPU 使用率 " + getCpuUsage() + "\n記憶體使用率 " + getRamUsage(), true);
+        builder.addField("統計資訊", event.getJDA().getUsers().size() + " 位使用者\n" + event.getJDA().getGuilds().size() + " 個伺服器", true);
         builder.addField("", event.getJDA().getTextChannels().size() + " 個文字頻道\n" + event.getJDA().getVoiceChannels().size() + " 個語音頻道", true);
         builder.setFooter("最後一次重新啟動", null);
         builder.setTimestamp(event.getClient().getStartTime());

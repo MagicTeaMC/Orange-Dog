@@ -32,17 +32,21 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.internal.utils.Checks;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import okhttp3.*;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.Reader;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Consumer;
@@ -150,26 +154,27 @@ public class CommandClientImpl implements CommandClient, EventListener {
         this.compiler = compiler;
         this.manager = manager;
         this.helpConsumer = helpConsumer == null ? (event) -> {
-            StringBuilder builder = new StringBuilder("**" + event.getSelfUser().getName() + "** 有這些指令:\n");
+            EmbedBuilder builder = new EmbedBuilder()
+                    .setTitle(event.getSelfUser().getName() + " 的指令列表")
+                    .setColor(event.isFromType(ChannelType.TEXT) ? event.getGuild().getSelfMember().getColor() : Color.BLUE);
+
             Category category = null;
             for (Command command : commands) {
                 if (!command.isHidden() && (!command.isOwnerCommand() || event.isOwner())) {
                     if (!Objects.equals(category, command.getCategory())) {
                         category = command.getCategory();
-                        builder.append("\n\n  __").append(category == null ? "No Category" : category.getName())
-                                .append("__:\n");
+                        builder.appendDescription("\n\n**" + (category == null ? "No Category" : category.getName()) + "**:\n");
                     }
-                    builder.append("\n`").append(textPrefix).append(prefix == null ? " " : "").append(command.getName())
-                            .append(command.getArguments() == null ? "`" : " " + command.getArguments() + "`")
-                            .append(" - ").append(command.getHelp());
+                    builder.appendDescription("`" + textPrefix + (prefix == null ? " " : "") + command.getName() +
+                            (command.getArguments() == null ? "`" : " " + command.getArguments() + "`") +
+                            " - " + command.getHelp() + "\n");
                 }
             }
+
             User owner = event.getJDA().getUserById(ownerId);
-                builder.append("\n\n如果你需要額外的協助，請聯絡 **").append(owner.getName()).append("**\n\n支援群組：https://discord.gg/uQ4UXANnP2");
-            event.replyInDm(builder.toString(), unused -> {
-                if (event.isFromType(ChannelType.TEXT))
-                    event.reactSuccess();
-            }, t -> event.replyWarning("無法發送私訊給你，請檢查你的私訊是否開啟!"));
+            builder.appendDescription("\n\n支援群組：https://discord.gg/uQ4UXANnP2 \n\n維護者：**" + owner.getName() + "**");
+
+            event.getChannel().sendMessage(builder.build()).queue();
         } : helpConsumer;
 
         // Load commands
