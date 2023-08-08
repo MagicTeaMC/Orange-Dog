@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.maoyue</groupId>
   <artifactId>ODBot</artifactId>
-  <version>1.0.6-SNAPSHOT</version>
+  <version>1.0.7-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <repositories>
@@ -34,9 +34,9 @@
       <version>4.4.1_353</version>
     </dependency>
     <dependency>
-      <groupId>com.github.walkyst</groupId>
-      <artifactId>lavaplayer-fork</artifactId>
-      <version>1.4.2</version>
+      <groupId>dev.arbjerg</groupId>
+      <artifactId>lavaplayer</artifactId>
+      <version>2.0.0</version>
     </dependency>
     <dependency>
       <groupId>com.jagrosh</groupId>
