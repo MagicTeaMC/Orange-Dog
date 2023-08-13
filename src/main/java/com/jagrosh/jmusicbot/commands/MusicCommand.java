@@ -20,6 +20,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -46,6 +47,12 @@ public abstract class MusicCommand extends Command
     protected void execute(CommandEvent event) 
     {
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
+        String authorId = event.getAuthor().getId();
+        boolean authorCannotUseCommands = settings.getBlacklistedUsers().contains(authorId);
+        if (authorCannotUseCommands) {
+            event.replyError(event.getAuthor().getAsTag() + " 在黑名單中，所以無法使用此指令！");
+            return;
+        }
         TextChannel tchannel = settings.getTextChannel(event.getGuild());
         if(tchannel!=null && !event.getTextChannel().equals(tchannel))
         {

@@ -19,8 +19,12 @@ import com.jagrosh.jdautilities.command.GuildSettingsManager;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import net.dv8tion.jda.api.entities.Guild;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
@@ -29,13 +33,11 @@ import org.slf4j.LoggerFactory;
  *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
-public class SettingsManager implements GuildSettingsManager
-{
+public class SettingsManager implements GuildSettingsManager<Settings> {
     private final static double SKIP_RATIO = .55;
-    private final HashMap<Long,Settings> settings;
+    private final HashMap<Long, Settings> settings;
 
-    public SettingsManager()
-    {
+    public SettingsManager() {
         this.settings = new HashMap<>();
         try {
             JSONObject loadedSettings = new JSONObject(new String(Files.readAllBytes(OtherUtil.getPath("serversettings.json"))));
@@ -46,72 +48,79 @@ public class SettingsManager implements GuildSettingsManager
                 if (!o.has("repeat_mode") && o.has("repeat") && o.getBoolean("repeat"))
                     o.put("repeat_mode", RepeatMode.ALL);
 
-
+                List<String> blacklistedUsers = convertJSONArrayToStringList(o.getJSONArray("blacklisted_users"));
                 settings.put(Long.parseLong(id), new Settings(this,
-                        o.has("text_channel_id") ? o.getString("text_channel_id")            : null,
-                        o.has("voice_channel_id")? o.getString("voice_channel_id")           : null,
-                        o.has("dj_role_id")      ? o.getString("dj_role_id")                 : null,
-                        o.has("volume")          ? o.getInt("volume")                        : 100,
-                        o.has("default_playlist")? o.getString("default_playlist")           : null,
-                        o.has("repeat_mode")     ? o.getEnum(RepeatMode.class, "repeat_mode"): RepeatMode.OFF,
-                        o.has("prefix")          ? o.getString("prefix")                     : null,
-                        o.has("skip_ratio")      ? o.getDouble("skip_ratio")                 : SKIP_RATIO));
+                        o.has("text_channel_id") ? o.getString("text_channel_id") : null,
+                        o.has("voice_channel_id") ? o.getString("voice_channel_id") : null,
+                        o.has("dj_role_id") ? o.getString("dj_role_id") : null,
+                        o.has("volume") ? o.getInt("volume") : 100,
+                        o.has("default_playlist") ? o.getString("default_playlist") : null,
+                        o.has("repeat_mode") ? o.getEnum(RepeatMode.class, "repeat_mode") : RepeatMode.OFF,
+                        o.has("prefix") ? o.getString("prefix") : null,
+                        o.has("skip_ratio") ? o.getDouble("skip_ratio") : SKIP_RATIO,
+                        o.has("blacklisted_users") ? blacklistedUsers : new ArrayList<String>(0))
+                );
             });
-        } catch(IOException | JSONException e) {
-            LoggerFactory.getLogger("設定").warn("無法讀取伺服器設定(此狀況會發生有可能為目前還沒有該檔案): "+e);
+        } catch (IOException | JSONException e) {
+            LoggerFactory.getLogger("Settings").warn("Failed to load server settings (this is normal if no settings have been set yet): " + e);
         }
     }
-    
+
     /**
      * Gets non-null settings for a Guild
-     * 
+     *
      * @param guild the guild to get settings for
      * @return the existing settings, or new settings for that guild
      */
     @Override
-    public Settings getSettings(Guild guild)
-    {
+    public Settings getSettings(Guild guild) {
         return getSettings(guild.getIdLong());
     }
-    
-    public Settings getSettings(long guildId)
-    {
+
+    public Settings getSettings(long guildId) {
         return settings.computeIfAbsent(guildId, id -> createDefaultSettings());
     }
-    
-    private Settings createDefaultSettings()
-    {
-        return new Settings(this, 0, 0, 0, 100, null, RepeatMode.OFF, null, SKIP_RATIO);
+
+    private Settings createDefaultSettings() {
+        return new Settings(this, 0, 0, 0, 100, null, RepeatMode.OFF, null, SKIP_RATIO, new ArrayList<String>(0));
     }
-    
-    protected void writeSettings()
-    {
+
+    protected void writeSettings() {
         JSONObject obj = new JSONObject();
         settings.keySet().stream().forEach(key -> {
             JSONObject o = new JSONObject();
             Settings s = settings.get(key);
-            if(s.textId!=0)
+            if (s.textId != 0)
                 o.put("text_channel_id", Long.toString(s.textId));
-            if(s.voiceId!=0)
+            if (s.voiceId != 0)
                 o.put("voice_channel_id", Long.toString(s.voiceId));
-            if(s.roleId!=0)
+            if (s.roleId != 0)
                 o.put("dj_role_id", Long.toString(s.roleId));
-            if(s.getVolume()!=100)
-                o.put("volume",s.getVolume());
-            if(s.getDefaultPlaylist() != null)
+            if (s.getVolume() != 100)
+                o.put("volume", s.getVolume());
+            if (s.getDefaultPlaylist() != null)
                 o.put("default_playlist", s.getDefaultPlaylist());
-            if(s.getRepeatMode()!=RepeatMode.OFF)
+            if (s.getRepeatMode() != RepeatMode.OFF)
                 o.put("repeat_mode", s.getRepeatMode());
-            if(s.getPrefix() != null)
+            if (s.getPrefix() != null)
                 o.put("prefix", s.getPrefix());
-            if(s.getSkipRatio() != SKIP_RATIO)
+            if (s.getSkipRatio() != SKIP_RATIO)
                 o.put("skip_ratio", s.getSkipRatio());
+            o.put("blacklisted_users", s.getBlacklistedUsers());
             obj.put(Long.toString(key), o);
         });
         try {
             Files.write(OtherUtil.getPath("serversettings.json"), obj.toString(4).getBytes());
-        } catch(IOException ex){
-            LoggerFactory.getLogger("設定").warn("寫入設定失敗: "+ex);
+        } catch (IOException ex) {
+            LoggerFactory.getLogger("Settings").warn("Failed to write to file: " + ex);
         }
+    }
+
+    private List<String> convertJSONArrayToStringList(JSONArray arr) {
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < arr.length(); i++) {
+            list.add(arr.getString(i));
+        }
+        return list;
     }
 }
