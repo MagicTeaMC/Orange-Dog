@@ -72,6 +72,7 @@ public class PlaylistCmd extends OwnerCommand
         protected void execute(CommandEvent event) 
         {
             String pname = event.getArgs().replaceAll("\\s+", "_");
+            pname = pname.replaceAll("[*?|\\/\":<>]", "");
             if(bot.getPlaylistLoader().getPlaylist(pname)==null)
             {
                 try
