@@ -40,19 +40,19 @@ public class SeekCmd extends MusicCommand {
             String args = event.getArgs();
             long track_duration = handler.getPlayer().getPlayingTrack().getDuration();
             int seek_milliseconds = 0;
-            int seconds;
+            int seconds = 0;
             int minutes = 0;
             int hours = 0;
 
-            if (Pattern.matches("^([0-9]\\d):([0-5]\\d):([0-5]\\d)$", args)) {
-                hours = Integer.parseInt(args.substring(0, 2));
-                minutes = Integer.parseInt(args.substring(3, 5));
-                seconds = Integer.parseInt(args.substring(6));
-            } else if (Pattern.matches("^([0-5]\\d):([0-5]\\d)$", args)) {
-                minutes = Integer.parseInt(args.substring(0, 2));
-                seconds = Integer.parseInt(args.substring(3, 5));
-            } else if (Pattern.matches("^([0-5]\\d)$", args)) {
-                seconds = Integer.parseInt(args.substring(0, 2));
+            if (Pattern.matches("^([0-9]{1,2}):([0-5]\\d):([0-5]\\d)$", args)) {
+                hours = Integer.parseInt(args.split(":")[0]);
+                minutes = Integer.parseInt(args.split(":")[1]);
+                seconds = Integer.parseInt(args.split(":")[2]);
+            } else if (Pattern.matches("^([0-9]{1,2}):([0-5]\\d)$", args)) {
+                minutes = Integer.parseInt(args.split(":")[0]);
+                seconds = Integer.parseInt(args.split(":")[1]);
+            } else if (Pattern.matches("^([0-9]{1,2})$", args)) {
+                seconds = Integer.parseInt(args);
             } else {
                 event.replyError("時間格式錯誤！ 正確格式：`<HH:MM:SS>|<MM:SS>|<SS>`");
                 return;
@@ -61,7 +61,9 @@ public class SeekCmd extends MusicCommand {
             seek_milliseconds += hours * 3600000 + minutes * 60000 + seconds * 1000;
             if (seek_milliseconds <= track_duration) {
                 handler.getPlayer().getPlayingTrack().setPosition(seek_milliseconds);
-                event.replySuccess("成功跳轉到 `" + args + "`！");
+                String responseTime = hours > 0 ? String.format("%d:%02d:%02d", hours, minutes, seconds)
+                        : String.format("%02d:%02d", minutes, seconds);
+                event.replySuccess("成功跳轉到 `" + responseTime + "`！");
             } else {
                 event.replyError("目前歌曲沒有所指定的時間！");
             }

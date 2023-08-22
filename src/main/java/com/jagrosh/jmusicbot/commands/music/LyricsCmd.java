@@ -58,7 +58,7 @@ public class LyricsCmd extends MusicCommand
         }
         else
             title = event.getArgs();
-        // event.getChannel().sendTyping().queue();
+        event.getChannel().sendTyping().queue();
         client.getLyrics(title).thenAccept(lyrics -> 
         {
             if(lyrics == null)
