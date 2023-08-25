@@ -25,11 +25,6 @@
         <updatePolicy>always</updatePolicy>
       </snapshots>
     </repository>
-    <repository>
-      <id>chew</id>
-      <name>m2-chew</name>
-      <url>https://m2.chew.pro/releases</url>
-    </repository>
   </repositories>
 
   <dependencies>
@@ -44,10 +39,9 @@
       <version>2.0.1</version>
     </dependency>
     <dependency>
-      <groupId>pw.chew</groupId>
-      <artifactId>jda-chewtils</artifactId>
-      <version>1.24.1</version>
-      <scope>compile</scope>
+      <groupId>com.jagrosh</groupId>
+      <artifactId>jda-utilities</artifactId>
+      <version>3.0.5</version>
       <type>pom</type>
     </dependency>
     <dependency>
