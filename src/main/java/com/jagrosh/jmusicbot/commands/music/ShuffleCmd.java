@@ -40,7 +40,7 @@ public class ShuffleCmd extends MusicCommand
     public void doCommand(CommandEvent event) 
     {
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-        int s = handler.getQueue().shuffle(event.getAuthor().getIdLong());
+        int s = handler.getQueue().shuffle(event.getAuthor().getIdLong(), false);
         switch (s) 
         {
             case 0:
@@ -50,7 +50,7 @@ public class ShuffleCmd extends MusicCommand
                 event.replyWarning("序列裡面只有一首歌曲!");
                 break;
             default:
-                event.replySuccess("成功打亂 "+s+" 首歌曲");
+                event.replySuccess("成功打亂 " + s + " 首歌曲");
                 break;
         }
     }
