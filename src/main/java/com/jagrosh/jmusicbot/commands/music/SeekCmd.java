@@ -58,6 +58,12 @@ public class SeekCmd extends MusicCommand {
                 return;
             }
 
+            minutes += seconds / 60;
+            seconds = seconds % 60;
+
+            hours += minutes / 60;
+            minutes = minutes % 60;
+
             seek_milliseconds += hours * 3600000 + minutes * 60000 + seconds * 1000;
             if (seek_milliseconds <= track_duration) {
                 handler.getPlayer().getPlayingTrack().setPosition(seek_milliseconds);
