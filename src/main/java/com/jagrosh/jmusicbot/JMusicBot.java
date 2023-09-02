@@ -126,6 +126,7 @@ public class JMusicBot
                         new PingCommand(),
                         new SettingsCmd(bot),
 
+                        new DownloadCmd(bot),
                         new LyricsCmd(bot),
                         new NowplayingCmd(bot),
                         new PlayCmd(bot),
