@@ -147,6 +147,7 @@ public class JMusicBot
                         new RepeatCmd(bot),
                         new ShuffleAllCmd(bot),
                         new SkiptoCmd(bot),
+                        new SpeedCmd(bot),
                         new StopCmd(bot),
                         new VolumeCmd(bot),
 

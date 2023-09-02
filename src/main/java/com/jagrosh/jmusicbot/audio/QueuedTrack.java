@@ -15,9 +15,9 @@
  */
 package com.jagrosh.jmusicbot.audio;
 
+import com.jagrosh.jmusicbot.utils.TimeUtil;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.jagrosh.jmusicbot.queue.Queueable;
-import com.jagrosh.jmusicbot.utils.TimeUtil;
 import net.dv8tion.jda.api.entities.User;
 
 /**
@@ -27,32 +27,32 @@ import net.dv8tion.jda.api.entities.User;
 public class QueuedTrack implements Queueable
 {
     private final AudioTrack track;
-    
+
     public QueuedTrack(AudioTrack track, User owner)
     {
-        this(track, new RequestMetadata(owner));
+        this(track, owner.getIdLong());
     }
-    
-    public QueuedTrack(AudioTrack track, RequestMetadata rm)
+
+    public QueuedTrack(AudioTrack track, long owner)
     {
         this.track = track;
-        this.track.setUserData(rm);
+        this.track.setUserData(owner);
     }
-    
+
     @Override
-    public long getIdentifier() 
+    public long getIdentifier()
     {
-        return track.getUserData(RequestMetadata.class).getOwner();
+        return track.getUserData(Long.class);
     }
-    
+
     public AudioTrack getTrack()
     {
         return track;
     }
 
     @Override
-    public String toString() 
+    public String toString()
     {
-        return "`[" + TimeUtil.formatTime(track.getDuration()) + "]` **" + track.getInfo().title + "** - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
+        return "`[" + TimeUtil.formatTime(track.getDuration()) + "]` **" + track.getInfo().title + "** - <@" + track.getUserData(Long.class) + ">";
     }
 }
