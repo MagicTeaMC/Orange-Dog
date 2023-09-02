@@ -49,7 +49,7 @@ public class SearchCmd extends MusicCommand
         this.name = "search";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.arguments = "<搜尋字串>";
-        this.help = "在YouTube上搜尋";
+        this.help = "在 YouTube 上搜尋";
         this.beListening = true;
         this.bePlaying = false;
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};

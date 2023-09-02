@@ -33,7 +33,7 @@ public class SetdjCmd extends AdminCommand
     public SetdjCmd(Bot bot)
     {
         this.name = "setdj";
-        this.help = "設定伺服器專用的DJ身分組";
+        this.help = "設定伺服器專用的 DJ 身分組";
         this.arguments = "<身分組名稱|NONE>";
         this.aliases = bot.getConfig().getAliases(this.name);
     }
