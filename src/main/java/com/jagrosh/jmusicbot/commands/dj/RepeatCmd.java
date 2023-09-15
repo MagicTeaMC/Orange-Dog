@@ -32,7 +32,7 @@ public class RepeatCmd extends DJCommand
         super(bot);
         this.name = "repeat";
         this.help = "切換重複播放功能";
-        this.arguments = "[off|all|單首]";
+        this.arguments = "<off|all|single>";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.guildOnly = true;
     }
