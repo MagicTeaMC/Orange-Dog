@@ -53,7 +53,7 @@ public class SkipCmd extends MusicCommand
                     .filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened()).count();
             String msg;
             if(handler.getVotes().contains(event.getAuthor().getId())) {
-                msg = event.getClient().getWarning()+" 你已經投過跳過 `[";
+                msg = event.getClient().getWarning()+" 你已經投過票了 `[";
             } else
             {
                 msg = event.getClient().getSuccess()+" 投票跳過 `[";

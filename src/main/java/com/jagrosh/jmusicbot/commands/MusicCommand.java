@@ -66,7 +66,7 @@ public abstract class MusicCommand extends Command
         bot.getPlayerManager().setUpHandler(event.getGuild()); // no point constantly checking for this later
         if(bePlaying && !((AudioHandler)event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA()))
         {
-            event.reply(event.getClient().getError()+" 必須要有一個音樂正在播放！");
+            event.reply(event.getClient().getError()+" 必須正在播放音樂！");
             return;
         }
         if(beListening)
@@ -77,7 +77,7 @@ public abstract class MusicCommand extends Command
             GuildVoiceState userState = event.getMember().getVoiceState();
             if(!userState.inVoiceChannel() || userState.isDeafened() || (current!=null && !userState.getChannel().equals(current)))
             {
-                event.replyError("你必須在 "+(current==null ? "一個語音頻道" : current.getAsMention())+" 才能使用這個指令！");
+                event.replyError("你必須在 "+(current==null ? "語音頻道中" : current.getAsMention())+" 才能使用這個指令！");
                 return;
             }
 
@@ -96,7 +96,7 @@ public abstract class MusicCommand extends Command
                 }
                 catch(PermissionException ex) 
                 {
-                    event.reply(event.getClient().getError()+" 我無法連結至 "+userState.getChannel().getAsMention()+" 語音頻道！");
+                    event.reply(event.getClient().getError()+" 我無法加入 "+userState.getChannel().getAsMention()+" ！");
                     return;
                 }
             }
