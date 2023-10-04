@@ -12,14 +12,10 @@ plugins {
 repositories {
     mavenLocal()
     jcenter()
+    mavenCentral()
     maven {
         url = uri("https://m2.dv8tion.net/releases")
     }
-
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
-
     maven {
         url = uri("https://jitpack.io")
     }
