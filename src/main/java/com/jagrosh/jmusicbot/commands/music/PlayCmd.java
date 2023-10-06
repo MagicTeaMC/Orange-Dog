@@ -111,24 +111,26 @@ public class PlayCmd extends MusicCommand
         }
 
         private void loadSingle(AudioTrack track, AudioPlaylist playlist) {
+            String trackTitle = track.getInfo().title.equals("Unknown title") ? "未知的歌曲" : track.getInfo().title;
+            String trackartist = track.getInfo().author.equals("Unknown artist") ? "未知的頻道" : track.getInfo().title;
             if (bot.getConfig().isTooLong(track)) {
-                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 這個歌曲 (**" + track.getInfo().title + "**) 超過可播放時間限制 `"
+                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 這個歌曲 (**" + trackTitle + "**) 超過可播放時間限制 `"
                         + TimeUtil.formatTime(track.getDuration()) + "` > `" + TimeUtil.formatTime(bot.getConfig().getMaxSeconds() * 1000) + "`")).queue();
                 return;
             }
             AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
             EmbedBuilder mb = new EmbedBuilder();
-            mb.setAuthor(track.getInfo().author);
-            mb.setTitle(track.getInfo().title, track.getInfo().uri);
+            mb.setAuthor(trackartist);
+            mb.setTitle(trackTitle, track.getInfo().uri);
             mb.setColor(Color.red);
             if(track instanceof YoutubeAudioTrack) mb.setImage("https://img.youtube.com/vi/"+track.getIdentifier()+"/mqdefault.jpg");
 
             int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
-            String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " 加入 **" + track.getInfo().title
+            String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " 加入 **" + trackTitle
                     + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+"序列"));
             if (playlist == null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
                 try {
-                    m.editMessage(event.getClient().getSuccess() + " 加入 **" + track.getInfo().title + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+"序列")).queue();
+                    m.editMessage(event.getClient().getSuccess() + " 加入 **" + trackTitle + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+"序列")).queue();
                     m.editMessageEmbeds(mb.build()).queue();
                 } catch (Exception e) {
                     e.printStackTrace();
