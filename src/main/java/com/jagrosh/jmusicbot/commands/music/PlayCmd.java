@@ -112,7 +112,7 @@ public class PlayCmd extends MusicCommand
 
         private void loadSingle(AudioTrack track, AudioPlaylist playlist) {
             String trackTitle = track.getInfo().title.equals("Unknown title") ? "未知的歌曲" : track.getInfo().title;
-            String trackartist = track.getInfo().author.equals("Unknown artist") ? "未知的頻道" : track.getInfo().title;
+            String trackartist = track.getInfo().author.equals("Unknown artist") ? "未知的頻道" : track.getInfo().author;
             if (bot.getConfig().isTooLong(track)) {
                 m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 這個歌曲 (**" + trackTitle + "**) 超過可播放時間限制 `"
                         + TimeUtil.formatTime(track.getDuration()) + "` > `" + TimeUtil.formatTime(bot.getConfig().getMaxSeconds() * 1000) + "`")).queue();
