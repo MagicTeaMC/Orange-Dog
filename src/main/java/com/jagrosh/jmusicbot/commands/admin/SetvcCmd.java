@@ -56,7 +56,7 @@ public class SetvcCmd extends AdminCommand
         {
             List<VoiceChannel> list = FinderUtil.findVoiceChannels(event.getArgs(), event.getGuild());
             if(list.isEmpty())
-                event.reply(event.getClient().getWarning()+" 沒有符合 \""+event.getArgs()+"\" 的語音頻道搜尋結果");
+                event.reply(event.getClient().getWarning()+" 找不到名為 \""+event.getArgs()+"\" 的語音頻道");
             else if (list.size()>1)
                 event.reply(event.getClient().getWarning()+FormatUtil.listOfVChannels(list, event.getArgs()));
             else

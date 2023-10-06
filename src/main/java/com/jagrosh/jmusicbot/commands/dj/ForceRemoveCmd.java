@@ -55,7 +55,7 @@ public class ForceRemoveCmd extends DJCommand
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (handler.getQueue().isEmpty())
         {
-            event.replyError("沒有任何歌曲在序列中!");
+            event.replyError("序列中沒有任何歌曲!");
             return;
         }
 
