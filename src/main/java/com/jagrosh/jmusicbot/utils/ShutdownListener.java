@@ -21,18 +21,23 @@ public class ShutdownListener extends Thread {
             String input = scanner.nextLine();
             if ("stop".equalsIgnoreCase(input)) {
                 System.out.println("Stopping bot...");
-                jda.getGuilds().stream().forEach(g ->
-                {
-                    g.getAudioManager().closeAudioConnection();
-                    AudioHandler ah = (AudioHandler)g.getAudioManager().getSendingHandler();
-                    if(ah!=null)
+                if (jda != null) {
+                    jda.getGuilds().stream().forEach(g ->
                     {
-                        ah.stopAndClear();
-                        ah.getPlayer().destroy();
-                        nowplaying.updateTopic(g.getIdLong(), ah, true);
-                    }
-                });
-                jda.shutdown();
+                        g.getAudioManager().closeAudioConnection();
+                        AudioHandler ah = (AudioHandler)g.getAudioManager().getSendingHandler();
+                        if(ah!=null)
+                        {
+                            ah.stopAndClear();
+                            ah.getPlayer().destroy();
+                            nowplaying.updateTopic(g.getIdLong(), ah, true);
+                        }
+                    });
+                }
+                if (jda != null)
+                {
+                    jda.shutdown();
+                }
                 System.exit(0);
             }
         }

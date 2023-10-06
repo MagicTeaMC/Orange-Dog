@@ -31,6 +31,8 @@ import com.jagrosh.jmusicbot.settings.SettingsManager;
 import java.awt.Color;
 import java.util.Arrays;
 import javax.security.auth.login.LoginException;
+
+import com.jagrosh.jmusicbot.utils.ShutdownListener;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -57,7 +59,26 @@ public class JMusicBot
      */
     public static void main(String[] args)
     {
-        System.out.println("\n" +
+        ShutdownListener listener = new ShutdownListener();
+        listener.start();
+        String[] pattern = {
+                "     ____  _____  ____        _   ",
+                "    / __ \\|  __ \\|  _ \\      | |  ",
+                "   | |  | | |  | | |_) | ___ | |_ ",
+                "   | |  | | |  | |  _ < / _ \\| __|",
+                "   | |__| | |__| | |_) | (_) | |_ ",
+                "    \\____/|_____/|____/ \\___/ \\__|",
+                "   By MagicTeaMC(Maoyue)",
+                "   GitHub: https://github.com/MagicTeaMC/Orange-Dog",
+                "   Discord: https://discord.gg/uQ4UXANnP2"
+        };
+
+        for (String line : pattern) {
+            System.out.println(line);
+        }
+        System.out.println
+                (
+                "\n" +
                 "╔════════════════════════════════════════════════════════════════╗\n" +
                 "║                          _ooOoo_                               ║\n" +
                 "║                         o8888888o                              ║ \n" +
@@ -79,7 +100,8 @@ public class JMusicBot
                 "║                           `=---='                              ║ \n" +
                 "║      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ║\n" +
                 "║            佛祖保佑       永不崩潰     永不抱錯                ║\n" +
-                "╚════════════════════════════════════════════════════════════════╝\n");
+                "╚════════════════════════════════════════════════════════════════╝\n"
+                );
         // startup log
         Logger log = LoggerFactory.getLogger("啟動");
 
