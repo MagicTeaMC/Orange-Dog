@@ -28,7 +28,7 @@ public class Prompt
     private final String title;
     private final String noguiMessage;
 
-    private final boolean nogui = true; // 直接設為 true，並且是 final
+    private final boolean nogui = true;
     private boolean noprompt;
     private Scanner scanner;
 
