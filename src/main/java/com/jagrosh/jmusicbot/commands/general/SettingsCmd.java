@@ -65,7 +65,7 @@ public class SettingsCmd extends Command
                                                 : "**"+s.getRepeatMode().getUserFriendlyName()+"**")
                         + "\n預設播放清單: " + (s.getDefaultPlaylist() == null ? "*未設置*" : "**" + s.getDefaultPlaylist() + "**")
                         )
-                .setFooter(event.getJDA().getGuilds().size() + " 個伺服器 | 在"
+                .setFooter(event.getJDA().getGuilds().size() + " 個伺服器 | 在 "
                         + event.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inVoiceChannel()).count()
                         + " 個語音頻道中", null);
         event.getChannel().sendMessage(builder.setEmbed(ebuilder.build()).build()).queue();
