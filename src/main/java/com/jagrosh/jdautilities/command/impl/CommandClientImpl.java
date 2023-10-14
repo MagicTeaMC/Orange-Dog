@@ -173,6 +173,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
 
             User owner = event.getJDA().getUserById(ownerId);
             builder.appendDescription("\n\n支援群組：https://discord.gg/uQ4UXANnP2 \n\n維護者：**" + owner.getName() + "**");
+            builder.setColor(Color.CYAN);
 
             event.getChannel().sendMessage(builder.build()).queue();
         } : helpConsumer;

@@ -39,6 +39,7 @@ public abstract class DJCommand extends MusicCommand
         String authorId = event.getAuthor().getId();
         boolean authorCannotUseCommands = settings.getBlacklistedUsers().contains(authorId);
         if (authorCannotUseCommands) {
+            // TODO: Support new user name
             event.replyError(event.getAuthor().getAsTag() + " 在黑名單中，所以無法使用此指令！");
             return false;
         }
