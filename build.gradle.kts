@@ -27,7 +27,7 @@ dependencies {
     api("com.jagrosh:jda-utilities:3.0.5")
     api("com.github.MagicTeaMC:MaoLyrics:8f6ee88")
     api("ch.qos.logback:logback-classic:1.4.11")
-    api("com.typesafe:config:1.4.2")
+    api("com.typesafe:config:1.4.3")
     api("org.jsoup:jsoup:1.16.1")
     api("com.squareup.okhttp3:okhttp:4.11.0")
     api("com.google.code.gson:gson:2.10.1")
