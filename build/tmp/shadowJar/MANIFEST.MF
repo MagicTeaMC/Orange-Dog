@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: com.jagrosh.jmusicbot.JMusicBot
-Specification-Title: ODBot
-Specification-Version: 1.1.0-SNAPSHOT
-Implementation-Title: ODBot
-Implementation-Version: 1.1.0-SNAPSHOT
-Implementation-Vendor-Id: tw.maoyue
-
