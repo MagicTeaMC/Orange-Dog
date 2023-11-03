@@ -56,6 +56,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     private final long guildId;
     
     private AudioFrame lastFrame;
+    private int retries = 0;
 
     protected AudioHandler(PlayerManager manager, Guild guild, AudioPlayer player)
     {
@@ -157,17 +158,26 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) 
     {
-        RepeatMode repeatMode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
+        final RepeatMode repeatMode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
         // if the track ended normally, and we're in repeat mode, re-add it to the queue
         if(endReason==AudioTrackEndReason.FINISHED && repeatMode != RepeatMode.OFF)
         {
-            QueuedTrack clone = new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class));
+            final QueuedTrack clone = new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class));
             if(repeatMode == RepeatMode.ALL)
                 queue.add(clone);
             else
                 queue.addAt(0, clone);
         }
-        
+
+        if(endReason == AudioTrackEndReason.LOAD_FAILED && retries < 3){
+            System.err.println("Playing track failed, retrying...");
+            retries++;
+            final QueuedTrack clone = new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class));
+            queue.addAt(0, clone);
+        }else{
+            retries = 0;
+        }
+
         if(queue.isEmpty())
         {
             if(!playFromDefault())
