@@ -23,7 +23,8 @@ import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 /**
  *
@@ -52,7 +53,7 @@ public class DebugCmd extends OwnerCommand
         sb.append("系統資訊:");
         for(String key: PROPERTIES)
             sb.append("\n  ").append(key).append(" = ").append(System.getProperty(key));
-        sb.append("\n\n花月資訊:")
+        sb.append("\n\n機器人資訊:")
                 .append("\n  版本 = ").append(OtherUtil.getCurrentVersion())
                 .append("\n  Owner = ").append(bot.getConfig().getOwnerId())
                 .append("\n  Prefix = ").append(bot.getConfig().getPrefix())
@@ -80,8 +81,8 @@ public class DebugCmd extends OwnerCommand
         
         if(event.isFromType(ChannelType.PRIVATE) 
                 || event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ATTACH_FILES))
-            event.getChannel().sendFile(sb.toString().getBytes(), "debug_information.txt").queue();
+            event.getEvent().getChannel().sendFiles(FileUpload.fromData(sb.toString().getBytes(), "debug_information.txt")).queue();
         else
-            event.reply("偵錯資訊: " + sb.toString());
+            event.reply("偵錯資訊: " + sb);
     }
 }

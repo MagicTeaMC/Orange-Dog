@@ -37,7 +37,6 @@ import java.util.concurrent.TimeUnit;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import com.jagrosh.jmusicbot.utils.TimeUtil;

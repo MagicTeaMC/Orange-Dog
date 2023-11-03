@@ -23,13 +23,14 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.GenericEvent;
-import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
+import net.dv8tion.jda.api.events.session.ReadyEvent;
+import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.internal.utils.Checks;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -175,7 +176,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
             builder.appendDescription("\n\n支援群組：https://discord.gg/uQ4UXANnP2 \n\n維護者：**" + owner.getName() + "**");
             builder.setColor(Color.CYAN);
 
-            event.getChannel().sendMessage(builder.build()).queue();
+            event.getChannel().sendMessageEmbeds(builder.build()).queue();
         } : helpConsumer;
 
         // Load commands
@@ -414,8 +415,8 @@ public class CommandClientImpl implements CommandClient, EventListener {
         if (event instanceof MessageReceivedEvent)
             onMessageReceived((MessageReceivedEvent) event);
 
-        else if (event instanceof GuildMessageDeleteEvent && usesLinkedDeletion())
-            onMessageDelete((GuildMessageDeleteEvent) event);
+        else if (event instanceof MessageDeleteEvent && usesLinkedDeletion())
+            onMessageDelete((MessageDeleteEvent) event);
 
         else if (event instanceof GuildJoinEvent) {
             if (((GuildJoinEvent) event).getGuild().getSelfMember().getTimeJoined()
@@ -495,7 +496,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
                 if (listener != null)
                     listener.onCompletedCommand(cevent, null);
                 return; // Help Consumer is done
-            } else if (event.isFromType(ChannelType.PRIVATE) || event.getTextChannel().canTalk()) {
+            } else if (event.isFromType(ChannelType.PRIVATE) || event.getChannel().canTalk()) {
                 String name = parts[0];
                 String args = parts[1] == null ? "" : parts[1];
                 final Command command; // this will be null if it's not a command
@@ -591,7 +592,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
         }
     }
 
-    private void onMessageDelete(GuildMessageDeleteEvent event) {
+    private void onMessageDelete(MessageDeleteEvent event) {
         // We don't need to cover whether or not this client usesLinkedDeletion()
         // because
         // that is checked in onEvent(Event) before this is even called.
@@ -599,8 +600,8 @@ public class CommandClientImpl implements CommandClient, EventListener {
             if (linkMap.contains(event.getMessageIdLong())) {
                 Set<Message> messages = linkMap.get(event.getMessageIdLong());
                 if (messages.size() > 1 && event.getGuild().getSelfMember()
-                        .hasPermission(event.getChannel(), Permission.MESSAGE_MANAGE))
-                    event.getChannel().deleteMessages(messages).queue(unused -> {
+                        .hasPermission(Permission.MESSAGE_MANAGE))
+                    event.getGuildChannel().deleteMessages(messages).queue(unused -> {
                     }, ignored -> {
                     });
                 else if (messages.size() > 0)
