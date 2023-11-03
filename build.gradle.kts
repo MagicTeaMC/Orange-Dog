@@ -1,5 +1,5 @@
 group = "tw.maoyue"
-version = "1.0.10-SNAPSHOT"
+version = "1.1.0-SNAPSHOT"
 description = "ODBot"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
@@ -14,17 +14,14 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        url = uri("https://m2.dv8tion.net/releases")
-    }
-    maven {
         url = uri("https://jitpack.io")
     }
 }
 
 dependencies {
-    api("net.dv8tion:JDA:4.4.1_353")
+    api("net.dv8tion:JDA:5.0.0-beta.17")
     api("dev.arbjerg:lavaplayer:2.0.2")
-    api("com.jagrosh:jda-utilities:3.0.5")
+    api("com.github.DxsSucuk:jda-utilities:fdbc298")
     api("com.github.MagicTeaMC:MaoLyrics:8f6ee88")
     api("ch.qos.logback:logback-classic:1.4.11")
     api("com.typesafe:config:1.4.3")

@@ -37,7 +37,6 @@ import java.util.concurrent.TimeUnit;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import com.jagrosh.jmusicbot.utils.TimeUtil;
@@ -97,6 +96,7 @@ public class PlayCmd extends MusicCommand
         if(args.startsWith("https://open.spotify.com"))
         {
          event.reply(CANCEL + "我們尚未支援來自 Spotify 的音樂");
+         return;
          // TODO: Spotify support
         }
         event.reply(loadingEmoji+" 載入中... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), args, new ResultHandler(m,event,false)));

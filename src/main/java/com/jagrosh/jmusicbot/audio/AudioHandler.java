@@ -34,12 +34,13 @@ import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
 import java.nio.ByteBuffer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import com.jagrosh.jmusicbot.utils.TimeUtil;
+import net.dv8tion.jda.api.utils.messages.MessageEditBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageEditData;
 
 /**
  *
@@ -56,6 +57,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     private final long guildId;
     
     private AudioFrame lastFrame;
+    private int retries = 0;
 
     protected AudioHandler(PlayerManager manager, Guild guild, AudioPlayer player)
     {
@@ -104,7 +106,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     
     public boolean isMusicPlaying(JDA jda)
     {
-        return guild(jda).getSelfMember().getVoiceState().inVoiceChannel() && audioPlayer.getPlayingTrack()!=null;
+        return guild(jda).getSelfMember().getVoiceState().inAudioChannel() && audioPlayer.getPlayingTrack()!=null;
     }
     
     public Set<String> getVotes()
@@ -157,17 +159,26 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) 
     {
-        RepeatMode repeatMode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
+        final RepeatMode repeatMode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
         // if the track ended normally, and we're in repeat mode, re-add it to the queue
         if(endReason==AudioTrackEndReason.FINISHED && repeatMode != RepeatMode.OFF)
         {
-            QueuedTrack clone = new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class));
+            final QueuedTrack clone = new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class));
             if(repeatMode == RepeatMode.ALL)
                 queue.add(clone);
             else
                 queue.addAt(0, clone);
         }
-        
+
+        if(endReason == AudioTrackEndReason.LOAD_FAILED && retries < 3){
+            System.err.println("Playing track failed, retrying...");
+            retries++;
+            final QueuedTrack clone = new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class));
+            queue.addAt(0, clone);
+        }else{
+            retries = 0;
+        }
+
         if(queue.isEmpty())
         {
             if(!playFromDefault())
@@ -196,14 +207,14 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
 
     
     // Formatting
-    public Message getNowPlaying(JDA jda)
+    public MessageEditData getNowPlaying(JDA jda)
     {
         if(isMusicPlaying(jda))
         {
             Guild guild = guild(jda);
             AudioTrack track = audioPlayer.getPlayingTrack();
-            MessageBuilder mb = new MessageBuilder();
-            mb.append(FormatUtil.filter(manager.getBot().getConfig().getSuccess()+" **目前正在 "+guild.getSelfMember().getVoiceState().getChannel().getAsMention()+" 裡播放音樂中...**"));
+            MessageEditBuilder meb = new MessageEditBuilder();
+            meb.setContent(FormatUtil.filter(manager.getBot().getConfig().getSuccess()+" **目前正在 "+guild.getSelfMember().getVoiceState().getChannel().getAsMention()+" 裡播放音樂中...**"));
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(guild.getSelfMember().getColor());
             RequestMetadata rm = getRequestMetadata();
@@ -244,17 +255,17 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
                     + " `[" + TimeUtil.formatTime(track.getPosition()) + "/" + TimeUtil.formatTime(track.getDuration()) + "]` "
                     + FormatUtil.volumeIcon(audioPlayer.getVolume()));
             
-            return mb.setEmbed(eb.build()).build();
+            return meb.setEmbeds(eb.build()).build();
         }
         else return null;
     }
     
-    public Message getNoMusicPlaying(JDA jda)
+    public MessageEditData getNoMusicPlaying(JDA jda)
     {
         Guild guild = guild(jda);
-        return new MessageBuilder()
+        return new MessageEditBuilder()
                 .setContent(FormatUtil.filter(manager.getBot().getConfig().getSuccess()+" **沒有音樂正在播放...**"))
-                .setEmbed(new EmbedBuilder()
+                .setEmbeds(new EmbedBuilder()
                 .setTitle("沒有音樂正在播放...")
                 .setDescription(JMusicBot.STOP_EMOJI+" "+FormatUtil.progressBar(-1)+" "+FormatUtil.volumeIcon(audioPlayer.getVolume()))
                 .setColor(guild.getSelfMember().getColor())

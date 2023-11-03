@@ -22,10 +22,12 @@ import com.jagrosh.jmusicbot.settings.RepeatMode;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import net.dv8tion.jda.api.utils.messages.MessageEditBuilder;
 
 /**
  *
@@ -47,12 +49,10 @@ public class SettingsCmd extends Command
     protected void execute(CommandEvent event) 
     {
         Settings s = event.getClient().getSettingsFor(event.getGuild());
-        MessageBuilder builder = new MessageBuilder()
-                .append(EMOJI + " **")
-                .append(FormatUtil.filter(event.getSelfUser().getName()))
-                .append("** 伺服器設定:");
+        MessageEditBuilder builder = new MessageEditBuilder()
+                .setContent(EMOJI + " **" + FormatUtil.filter(event.getSelfUser().getName())+ "** 伺服器設定:");
         TextChannel tchan = s.getTextChannel(event.getGuild());
-        VoiceChannel vchan = s.getVoiceChannel(event.getGuild());
+        AudioChannel vchan = s.getVoiceChannel(event.getGuild());
         Role role = s.getRole(event.getGuild());
         EmbedBuilder ebuilder = new EmbedBuilder()
                 .setColor(event.getSelfMember().getColor())
@@ -66,9 +66,9 @@ public class SettingsCmd extends Command
                         + "\n預設播放清單: " + (s.getDefaultPlaylist() == null ? "*未設置*" : "**" + s.getDefaultPlaylist() + "**")
                         )
                 .setFooter(event.getJDA().getGuilds().size() + " 個伺服器 | 在 "
-                        + event.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inVoiceChannel()).count()
+                        + event.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inAudioChannel()).count()
                         + " 個語音頻道中", null);
-        event.getChannel().sendMessage(builder.setEmbed(ebuilder.build()).build()).queue();
+        event.getChannel().sendMessage(MessageCreateData.fromEditData(builder.setEmbeds(ebuilder.build()).build())).queue();
     }
     
 }
