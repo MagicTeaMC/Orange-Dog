@@ -1,5 +1,5 @@
 group = "tw.maoyue"
-version = "1.0.10-SNAPSHOT"
+version = "1.1.0-SNAPSHOT"
 description = "ODBot"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
