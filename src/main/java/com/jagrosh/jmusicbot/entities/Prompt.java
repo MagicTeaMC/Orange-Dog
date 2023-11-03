@@ -16,7 +16,6 @@
 package com.jagrosh.jmusicbot.entities;
 
 import java.util.Scanner;
-import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,123 +27,74 @@ public class Prompt
 {
     private final String title;
     private final String noguiMessage;
-    
-    private boolean nogui;
+
+    private final boolean nogui = true;
     private boolean noprompt;
     private Scanner scanner;
-    
+
     public Prompt(String title)
     {
         this(title, null);
     }
-    
+
     public Prompt(String title, String noguiMessage)
     {
-        this(title, noguiMessage, "true".equalsIgnoreCase(System.getProperty("nogui")), "true".equalsIgnoreCase(System.getProperty("noprompt")));
+        this(title, noguiMessage, "true".equalsIgnoreCase(System.getProperty("noprompt")));
     }
-    
-    public Prompt(String title, String noguiMessage, boolean nogui, boolean noprompt)
+
+    private Prompt(String title, String noguiMessage, boolean noprompt)
     {
         this.title = title;
         this.noguiMessage = noguiMessage == null ? "無法開啟視窗，如果您的伺服器或電腦沒有螢幕，請使用 -Dnogui=true 來啟動機器人" : noguiMessage;
-        this.nogui = nogui;
         this.noprompt = noprompt;
     }
-    
+
     public boolean isNoGUI()
     {
         return nogui;
     }
-    
+
     public void alert(Level level, String context, String message)
     {
-        if(nogui)
+        Logger log = LoggerFactory.getLogger(context);
+        switch(level)
         {
-            Logger log = LoggerFactory.getLogger(context);
-            switch(level)
-            {
-                case INFO: 
-                    log.info(message); 
-                    break;
-                case WARNING: 
-                    log.warn(message); 
-                    break;
-                case ERROR: 
-                    log.error(message); 
-                    break;
-                default: 
-                    log.info(message); 
-                    break;
-            }
-        }
-        else
-        {
-            try 
-            {
-                int option = 0;
-                switch(level)
-                {
-                    case INFO: 
-                        option = JOptionPane.INFORMATION_MESSAGE; 
-                        break;
-                    case WARNING: 
-                        option = JOptionPane.WARNING_MESSAGE; 
-                        break;
-                    case ERROR: 
-                        option = JOptionPane.ERROR_MESSAGE; 
-                        break;
-                    default:
-                        option = JOptionPane.PLAIN_MESSAGE;
-                        break;
-                }
-                JOptionPane.showMessageDialog(null, "<html><body><p style='width: 400px;'>"+message, title, option);
-            }
-            catch(Exception e) 
-            {
-                nogui = true;
-                alert(Level.WARNING, context, noguiMessage);
-                alert(level, context, message);
-            }
+            case INFO:
+                log.info(message);
+                break;
+            case WARNING:
+                log.warn(message);
+                break;
+            case ERROR:
+                log.error(message);
+                break;
+            default:
+                log.info(message);
+                break;
         }
     }
-    
+
     public String prompt(String content)
     {
         if(noprompt)
             return null;
-        if(nogui)
+        if(scanner==null)
+            scanner = new Scanner(System.in);
+        try
         {
-            if(scanner==null)
-                scanner = new Scanner(System.in);
-            try
-            {
-                System.out.println(content);
-                if(scanner.hasNextLine())
-                    return scanner.nextLine();
-                return null;
-            }
-            catch(Exception e)
-            {
-                alert(Level.ERROR, title, "無法從命令列讀取輸入");
-                e.printStackTrace();
-                return null;
-            }
+            System.out.println(content);
+            if(scanner.hasNextLine())
+                return scanner.nextLine();
+            return null;
         }
-        else
+        catch(Exception e)
         {
-            try 
-            {
-                return JOptionPane.showInputDialog(null, content, title, JOptionPane.QUESTION_MESSAGE);
-            }
-            catch(Exception e) 
-            {
-                nogui = true;
-                alert(Level.WARNING, title, noguiMessage);
-                return prompt(content);
-            }
+            alert(Level.ERROR, title, "無法從命令列讀取輸入");
+            e.printStackTrace();
+            return null;
         }
     }
-    
+
     public static enum Level
     {
         INFO, WARNING, ERROR;

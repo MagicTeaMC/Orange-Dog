@@ -22,8 +22,9 @@ import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
 /**
@@ -50,7 +51,13 @@ public abstract class MusicCommand extends Command
         String authorId = event.getAuthor().getId();
         boolean authorCannotUseCommands = settings.getBlacklistedUsers().contains(authorId);
         if (authorCannotUseCommands) {
-            event.replyError(event.getAuthor().getAsTag() + " 在黑名單中，所以無法使用此指令！");
+            String authorTag = event.getAuthor().getAsTag();
+            if (authorTag.contains("#0000")) {
+                String modifiedContent = authorTag.substring(0, authorTag.length() - 5);
+                event.replyError(modifiedContent + " 在黑名單中，所以無法使用此指令！");
+            } else {
+                event.replyError(authorTag + " 在黑名單中，所以無法使用此指令！");
+            }
             return;
         }
         TextChannel tchannel = settings.getTextChannel(event.getGuild());
@@ -66,18 +73,18 @@ public abstract class MusicCommand extends Command
         bot.getPlayerManager().setUpHandler(event.getGuild()); // no point constantly checking for this later
         if(bePlaying && !((AudioHandler)event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA()))
         {
-            event.reply(event.getClient().getError()+" 必須要有一個音樂正在播放！");
+            event.reply(event.getClient().getError()+" 必須正在播放音樂！");
             return;
         }
         if(beListening)
         {
-            VoiceChannel current = event.getGuild().getSelfMember().getVoiceState().getChannel();
+            AudioChannel current = event.getGuild().getSelfMember().getVoiceState().getChannel();
             if(current==null)
                 current = settings.getVoiceChannel(event.getGuild());
             GuildVoiceState userState = event.getMember().getVoiceState();
-            if(!userState.inVoiceChannel() || userState.isDeafened() || (current!=null && !userState.getChannel().equals(current)))
+            if(!userState.inAudioChannel() || userState.isDeafened() || (current!=null && !userState.getChannel().equals(current)))
             {
-                event.replyError("你必須在 "+(current==null ? "一個語音頻道" : current.getAsMention())+" 才能使用這個指令！");
+                event.replyError("你必須在 "+(current==null ? "語音頻道中" : current.getAsMention())+" 才能使用這個指令！");
                 return;
             }
 
@@ -88,7 +95,7 @@ public abstract class MusicCommand extends Command
                 return;
             }
 
-            if(!event.getGuild().getSelfMember().getVoiceState().inVoiceChannel())
+            if(!event.getGuild().getSelfMember().getVoiceState().inAudioChannel())
             {
                 try 
                 {
@@ -96,7 +103,7 @@ public abstract class MusicCommand extends Command
                 }
                 catch(PermissionException ex) 
                 {
-                    event.reply(event.getClient().getError()+" 我無法連結至 "+userState.getChannel().getAsMention()+" 語音頻道！");
+                    event.reply(event.getClient().getError()+" 我無法加入 "+userState.getChannel().getAsMention()+" ！");
                     return;
                 }
             }

@@ -16,7 +16,7 @@
 package com.jagrosh.jmusicbot.commands.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeHttpContextFilter;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
@@ -31,7 +31,11 @@ import com.jagrosh.jmusicbot.commands.DJCommand;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
 import com.jagrosh.jmusicbot.playlist.PlaylistLoader.Playlist;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
+
+import java.awt.*;
 import java.util.concurrent.TimeUnit;
+
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
@@ -89,6 +93,12 @@ public class PlayCmd extends MusicCommand
         String args = event.getArgs().startsWith("<") && event.getArgs().endsWith(">") 
                 ? event.getArgs().substring(1,event.getArgs().length()-1) 
                 : event.getArgs().isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : event.getArgs();
+        if(args.startsWith("https://open.spotify.com"))
+        {
+         event.reply(CANCEL + "我們尚未支援來自 Spotify 的音樂");
+         return;
+         // TODO: Spotify support
+        }
         event.reply(loadingEmoji+" 載入中... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), args, new ResultHandler(m,event,false)));
     }
     
@@ -106,17 +116,30 @@ public class PlayCmd extends MusicCommand
         }
 
         private void loadSingle(AudioTrack track, AudioPlaylist playlist) {
+            String trackTitle = track.getInfo().title.equals("Unknown title") ? "未知的歌曲" : track.getInfo().title;
+            String trackartist = track.getInfo().author.equals("Unknown artist") ? "未知的頻道" : track.getInfo().author;
             if (bot.getConfig().isTooLong(track)) {
-                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 這個歌曲 (**" + track.getInfo().title + "**) 超過可播放時間限制 `"
+                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 這個歌曲 (**" + trackTitle + "**) 超過可播放時間限制 `"
                         + TimeUtil.formatTime(track.getDuration()) + "` > `" + TimeUtil.formatTime(bot.getConfig().getMaxSeconds() * 1000) + "`")).queue();
                 return;
             }
             AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+            EmbedBuilder mb = new EmbedBuilder();
+            mb.setAuthor(trackartist);
+            mb.setTitle(trackTitle, track.getInfo().uri);
+            mb.setColor(Color.red);
+            if(track instanceof YoutubeAudioTrack) mb.setImage("https://img.youtube.com/vi/"+track.getIdentifier()+"/mqdefault.jpg");
+
             int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
-            String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " 加入 **" + track.getInfo().title
+            String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " 加入 **" + trackTitle
                     + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+"序列"));
             if (playlist == null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
-                m.editMessage(addMsg).queue();
+                try {
+                    m.editMessage(event.getClient().getSuccess() + " 加入 **" + trackTitle + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+"序列")).queue();
+                    m.editMessageEmbeds(mb.build()).queue();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             else
             {
                 new ButtonMenu.Builder()

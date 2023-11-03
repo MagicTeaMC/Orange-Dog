@@ -16,11 +16,7 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "17"
-      - name: Cache local Maven repository
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
       - name: Build Jar file
-        run: mvn clean install
+        run: ./gradlew clean build shadowJar

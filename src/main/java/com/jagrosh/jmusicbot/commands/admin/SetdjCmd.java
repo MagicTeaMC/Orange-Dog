@@ -33,7 +33,7 @@ public class SetdjCmd extends AdminCommand
     public SetdjCmd(Bot bot)
     {
         this.name = "setdj";
-        this.help = "設定伺服器專用的DJ身分組";
+        this.help = "設定伺服器專用的 DJ 身分組";
         this.arguments = "<身分組名稱|NONE>";
         this.aliases = bot.getConfig().getAliases(this.name);
     }
@@ -56,13 +56,13 @@ public class SetdjCmd extends AdminCommand
         {
             List<Role> list = FinderUtil.findRoles(event.getArgs(), event.getGuild());
             if(list.isEmpty())
-                event.reply(event.getClient().getWarning()+" 沒有符合 \""+event.getArgs()+"\" 的身分組搜尋結果");
+                event.reply(event.getClient().getWarning()+" 找不到名為 \""+event.getArgs()+"\" 的身分組");
             else if (list.size()>1)
                 event.reply(event.getClient().getWarning()+FormatUtil.listOfRoles(list, event.getArgs()));
             else
             {
                 s.setDJRole(list.get(0));
-                event.reply(event.getClient().getSuccess()+" DJ指令現在可以被擁有 **"+list.get(0).getName()+"** 身分組的人使用");
+                event.reply(event.getClient().getSuccess()+"擁有 **"+list.get(0).getName()+"** 身分組的人現在可以使用 DJ 指令");
             }
         }
     }

@@ -43,8 +43,8 @@ public class BlacklistUserCmd extends AdminCommand
     public BlacklistUserCmd(Bot bot)
     {
         this.name = "blacklist";
-        this.help = "讓特定用戶無法使用機器人";
-        this.arguments = "<user>";
+        this.help = "把用戶加入黑名單";
+        this.arguments = "<use|none>";
         this.aliases = bot.getConfig().getAliases(this.name);
     }
 
@@ -53,7 +53,7 @@ public class BlacklistUserCmd extends AdminCommand
     {
         if(event.getArgs().isEmpty())
         {
-            event.replyError("你需要@一個用戶");
+            event.replyError("你需要標記一個用戶");
             return;
         }
         Settings s = event.getClient().getSettingsFor(event.getGuild());
@@ -98,7 +98,7 @@ public class BlacklistUserCmd extends AdminCommand
         } else
         {
             s.setBlacklistedUser(target.getId());
-            event.replySuccess(event.getArgs() + " 已經加入黑名單！");
+            event.replySuccess(event.getArgs() + " 已經被加入黑名單！");
         }
     }
 }

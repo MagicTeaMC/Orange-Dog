@@ -22,7 +22,7 @@ import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.commands.AdminCommand;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 /**
  *
@@ -50,13 +50,13 @@ public class SettcCmd extends AdminCommand
         if(event.getArgs().equalsIgnoreCase("none"))
         {
             s.setTextChannel(null);
-            event.reply(event.getClient().getSuccess()+" 音樂指令現在可以在任何頻道中使用");
+            event.reply(event.getClient().getSuccess()+" 現在可以在任何頻道中使用音樂指令");
         }
         else
         {
             List<TextChannel> list = FinderUtil.findTextChannels(event.getArgs(), event.getGuild());
             if(list.isEmpty())
-                event.reply(event.getClient().getWarning()+" 沒有符合 \""+event.getArgs()+"\" 的文字頻道搜尋結果");
+                event.reply(event.getClient().getWarning()+" 找不到名為 \""+event.getArgs()+"\" 的文字頻道");
             else if (list.size()>1)
                 event.reply(event.getClient().getWarning()+FormatUtil.listOfTChannels(list, event.getArgs()));
             else

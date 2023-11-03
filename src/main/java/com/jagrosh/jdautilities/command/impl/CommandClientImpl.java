@@ -23,13 +23,14 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.GenericEvent;
-import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
+import net.dv8tion.jda.api.events.session.ReadyEvent;
+import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.internal.utils.Checks;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -173,8 +174,9 @@ public class CommandClientImpl implements CommandClient, EventListener {
 
             User owner = event.getJDA().getUserById(ownerId);
             builder.appendDescription("\n\n支援群組：https://discord.gg/uQ4UXANnP2 \n\n維護者：**" + owner.getName() + "**");
+            builder.setColor(Color.CYAN);
 
-            event.getChannel().sendMessage(builder.build()).queue();
+            event.getChannel().sendMessageEmbeds(builder.build()).queue();
         } : helpConsumer;
 
         // Load commands
@@ -413,8 +415,8 @@ public class CommandClientImpl implements CommandClient, EventListener {
         if (event instanceof MessageReceivedEvent)
             onMessageReceived((MessageReceivedEvent) event);
 
-        else if (event instanceof GuildMessageDeleteEvent && usesLinkedDeletion())
-            onMessageDelete((GuildMessageDeleteEvent) event);
+        else if (event instanceof MessageDeleteEvent && usesLinkedDeletion())
+            onMessageDelete((MessageDeleteEvent) event);
 
         else if (event instanceof GuildJoinEvent) {
             if (((GuildJoinEvent) event).getGuild().getSelfMember().getTimeJoined()
@@ -494,7 +496,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
                 if (listener != null)
                     listener.onCompletedCommand(cevent, null);
                 return; // Help Consumer is done
-            } else if (event.isFromType(ChannelType.PRIVATE) || event.getTextChannel().canTalk()) {
+            } else if (event.isFromType(ChannelType.PRIVATE) || event.getChannel().canTalk()) {
                 String name = parts[0];
                 String args = parts[1] == null ? "" : parts[1];
                 final Command command; // this will be null if it's not a command
@@ -531,66 +533,10 @@ public class CommandClientImpl implements CommandClient, EventListener {
                 bodyBuilder.add("shard_id", Integer.toString(jda.getShardInfo().getShardId()))
                         .add("shard_count", Integer.toString(jda.getShardInfo().getShardTotal()));
             }
-
-            Request.Builder builder = new Request.Builder()
-                    .post(bodyBuilder.build())
-                    .url("https://www.carbonitex.net/discord/data/botdata.php");
-
-            client.newCall(builder.build()).enqueue(new Callback() {
-                @Override
-                public void onResponse(Call call, Response response) {
-                    LOG.info("Successfully send information to carbonitex.net");
-                    response.close();
-                }
-
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    LOG.error("Failed to send information to carbonitex.net ", e);
-                }
-            });
-        }
-
-        if (botsKey != null) {
-            JSONObject body = new JSONObject().put("guildCount", jda.getGuilds().size());
-            if (jda.getShardInfo() != null) {
-                body.put("shardId", jda.getShardInfo().getShardId())
-                        .put("shardCount", jda.getShardInfo().getShardTotal());
-            }
-
-            Request.Builder builder = new Request.Builder()
-                    .post(RequestBody.create(MediaType.parse("application/json"), body.toString()))
-                    .url("https://discord.bots.gg/api/v1/bots/" + jda.getSelfUser().getId() + "/stats")
-                    .header("Authorization", botsKey)
-                    .header("Content-Type", "application/json");
-
-            client.newCall(builder.build()).enqueue(new Callback() {
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        LOG.info("Successfully sent information to discord.bots.gg");
-                        try (Reader reader = response.body().charStream()) {
-                            totalGuilds = new JSONObject(new JSONTokener(reader)).getInt("guildCount");
-                        } catch (Exception ex) {
-                            LOG.error("Failed to retrieve bot shard information from discord.bots.gg ", ex);
-                        }
-                    } else
-                        LOG.error("Failed to send information to discord.bots.gg: " + response.body().string());
-                    response.close();
-                }
-
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    LOG.error("Failed to send information to discord.bots.gg ", e);
-                }
-            });
-        } else if (jda.getShardManager() != null) {
-            totalGuilds = (int) jda.getShardManager().getGuildCache().size();
-        } else {
-            totalGuilds = (int) jda.getGuildCache().size();
         }
     }
 
-    private void onMessageDelete(GuildMessageDeleteEvent event) {
+    private void onMessageDelete(MessageDeleteEvent event) {
         // We don't need to cover whether or not this client usesLinkedDeletion()
         // because
         // that is checked in onEvent(Event) before this is even called.
@@ -598,8 +544,8 @@ public class CommandClientImpl implements CommandClient, EventListener {
             if (linkMap.contains(event.getMessageIdLong())) {
                 Set<Message> messages = linkMap.get(event.getMessageIdLong());
                 if (messages.size() > 1 && event.getGuild().getSelfMember()
-                        .hasPermission(event.getChannel(), Permission.MESSAGE_MANAGE))
-                    event.getChannel().deleteMessages(messages).queue(unused -> {
+                        .hasPermission(Permission.MESSAGE_MANAGE))
+                    event.getGuildChannel().deleteMessages(messages).queue(unused -> {
                     }, ignored -> {
                     });
                 else if (messages.size() > 0)
