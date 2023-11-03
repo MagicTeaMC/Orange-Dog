@@ -33,6 +33,7 @@ dependencies {
     api("com.google.code.gson:gson:2.10.1")
     api("org.slf4j:slf4j-nop:2.0.9")
     api("org.slf4j:slf4j-api:2.0.9")
+    implementation(files("libs/lavasrc-3.2.9.jar"))
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest-core:2.2")
 }
