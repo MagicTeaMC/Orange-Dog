@@ -96,6 +96,7 @@ public class PlayCmd extends MusicCommand
         if(args.startsWith("https://open.spotify.com"))
         {
          event.reply(CANCEL + "我們尚未支援來自 Spotify 的音樂");
+         return;
          // TODO: Spotify support
         }
         event.reply(loadingEmoji+" 載入中... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), args, new ResultHandler(m,event,false)));
