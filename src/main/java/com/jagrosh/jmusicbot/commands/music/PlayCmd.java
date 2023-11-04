@@ -255,7 +255,7 @@ public class PlayCmd extends MusicCommand
             Playlist playlist = bot.getPlaylistLoader().getPlaylist(event.getArgs());
             if(playlist==null)
             {
-                event.replyError("我找不到預載播放清單 `"+event.getArgs()+".txt` !");
+                event.replyError("我找不到預載播放清單 `"+event.getArgs()+".txt`，如果您要搜索歌曲，請不要在指令參數中輸入 `playlist`");
                 return;
             }
             event.getChannel().sendMessage(loadingEmoji+" 正在載入 **"+event.getArgs()+"**... ("+playlist.getItems().size()+" 首歌曲)").queue(m -> 
