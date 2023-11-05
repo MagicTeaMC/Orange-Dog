@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
     api("net.dv8tion:JDA:5.0.0-beta.17")
-    api("dev.arbjerg:lavaplayer:2.0.2")
+    api("dev.arbjerg:lavaplayer:2.0.3")
     api("com.github.DxsSucuk:jda-utilities:fdbc298")
     api("com.github.MagicTeaMC:MaoLyrics:8f6ee88")
     api("ch.qos.logback:logback-classic:1.4.11")
