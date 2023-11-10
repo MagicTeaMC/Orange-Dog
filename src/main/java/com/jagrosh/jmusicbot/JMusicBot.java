@@ -161,6 +161,7 @@ public class JMusicBot
                         new SkipCmd(bot),
                         new SeekCmd(bot),
                         new skipSegCmd(bot),
+                        new SpotifyCmd(bot),
 
                         new ForceRemoveCmd(bot),
                         new ForceskipCmd(bot),

@@ -41,7 +41,7 @@ public class BotConfig
 
     private Path path = null;
     private String token, prefix, altprefix, helpWord, playlistsFolder, logLevel,
-            successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji;
+            successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji, spClientId, spClientSecret;
     private boolean stayInChannel, songInGame, npImages, updatealerts, useEval, dbots;
     private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
@@ -100,6 +100,8 @@ public class BotConfig
             aliases = config.getConfig("aliases");
             transforms = config.getConfig("transforms");
             dbots = owner == 113156185389092864L;
+            spClientId = config.getString("spclient");
+            spClientSecret = config.getString("spsecret");
 
             // we may need to write a new config file
             boolean write = false;
@@ -335,4 +337,5 @@ public class BotConfig
     {
         return transforms;
     }
-}
+    public String getSpotifyClientId(){return spClientId;}
+    public String getSpotifyClientSecret(){return spClientSecret;}}

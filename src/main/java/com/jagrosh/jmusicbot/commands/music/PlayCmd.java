@@ -95,9 +95,9 @@ public class PlayCmd extends MusicCommand
                 : event.getArgs().isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : event.getArgs();
         if(args.startsWith("https://open.spotify.com"))
         {
-         event.reply(CANCEL + "我們尚未支援來自 Spotify 的音樂");
-         return;
-         // TODO: Spotify support
+            SpotifyCmd spotifyCmd = new SpotifyCmd(bot);
+            spotifyCmd.doCommand(event);
+            return;
         }
         event.reply(loadingEmoji+" 載入中... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), args, new ResultHandler(m,event,false)));
     }
@@ -132,10 +132,10 @@ public class PlayCmd extends MusicCommand
 
             int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
             String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " 加入 **" + trackTitle
-                    + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+"序列"));
+                    + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+" 序列"));
             if (playlist == null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
                 try {
-                    m.editMessage(event.getClient().getSuccess() + " 加入 **" + trackTitle + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+"序列")).queue();
+                    m.editMessage(event.getClient().getSuccess() + " 加入 **" + trackTitle + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+" 序列")).queue();
                     m.editMessageEmbeds(mb.build()).queue();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -216,7 +216,7 @@ public class PlayCmd extends MusicCommand
         public void noMatches()
         {
             if(ytsearch)
-                m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" 沒有找到歌曲 `"+event.getArgs()+"`.")).queue();
+                m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" 沒有找到歌曲 `"+event.getArgs()+"`")).queue();
             else
                 bot.getPlayerManager().loadItemOrdered(event.getGuild(), "ytsearch:"+event.getArgs(), new ResultHandler(m,event,true));
         }
