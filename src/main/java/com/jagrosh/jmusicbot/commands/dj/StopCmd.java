@@ -33,6 +33,7 @@ public class StopCmd extends DJCommand
         this.help = "停止播放歌曲並清除序列";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = false;
+        this.beListening = true;
     }
 
     @Override
