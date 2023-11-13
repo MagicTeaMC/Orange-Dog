@@ -145,8 +145,10 @@ public class JMusicBot
                 .setLinkedCacheSize(200)
                 .setGuildSettingsManager(settings)
                 .addCommands(aboutCommand,
+                        new ServerInfo(bot),
                         new PingCommand(),
                         new SettingsCmd(bot),
+                        new UserInfo(),
 
                         new DownloadCmd(bot),
                         new LyricsCmd(bot),

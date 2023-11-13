@@ -9,7 +9,8 @@
 - [ ] play 的時候可直接指定開始撥放的時間
 - [x] 可使用指令跳轉到影片的特定時間
 - [ ] 反應改為使用按鈕的方式
-- [ ] 支援 Spotify
+- [x] 支援 Spotify
+- [ ] 支援 bilibili
 - [x] 透過 SponsorBlock API 跳過影片部分片段
 - [x] 支援 YouTube 中有年齡限制的影片
 ## 使用到的 code

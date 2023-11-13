@@ -1,6 +1,6 @@
 group = "tw.maoyue"
-version = "1.1.0-SNAPSHOT"
-description = "ODBot"
+version = "1.1.0"
+description = "My Discord music bot, base on JMusicBot"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 plugins {
@@ -48,7 +48,16 @@ tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
 }
 
+tasks.build {
+    dependsOn("shadowJar")
+}
+
+tasks.shadowJar {
+    archiveFileName = "OrangeDog-$version.jar"
+}
+
 tasks.jar {
+    archiveFileName = "originalOrangeDog-$version.jar"
     manifest {
         attributes(
             "Main-Class" to "com.jagrosh.jmusicbot.JMusicBot",
