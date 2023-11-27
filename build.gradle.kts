@@ -25,7 +25,7 @@ dependencies {
     api("com.github.MagicTeaMC:MaoLyrics:2d521a797c")
     api("ch.qos.logback:logback-classic:1.4.11")
     api("com.typesafe:config:1.4.3")
-    api("org.jsoup:jsoup:1.16.2")
+    api("org.jsoup:jsoup:1.17.1")
     api("com.squareup.okhttp3:okhttp:4.12.0")
     api("com.google.code.gson:gson:2.10.1")
     api("org.slf4j:slf4j-nop:2.0.9")
