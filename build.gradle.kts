@@ -23,7 +23,7 @@ dependencies {
     api("dev.arbjerg:lavaplayer:2.0.3")
     api("com.github.DxsSucuk:jda-utilities:fdbc298")
     api("com.github.MagicTeaMC:MaoLyrics:2d521a797c")
-    api("ch.qos.logback:logback-classic:1.4.13")
+    api("ch.qos.logback:logback-classic:1.4.14")
     api("com.typesafe:config:1.4.3")
     api("org.jsoup:jsoup:1.17.1")
     api("com.squareup.okhttp3:okhttp:4.12.0")
