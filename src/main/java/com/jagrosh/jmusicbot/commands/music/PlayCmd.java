@@ -125,12 +125,15 @@ public class PlayCmd extends MusicCommand
             }
             AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
             EmbedBuilder mb = new EmbedBuilder();
-            mb.setAuthor(trackartist);
-            mb.setTitle(trackTitle, track.getInfo().uri);
-            mb.setColor(Color.red);
-            if(track instanceof YoutubeAudioTrack) mb.setImage("https://img.youtube.com/vi/"+track.getIdentifier()+"/mqdefault.jpg");
-
             int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
+            mb.setColor(Color.red);
+            mb.setTitle(event.getClient().getSuccess() + " " + trackTitle);
+            if(track instanceof YoutubeAudioTrack) mb.setThumbnail("https://img.youtube.com/vi/"+track.getIdentifier()+"/mqdefault.jpg");
+            mb.addField("곡 길이", TimeUtil.formatTime(track.getDuration()), true );
+            mb.addField("대기열", pos == 0 ? "바로 재생" : "대기열 "+pos+"번", true);
+            mb.addField("음원", "[링크]("+track.getInfo().uri+")", true);
+            mb.setFooter(event.getAuthor().getEffectiveName(), event.getAuthor().getEffectiveAvatarUrl());
+
             String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " 加入 **" + trackTitle
                     + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+" 序列"));
             if (playlist == null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
