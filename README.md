@@ -13,7 +13,7 @@
 - [ ] 支援 bilibili
 - [x] 透過 SponsorBlock API 跳過影片部分片段
 - [x] 支援 YouTube 中有年齡限制的影片
-- [x] 基於 JDA v5
+- [x] 基於 JDA v5  
 還有一堆雜項功能...
 ## 使用到的 code
 Jmusicbot: https://github.com/jagrosh/MusicBot  
