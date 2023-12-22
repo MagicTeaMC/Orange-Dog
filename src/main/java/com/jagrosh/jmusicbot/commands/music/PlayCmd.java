@@ -124,35 +124,41 @@ public class PlayCmd extends MusicCommand
                 return;
             }
             AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-            EmbedBuilder mb = new EmbedBuilder();
-            mb.setAuthor(trackartist);
-            mb.setTitle(trackTitle, track.getInfo().uri);
-            mb.setColor(Color.red);
-            if(track instanceof YoutubeAudioTrack) mb.setImage("https://img.youtube.com/vi/"+track.getIdentifier()+"/mqdefault.jpg");
-
             int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
-            String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " 加入 **" + trackTitle
-                    + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+" 序列"));
+            EmbedBuilder mb = new EmbedBuilder();
+            mb.setTitle(event.getClient().getSuccess() + " " + trackTitle);
+            mb.setColor(Color.pink);
+            if(track instanceof YoutubeAudioTrack) mb.setThumbnail("https://img.youtube.com/vi/"+track.getIdentifier()+"/mqdefault.jpg");
+            mb.addField("時長", TimeUtil.formatTime(track.getDuration()), true);
+            mb.addField("序列", pos == 0 ? "立即播放" : "第 "+pos + " 序列", true);
+            mb.addField("歌曲連結", "[點我前往]("+track.getInfo().uri+")", true);
+            mb.setFooter(event.getAuthor().getEffectiveName(), event.getAuthor().getEffectiveAvatarUrl());
+
             if (playlist == null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
                 try {
-                    m.editMessage(event.getClient().getSuccess() + " 加入 **" + trackTitle + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "並且開始播放" : " 至播放清單的第 "+pos+" 序列")).queue();
+                    m.editMessage("** **").queue();
                     m.editMessageEmbeds(mb.build()).queue();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             else
             {
+                try {
+                    m.editMessageEmbeds(mb.build()).queue();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 new ButtonMenu.Builder()
-                        .setText(addMsg+"\n"+event.getClient().getWarning()+" 這個歌曲在播放清單內，還有 **"+playlist.getTracks().size()+"** 首其他歌曲，按下 "+LOAD+" 來載入")
+                        .setText(event.getClient().getWarning()+" 這個歌曲在播放清單內，還有 **"+playlist.getTracks().size()+"** 首其他歌曲，按下 "+LOAD+" 來載入")
                         .setChoices(LOAD, CANCEL)
                         .setEventWaiter(bot.getWaiter())
                         .setTimeout(30, TimeUnit.SECONDS)
                         .setAction(re ->
                         {
                             if(re.getName().equals(LOAD))
-                                m.editMessage(addMsg+"\n"+event.getClient().getSuccess()+" 載入 **"+loadPlaylist(playlist, track)+"** 首歌曲!").queue();
+                                m.editMessage(event.getClient().getSuccess()+" 載入 **"+loadPlaylist(playlist, track)+"** 首歌曲!").queue();
                             else
-                                m.editMessage(addMsg).queue();
+                                m.editMessage("♬").queue();
                         }).setFinalAction(m ->
                         {
                             try{ m.clearReactions().queue(); }catch(PermissionException ignore) {}
