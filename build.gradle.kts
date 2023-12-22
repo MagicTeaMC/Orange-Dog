@@ -1,5 +1,5 @@
 group = "tw.maoyue"
-version = "1.1.0"
+version = "1.1.1"
 description = "My Discord music bot, base on JMusicBot"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
