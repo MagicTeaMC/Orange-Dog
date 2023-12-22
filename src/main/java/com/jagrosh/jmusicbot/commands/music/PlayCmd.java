@@ -129,9 +129,9 @@ public class PlayCmd extends MusicCommand
             mb.setTitle(event.getClient().getSuccess() + " " + trackTitle);
             mb.setColor(Color.red);
             if(track instanceof YoutubeAudioTrack) mb.setThumbnail("https://img.youtube.com/vi/"+track.getIdentifier()+"/mqdefault.jpg");
-            mb.addField("Duration", TimeUtil.formatTime(track.getDuration()), true);
-            mb.addField("Queue", pos == 0 ? "Now playing" : "Queue "+pos, true);
-            mb.addField("Music", "[link]("+track.getInfo().uri+")", true);
+            mb.addField("時長", TimeUtil.formatTime(track.getDuration()), true);
+            mb.addField("序列", pos == 0 ? "立即播放" : "第 "+pos + " 序列", true);
+            mb.addField("歌曲連結", "[點我前往]("+track.getInfo().uri+")", true);
             mb.setFooter(event.getAuthor().getEffectiveName(), event.getAuthor().getEffectiveAvatarUrl());
 
             if (playlist == null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
