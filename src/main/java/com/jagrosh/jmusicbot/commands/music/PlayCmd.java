@@ -127,7 +127,7 @@ public class PlayCmd extends MusicCommand
             int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
             EmbedBuilder mb = new EmbedBuilder();
             mb.setTitle(event.getClient().getSuccess() + " " + trackTitle);
-            mb.setColor(Color.red);
+            mb.setColor(Color.pink);
             if(track instanceof YoutubeAudioTrack) mb.setThumbnail("https://img.youtube.com/vi/"+track.getIdentifier()+"/mqdefault.jpg");
             mb.addField("時長", TimeUtil.formatTime(track.getDuration()), true);
             mb.addField("序列", pos == 0 ? "立即播放" : "第 "+pos + " 序列", true);
@@ -136,7 +136,7 @@ public class PlayCmd extends MusicCommand
 
             if (playlist == null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
                 try {
-                    m.editMessage("♬").queue();
+                    m.editMessage("** **").queue();
                     m.editMessageEmbeds(mb.build()).queue();
                 } catch (Exception e) {
                     e.printStackTrace();
