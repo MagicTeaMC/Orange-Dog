@@ -23,10 +23,13 @@ import com.jagrosh.jmusicbot.commands.DJCommand;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import com.jagrosh.jmusicbot.utils.TimeUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import java.awt.*;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 /**
  *
@@ -76,6 +79,7 @@ public class PlaynextCmd extends DJCommand
         }
 
         private void loadSingle(AudioTrack track) {
+            String trackTitle = track.getInfo().title.equals("Unknown title") ? "未知的歌曲" : track.getInfo().title;
             if (bot.getConfig().isTooLong(track)) {
                 m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 這首歌曲 (**" + track.getInfo().title + "**) 比可播放的時間還長： `"
                         + TimeUtil.formatTime(track.getDuration()) + "` > `" + TimeUtil.formatTime(bot.getConfig().getMaxSeconds() * 1000) + "`")).queue();
@@ -83,9 +87,19 @@ public class PlaynextCmd extends DJCommand
             }
             AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
             int pos = handler.addTrackToFront(new QueuedTrack(track, event.getAuthor()))+1;
+            EmbedBuilder mb = new EmbedBuilder();
+            mb.setTitle(event.getClient().getSuccess() + " " + trackTitle);
+            mb.setColor(Color.pink);
+            if(track instanceof YoutubeAudioTrack) mb.setThumbnail("https://img.youtube.com/vi/"+track.getIdentifier()+"/mqdefault.jpg");
+            mb.addField("時長", TimeUtil.formatTime(track.getDuration()), true);
+            mb.addField("序列", pos == 0 ? "立即播放" : "第 "+pos + " 序列", true);
+            mb.addField("歌曲連結", "[點我前往]("+track.getInfo().uri+")", true);
+            mb.setFooter(event.getAuthor().getEffectiveName(), event.getAuthor().getEffectiveAvatarUrl());
+
             String addMsg = FormatUtil.filter(event.getClient().getSuccess()+" 已加入 **"+track.getInfo().title
                     +"** (`"+TimeUtil.formatTime(track.getDuration())+"`) "+(pos==0?"，且在稍後即將開始播放":"到序列的第"+pos+"個位置"));
-            m.editMessage(addMsg).queue();
+            m.editMessage("♬").queue();
+            m.editMessageEmbeds(mb.build()).queue();
         }
         
         @Override
