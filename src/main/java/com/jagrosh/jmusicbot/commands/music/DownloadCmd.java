@@ -34,7 +34,7 @@ public class DownloadCmd extends MusicCommand {
         );
 
         Request request = new Request.Builder()
-                .url("https://qkmaocc.magicteamc.repl.co/api/v2/youtube")
+                .url("https://qkmao.cc/api/v2/youtube")
                 .post(body)
                 .addHeader("Content-Type", "application/json")
                 .build();
