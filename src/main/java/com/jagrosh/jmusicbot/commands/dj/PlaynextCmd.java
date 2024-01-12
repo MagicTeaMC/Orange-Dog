@@ -94,10 +94,8 @@ public class PlaynextCmd extends DJCommand
             mb.addField("時長", TimeUtil.formatTime(track.getDuration()), true);
             mb.addField("序列", pos == 0 ? "立即播放" : "第 "+pos + " 序列", true);
             mb.addField("歌曲連結", "[點我前往]("+track.getInfo().uri+")", true);
-            mb.setFooter(event.getAuthor().getEffectiveName(), event.getAuthor().getEffectiveAvatarUrl());
+            mb.setFooter(event.getMember().getEffectiveName(), event.getMember().getEffectiveAvatarUrl());
 
-            String addMsg = FormatUtil.filter(event.getClient().getSuccess()+" 已加入 **"+track.getInfo().title
-                    +"** (`"+TimeUtil.formatTime(track.getDuration())+"`) "+(pos==0?"，且在稍後即將開始播放":"到序列的第"+pos+"個位置"));
             m.editMessage("♬").queue();
             m.editMessageEmbeds(mb.build()).queue();
         }
