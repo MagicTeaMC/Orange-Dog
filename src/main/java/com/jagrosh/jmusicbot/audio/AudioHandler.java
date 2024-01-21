@@ -15,6 +15,8 @@
  */
 package com.jagrosh.jmusicbot.audio;
 
+import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
+import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.JMusicBot;
 import com.jagrosh.jmusicbot.playlist.PlaylistLoader.Playlist;
 import com.jagrosh.jmusicbot.settings.RepeatMode;
@@ -48,6 +50,7 @@ import net.dv8tion.jda.api.utils.messages.MessageEditData;
  */
 public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
 {
+    private Bot bot;
     private final FairQueue<QueuedTrack> queue = new FairQueue<>();
     private final List<AudioTrack> defaultQueue = new LinkedList<>();
     private final Set<String> votes = new HashSet<>();
@@ -118,6 +121,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     {
         return audioPlayer;
     }
+    public void setSpeed(Guild guild, double speed) {
+        Settings settings = manager.getBot().getSettingsManager().getSettings(guildId);
+        settings.setSpeed(speed);
+    }
     
     public RequestMetadata getRequestMetadata()
     {
@@ -154,10 +161,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
         });
         return true;
     }
-    
+
     // Audio Events
     @Override
-    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) 
+    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason)
     {
         final RepeatMode repeatMode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
         // if the track ended normally, and we're in repeat mode, re-add it to the queue
@@ -199,7 +206,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     }
 
     @Override
-    public void onTrackStart(AudioPlayer player, AudioTrack track) 
+    public void onTrackStart(AudioPlayer player, AudioTrack track)
     {
         votes.clear();
         manager.getBot().getNowplayingHandler().onTrackUpdate(guildId, track, this);

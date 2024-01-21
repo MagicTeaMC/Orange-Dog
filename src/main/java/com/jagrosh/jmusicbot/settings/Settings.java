@@ -42,11 +42,12 @@ public class Settings implements GuildSettingsProvider
     private int volume;
     private String defaultPlaylist;
     private RepeatMode repeatMode;
+    private double speed;
     private String prefix;
     private double skipRatio;
     private List<String> blacklistedUsers;
 
-    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, List<String> blacklistedUsers)
+    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, double speed, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, List<String> blacklistedUsers)
     {
         this.manager = manager;
         try
@@ -74,6 +75,7 @@ public class Settings implements GuildSettingsProvider
             this.roleId = 0;
         }
         this.volume = volume;
+        this.speed = speed;
         this.defaultPlaylist = defaultPlaylist;
         this.repeatMode = repeatMode;
         this.prefix = prefix;
@@ -81,13 +83,14 @@ public class Settings implements GuildSettingsProvider
         this.blacklistedUsers = blacklistedUsers;
     }
     
-    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, List<String> blacklistedUsers)
+    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume,  double speed, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, List<String> blacklistedUsers)
     {
         this.manager = manager;
         this.textId = textId;
         this.voiceId = voiceId;
         this.roleId = roleId;
         this.volume = volume;
+        this.speed = speed;
         this.defaultPlaylist = defaultPlaylist;
         this.repeatMode = repeatMode;
         this.prefix = prefix;
@@ -114,6 +117,10 @@ public class Settings implements GuildSettingsProvider
     public int getVolume()
     {
         return volume;
+    }
+    public double getSpeed()
+    {
+        return speed;
     }
     
     public String getDefaultPlaylist()
@@ -208,5 +215,8 @@ public class Settings implements GuildSettingsProvider
     public void clearBlacklistedUsers() {
         this.blacklistedUsers = new ArrayList<String>(0);
         this.manager.writeSettings();
+    }
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 }
