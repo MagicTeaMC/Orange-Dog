@@ -27,11 +27,11 @@ import com.jagrosh.jmusicbot.commands.music.*;
 import com.jagrosh.jmusicbot.commands.owner.*;
 import com.jagrosh.jmusicbot.entities.Prompt;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
-// import com.jagrosh.jmusicbot.utils.OtherUtil;
 import java.awt.Color;
 import java.util.Arrays;
 
 import com.jagrosh.jmusicbot.utils.ShutdownListener;
+import me.scarsz.jdaappender.ChannelLoggingHandler;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.exceptions.InvalidTokenException;
@@ -223,6 +223,10 @@ public class JMusicBot
                     .setBulkDeleteSplittingEnabled(true)
                     .build();
             bot.setJDA(jda);
+
+            new ChannelLoggingHandler(() -> jda.getTextChannelById(1195875816593174609L))
+                    .attach() // attach to SLF4J JDK logging if present, else Log4j if present, else standard out/err
+                    .schedule(); // schedule handler to flush output asynchronously every 1.5 seconds
         }
         catch (InvalidTokenException ex)
         {
