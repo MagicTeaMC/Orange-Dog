@@ -102,7 +102,7 @@ public class SearchCmd extends MusicCommand
         {
             builder.setColor(event.getSelfMember().getColor())
                     .setText(FormatUtil.filter(event.getClient().getSuccess()+" `"+event.getArgs()+"` 的搜尋節果:"))
-                    .setChoices(new String[0])
+                    .setChoices()
                     .setSelection((msg,i) -> 
                     {
                         AudioTrack track = playlist.getTracks().get(i-1);

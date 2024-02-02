@@ -28,7 +28,7 @@ public enum RepeatMode
     private final String emoji;
     private final String userFriendlyName;
 
-    private RepeatMode(String emoji, String userFriendlyName)
+    RepeatMode(String emoji, String userFriendlyName)
     {
         this.emoji = emoji;
         this.userFriendlyName = userFriendlyName;

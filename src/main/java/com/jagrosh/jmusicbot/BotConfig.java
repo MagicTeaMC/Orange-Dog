@@ -115,7 +115,7 @@ public class BotConfig
                         + "\n目前的機器人Token: ");
                 if(token==null)
                 {
-                    prompt.alert(Prompt.Level.WARNING, CONTEXT, "沒有提供Token! 關閉程式中...\n\n配置文件路徑: " + path.toAbsolutePath().toString());
+                    prompt.alert(Prompt.Level.WARNING, CONTEXT, "沒有提供Token! 關閉程式中...\n\n配置文件路徑: " + path.toAbsolutePath());
                     return;
                 }
                 else
@@ -141,7 +141,7 @@ public class BotConfig
                 }
                 if(owner<=0)
                 {
-                    prompt.alert(Prompt.Level.ERROR, CONTEXT, "無效的用戶ID! 關閉程式中...\n\n配置文件路徑: " + path.toAbsolutePath().toString());
+                    prompt.alert(Prompt.Level.ERROR, CONTEXT, "無效的用戶ID! 關閉程式中...\n\n配置文件路徑: " + path.toAbsolutePath());
                     return;
                 }
                 else
@@ -158,7 +158,7 @@ public class BotConfig
         }
         catch (ConfigException ex)
         {
-            prompt.alert(Prompt.Level.ERROR, CONTEXT, ex + ": " + ex.getMessage() + "\n\n配置文件路徑: " + path.toAbsolutePath().toString());
+            prompt.alert(Prompt.Level.ERROR, CONTEXT, ex + ": " + ex.getMessage() + "\n\n配置文件路徑: " + path.toAbsolutePath());
         }
     }
 
@@ -185,7 +185,7 @@ public class BotConfig
         {
             prompt.alert(Prompt.Level.WARNING, CONTEXT, "寫入Config.txt失敗: "+ex
                     + "\n請確認您不是在桌面或者其它被限制的資料夾內\n\n配置文件路徑: "
-                    + path.toAbsolutePath().toString());
+                    + path.toAbsolutePath());
         }
     }
 

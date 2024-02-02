@@ -1,5 +1,13 @@
 package com.jagrosh.jmusicbot.commands.music;
 
+import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jmusicbot.Bot;
+import com.jagrosh.jmusicbot.audio.AudioHandler;
+import com.jagrosh.jmusicbot.commands.MusicCommand;
+import net.dv8tion.jda.api.Permission;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,13 +17,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jmusicbot.Bot;
-import com.jagrosh.jmusicbot.audio.AudioHandler;
-import com.jagrosh.jmusicbot.commands.MusicCommand;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import net.dv8tion.jda.api.Permission;
 
 public class skipSegCmd extends MusicCommand {
     public skipSegCmd(Bot bot) {

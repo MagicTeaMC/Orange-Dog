@@ -1,9 +1,10 @@
 package com.jagrosh.jmusicbot.utils;
 
-import java.util.Scanner;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.NowplayingHandler;
 import net.dv8tion.jda.api.JDA;
+
+import java.util.Scanner;
 
 public class ShutdownListener extends Thread {
 

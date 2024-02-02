@@ -17,22 +17,13 @@ package com.jagrosh.jmusicbot.commands.admin;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
-import com.jagrosh.jdautilities.menu.OrderedMenu;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.commands.AdminCommand;
 import com.jagrosh.jmusicbot.settings.Settings;
-import com.jagrosh.jmusicbot.utils.FormatUtil;
-import java.lang.String;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 
-import java.text.Format;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -79,7 +70,7 @@ public class BlacklistUserCmd extends AdminCommand
                 Member member = found.get(i);
                 builder.append("\n**"+member.getUser().getName()+"**#"+member.getUser().getDiscriminator());
             }
-            event.replyWarning("找到多個用戶 " + builder.toString());
+            event.replyWarning("找到多個用戶 " + builder);
             return;
         }
         else

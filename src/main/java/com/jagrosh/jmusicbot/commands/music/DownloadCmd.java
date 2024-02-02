@@ -1,11 +1,11 @@
 package com.jagrosh.jmusicbot.commands.music;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
 import okhttp3.*;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.IOException;
 
