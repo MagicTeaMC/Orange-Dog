@@ -223,10 +223,6 @@ public class JMusicBot
                     .setBulkDeleteSplittingEnabled(true)
                     .build();
             bot.setJDA(jda);
-
-            new ChannelLoggingHandler(() -> jda.getTextChannelById(1195875816593174609L))
-                    .attach() // attach to SLF4J JDK logging if present, else Log4j if present, else standard out/err
-                    .schedule(); // schedule handler to flush output asynchronously every 1.5 seconds
         }
         catch (InvalidTokenException ex)
         {
