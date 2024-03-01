@@ -157,33 +157,4 @@ public class OtherUtil
         else
             return "UNKNOWN";
     }
-    
-    public static String getLatestVersion()
-    {
-        try
-        {
-            Response response = new OkHttpClient.Builder().build()
-                    .newCall(new Request.Builder().get().url("https://api.github.com/repos/wolf-yuan-6115/flowermoon/releases/latest").build())
-                    .execute();
-            ResponseBody body = response.body();
-            if(body != null)
-            {
-                try(Reader reader = body.charStream())
-                {
-                    JSONObject obj = new JSONObject(new JSONTokener(reader));
-                    return obj.getString("tag_name");
-                }
-                finally
-                {
-                    response.close();
-                }
-            }
-            else
-                return null;
-        }
-        catch(IOException | JSONException | NullPointerException ex)
-        {
-            return null;
-        }
-    }
 }

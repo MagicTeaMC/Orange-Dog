@@ -19,12 +19,15 @@ repositories {
     maven {
         url = uri("https://nexus.scarsz.me/content/repositories/releases/")
     }
+    maven {
+        url = uri("https://m2.chew.pro/snapshots")
+    }
 }
 
 dependencies {
     api("net.dv8tion:JDA:5.0.0-beta.20")
     api("dev.arbjerg:lavaplayer:2.1.0")
-    api("com.github.DxsSucuk:jda-utilities:fdbc298")
+    api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
     api("com.github.MagicTeaMC:MaoLyrics:2d521a797c")
     api("ch.qos.logback:logback-classic:1.5.0")
     api("com.typesafe:config:1.4.3")
