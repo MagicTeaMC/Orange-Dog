@@ -25,6 +25,8 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.util.regex.Matcher;
 
+import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
+
 /**
  *
  * @author Michaili K.
@@ -119,11 +121,7 @@ public class ForceRemoveCmd extends DJCommand
         }
         else
         {
-            if ("0000".equals(discriminator)) {
-                event.replySuccess("成功移除 `" + count + "` 首由 **" + target.getName() + " 新增的歌曲");
-            } else {
-                event.replySuccess("成功移除 `" + count + "` 首由 **" + target.getName() + "#" + discriminator + " 新增的歌曲");
-            }
+            event.replySuccess("成功移除 `" + count + "` 首由 " + formatUsername(target.getName(), discriminator) + " 新增的歌曲");
         }
     }
 }

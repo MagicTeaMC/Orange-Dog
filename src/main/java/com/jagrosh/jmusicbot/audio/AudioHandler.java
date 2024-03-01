@@ -42,6 +42,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
+
 /**
  *
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -222,15 +224,9 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
             {
                 User u = guild.getJDA().getUserById(rm.user.id);
                 if(u==null)
-                    if(rm.user.discrim.equals("0000"))
-                        eb.setAuthor(rm.user.username, null, rm.user.avatar);
-                        else
-                     eb.setAuthor(rm.user.username + "#" + rm.user.discrim, null, rm.user.avatar);
+                    eb.setAuthor(formatUsername(rm.user.username, rm.user.discrim), null, rm.user.avatar);
                 else
-                if(u.getDiscriminator().equals("0000"))
-                    eb.setAuthor(u.getName(), null, u.getEffectiveAvatarUrl());
-                else
-                    eb.setAuthor(u.getName() + "#" + u.getDiscriminator(), null, u.getEffectiveAvatarUrl());
+                    eb.setAuthor(formatUsername(u.getName(), u.getDiscriminator()), null, u.getEffectiveAvatarUrl());
             }
             try 
             {
