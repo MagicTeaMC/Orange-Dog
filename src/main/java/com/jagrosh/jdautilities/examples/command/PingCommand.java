@@ -19,7 +19,9 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
+import net.dv8tion.jda.api.EmbedBuilder;
 
+import java.awt.*;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -39,9 +41,16 @@ public class PingCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        event.reply("延遲: ...", m -> {
-            long ping = event.getMessage().getTimeCreated().until(m.getTimeCreated(), ChronoUnit.MILLIS);
-            m.editMessage("延遲: " + ping + "毫秒 | Websocket: " + event.getJDA().getGatewayPing() + "毫秒").queue();
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setColor(Color.CYAN);
+        embed.setTitle("機器人延遲");
+        embed.addField("延遲", "...", false);
+        event.getChannel().sendMessageEmbeds(embed.build()).queue(response -> {
+            long ping = event.getMessage().getTimeCreated().until(response.getTimeCreated(), ChronoUnit.MILLIS);
+            embed.clearFields();
+            embed.addField("延遲", ping + "毫秒", false);
+            embed.addField("Websocket延遲", event.getJDA().getGatewayPing() + "毫秒", false);
+            response.editMessageEmbeds(embed.build()).queue();
         });
     }
 
