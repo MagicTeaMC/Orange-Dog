@@ -277,12 +277,14 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
             String title = track.getInfo().title;
             if(title==null || title.equals("未知的標題"))
                 title = track.getInfo().uri;
-            return "**"+title+"** ["+(userid==0 ? "自動播放" : "<@"+userid+">")+"]"
+            User user = jda.retrieveUserById(getRequestMetadata().getOwner()).complete();
+
+            return "**" + title + "** [" + (userid == 0 ? "自動播放" : user.getName()) + "]"
                     + "\n" + (audioPlayer.isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI) + " "
                     + "[" + TimeUtil.formatTime(track.getDuration()) + "] "
                     + FormatUtil.volumeIcon(audioPlayer.getVolume());
         }
-        else return "沒有音樂正在播放 " + JMusicBot.STOP_EMOJI + " " + FormatUtil.volumeIcon(audioPlayer.getVolume());
+        else return "目前未播放任何音樂 " + JMusicBot.STOP_EMOJI + " " + FormatUtil.volumeIcon(audioPlayer.getVolume());
     }
     
     // Audio Send Handler methods
