@@ -22,6 +22,9 @@ repositories {
     maven {
         url = uri("https://m2.chew.pro/snapshots")
     }
+    maven {
+        url = uri("https://maven.lavalink.dev/snapshots")
+    }
 }
 
 dependencies {
