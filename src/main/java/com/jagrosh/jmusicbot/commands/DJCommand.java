@@ -21,6 +21,8 @@ import com.jagrosh.jmusicbot.settings.Settings;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 
+import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
+
 /**
  *
  * @author John Grosh (john.a.grosh@gmail.com)
@@ -39,13 +41,7 @@ public abstract class DJCommand extends MusicCommand
         String authorId = event.getAuthor().getId();
         boolean authorCannotUseCommands = settings.getBlacklistedUsers().contains(authorId);
         if (authorCannotUseCommands) {
-            String authorTag = event.getAuthor().getAsTag();
-            if (authorTag.contains("#0000")) {
-                String modifiedContent = authorTag.substring(0, authorTag.length() - 5);
-                event.replyError(modifiedContent + " 在黑名單中，所以無法使用此指令！");
-            } else {
-                event.replyError(authorTag + " 在黑名單中，所以無法使用此指令！");
-            }
+            event.replyError(formatUsername(event.getAuthor().getName(), event.getAuthor().getDiscriminator()) + " 在黑名單中，所以無法使用此指令！");
             return false;
         }
         if(event.getAuthor().getId().equals(event.getClient().getOwnerId()))

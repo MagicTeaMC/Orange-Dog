@@ -21,6 +21,8 @@ import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.RequestMetadata;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
 
+import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
+
 /**
  *
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -66,7 +68,7 @@ public class SkipCmd extends MusicCommand
             if(skippers>=required)
             {
                 msg += "\n" + event.getClient().getSuccess() + " 已跳過 **" + handler.getPlayer().getPlayingTrack().getInfo().title
-                    + "** " + (rm.getOwner() == 0L ? "(自動播放)" : "(由 **" + rm.user.username + "**點播)");
+                    + "** " + (rm.getOwner() == 0L ? "(自動播放)" : "(由 **" + formatUsername(rm.user.username, rm.user.discrim) + "**點播)");
                 handler.getPlayer().stopTrack();
             }
             event.reply(msg);

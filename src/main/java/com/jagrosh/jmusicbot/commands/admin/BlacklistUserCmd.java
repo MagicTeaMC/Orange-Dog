@@ -25,6 +25,8 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.util.List;
 
+import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
+
 /**
  *
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -68,7 +70,7 @@ public class BlacklistUserCmd extends AdminCommand
             for(int i=0; i<found.size() && i<4; i++)
             {
                 Member member = found.get(i);
-                builder.append("\n**"+member.getUser().getName()+"**#"+member.getUser().getDiscriminator());
+                builder.append("\n**"+ formatUsername(member.getUser().getName(), member.getUser().getDiscriminator()));
             }
             event.replyWarning("找到多個用戶 " + builder);
             return;

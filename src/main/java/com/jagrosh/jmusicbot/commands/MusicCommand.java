@@ -26,6 +26,8 @@ import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
+import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
+
 /**
  *
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -51,12 +53,7 @@ public abstract class MusicCommand extends Command
         boolean authorCannotUseCommands = settings.getBlacklistedUsers().contains(authorId);
         if (authorCannotUseCommands) {
             String authorTag = event.getAuthor().getAsTag();
-            if (authorTag.contains("#0000")) {
-                String modifiedContent = authorTag.substring(0, authorTag.length() - 5);
-                event.replyError(modifiedContent + " 在黑名單中，所以無法使用此指令！");
-            } else {
-                event.replyError(authorTag + " 在黑名單中，所以無法使用此指令！");
-            }
+            event.replyError(formatUsername(event.getAuthor().getName(), event.getAuthor().getDiscriminator()) + " 在黑名單中，所以無法使用此指令！");
             return;
         }
         TextChannel tchannel = settings.getTextChannel(event.getGuild());
