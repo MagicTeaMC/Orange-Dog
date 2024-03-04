@@ -32,7 +32,7 @@ dependencies {
     api("dev.arbjerg:lavaplayer:727959e9f621fc457b3a5adafcfffb55fdeaa538-SNAPSHOT")
     api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
     api("com.github.MagicTeaMC:MaoLyrics:b74346f")
-    api("ch.qos.logback:logback-classic:1.5.0")
+    api("ch.qos.logback:logback-classic:1.5.2")
     api("com.typesafe:config:1.4.3")
     api("org.jsoup:jsoup:1.17.2")
     api("com.squareup.okhttp3:okhttp:4.12.0")
