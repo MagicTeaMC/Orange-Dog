@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
     api("net.dv8tion:JDA:5.0.0-beta.21")
-    api("dev.arbjerg:lavaplayer:727959e9f621fc457b3a5adafcfffb55fdeaa538-SNAPSHOT")
+    api("dev.arbjerg:lavaplayer:5413883383c319e09f09957cd227ee418f2ef6ce-SNAPSHOT")
     api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
     api("com.github.MagicTeaMC:MaoLyrics:b74346f")
     api("ch.qos.logback:logback-classic:1.5.3")
