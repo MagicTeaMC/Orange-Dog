@@ -1,5 +1,4 @@
-group = "tw.maoyue"
-version = "1.1.1"
+group = "tw.maoyue"version = "1.1.1"
 description = "My Discord music bot, base on JMusicBot"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
@@ -22,14 +21,11 @@ repositories {
     maven {
         url = uri("https://m2.chew.pro/snapshots")
     }
-    maven {
-        url = uri("https://maven.lavalink.dev/snapshots")
-    }
 }
 
 dependencies {
     api("net.dv8tion:JDA:5.0.0-beta.21")
-    api("dev.arbjerg:lavaplayer:727959e9f621fc457b3a5adafcfffb55fdeaa538-SNAPSHOT")
+    api("dev.arbjerg:lavaplayer:2.1.1")
     api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
     api("com.github.MagicTeaMC:MaoLyrics:b74346f")
     api("ch.qos.logback:logback-classic:1.5.3")
