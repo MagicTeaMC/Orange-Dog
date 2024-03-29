@@ -21,10 +21,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jdautilities.examples.command.PingCommand;
 import com.jagrosh.jmusicbot.commands.admin.*;
 import com.jagrosh.jmusicbot.commands.dj.*;
-import com.jagrosh.jmusicbot.commands.general.AboutCommand;
-import com.jagrosh.jmusicbot.commands.general.ServerInfo;
-import com.jagrosh.jmusicbot.commands.general.SettingsCmd;
-import com.jagrosh.jmusicbot.commands.general.UserInfo;
+import com.jagrosh.jmusicbot.commands.general.*;
 import com.jagrosh.jmusicbot.commands.music.*;
 import com.jagrosh.jmusicbot.commands.owner.*;
 import com.jagrosh.jmusicbot.entities.Prompt;
@@ -149,6 +146,7 @@ public class JMusicBot
                 .setLinkedCacheSize(200)
                 .setGuildSettingsManager(settings)
                 .addCommands(aboutCommand,
+                        new QkmaoCmd(bot),
                         new ServerInfo(bot),
                         new PingCommand(),
                         new SettingsCmd(bot),

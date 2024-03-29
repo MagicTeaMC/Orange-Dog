@@ -2,18 +2,17 @@ package com.jagrosh.jmusicbot.commands.general;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
-import com.jagrosh.jmusicbot.commands.MusicCommand;
 import okhttp3.*;
 
 import java.io.IOException;
 
-public class QkmaoCmd extends MusicCommand {
+public class QkmaoCmd extends Command {
     private final OkHttpClient httpClient;
 
     public QkmaoCmd(Bot bot) {
-        super(bot);
         this.name = "qkmao";
         this.help = "透過 Qkmao 縮短網址";
         this.arguments = "<長網址> [短網址名稱]";
@@ -22,15 +21,34 @@ public class QkmaoCmd extends MusicCommand {
     }
 
     @Override
-    public void doCommand(CommandEvent event) {
+    public void execute(CommandEvent event) {
 
         event.getChannel().sendTyping().queue();
 
-        String link = event.getArgs();
+        String[] args = event.getArgs().split("\\s+", 2);
+
+        if (args.length < 1) {
+            event.replyWarning("正確的使用方法： `>qkmao <長網址> [短網址名稱]`");
+            return;
+        }
+
+        String link = args[0];
+        String customName = args.length > 1 ? args[1] : null;
+
+        if(customName == null) {
+            createRandomShortUrl(event, link);
+        } else {
+            createCustomShortUrl(event, link, customName);
+        }
+    }
+
+    private void createRandomShortUrl(CommandEvent event, String link) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("link", link);
 
         RequestBody body = RequestBody.create(
                 MediaType.parse("application/json"),
-                "{\"link\":\"" + link + "\"}"
+                jsonObject.toString()
         );
 
         Request request = new Request.Builder()
@@ -39,6 +57,29 @@ public class QkmaoCmd extends MusicCommand {
                 .addHeader("Content-Type", "application/json")
                 .build();
 
+        messageLogic(event, request);
+    }
+
+    private void createCustomShortUrl(CommandEvent event, String link, String customName) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("link", link);
+        jsonObject.addProperty("slug", customName);
+
+        RequestBody body = RequestBody.create(
+                MediaType.parse("application/json"),
+                jsonObject.toString()
+        );
+
+        Request request = new Request.Builder()
+                .url("https://qkmao.cc/api/v2")
+                .post(body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        messageLogic(event, request);
+    }
+
+    private void messageLogic(CommandEvent event, Request request) {
         httpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -54,15 +95,13 @@ public class QkmaoCmd extends MusicCommand {
 
                 String jsonData = response.body().string();
                 JsonObject jsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
-                String shortUrl = jsonObject.get("url").getAsString();
-                String code = jsonObject.get("message").getAsString();
+                String message = jsonObject.get("message").getAsString();
 
-                if(code.equals("successful")) {
+                if(message.equals("successful")) {
+                    String shortUrl = jsonObject.get("link").getAsString();
                     event.reply("您的短網址為：<" + shortUrl + ">");
-                } else if(code.equals("used")) {
-                    event.reply("此你提供的短網址名稱無法使用");
                 } else {
-                    event.reply("這個不該發生...請考慮回報給我們");
+                    event.reply("API 回覆：" + message);
                 }
             }
         });
