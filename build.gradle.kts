@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    api("net.dv8tion:JDA:5.0.0-beta.21")
+    api("net.dv8tion:JDA:5.0.0-beta.22")
     api("com.github.Nansess:lavaplayer-test:main-SNAPSHOT")
     api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
     api("com.github.MagicTeaMC:MaoLyrics:b74346f")
