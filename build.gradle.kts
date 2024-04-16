@@ -35,7 +35,7 @@ dependencies {
     api("com.squareup.okhttp3:okhttp:4.12.0")
     api("com.google.code.gson:gson:2.10.1")
     api("org.slf4j:slf4j-nop:2.0.12")
-    api("org.slf4j:slf4j-api:2.0.12")
+    api("org.slf4j:slf4j-api:2.0.13")
     api("me.scarsz.jdaappender:jda5:1.2.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest-core:2.2")
