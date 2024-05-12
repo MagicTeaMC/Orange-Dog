@@ -1,80 +1,84 @@
+/*
+ * Copyright 2020 John Grosh <john.a.grosh@gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.jagrosh.jmusicbot.commands.music;
-
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
+import com.jagrosh.jmusicbot.commands.DJCommand;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
-import com.jagrosh.jmusicbot.settings.Settings;
+import com.jagrosh.jmusicbot.utils.TimeUtil;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.dv8tion.jda.api.Permission;
-
-import java.util.regex.Pattern;
-
-public class SeekCmd extends MusicCommand {
-    public SeekCmd(Bot bot) {
+/**
+ * @author Whew., Inc.
+ */
+public class SeekCmd extends MusicCommand
+{
+    public SeekCmd(Bot bot)
+    {
         super(bot);
         this.name = "seek";
         this.help = "跳轉至歌曲的特定時間";
-        this.arguments = "<HH:MM:SS>|<MM:SS>|<SS>";
+        this.arguments = "[+ | -] <HH:MM:SS | MM:SS | SS>|<0h0m0s | 0m0s | 0s>";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.beListening = true;
         this.bePlaying = true;
     }
-
     @Override
-    public void doCommand(CommandEvent event) {
+    public void doCommand(CommandEvent event)
+    {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        if (handler.getPlayer().getPlayingTrack().isSeekable()) {
-            AudioTrack currentTrack = handler.getPlayer().getPlayingTrack();
-            Settings settings = event.getClient().getSettingsFor(event.getGuild());
+        AudioTrack playingTrack = handler.getPlayer().getPlayingTrack();
+        if (!playingTrack.isSeekable())
+        {
+            event.replyError("此歌曲無法跳轉");
+            return;
+        }
+        if (!DJCommand.checkDJPermission(event) && playingTrack.getUserData(Long.class) != event.getAuthor().getIdLong())
+        {
+            event.replyError("只有點播 **" + playingTrack.getInfo().title + "** 的用戶才能跳轉歌曲時間");
+            return;
+        }
+        String args = event.getArgs();
+        TimeUtil.SeekTime seekTime = TimeUtil.parseTime(args);
+        if (seekTime == null)
+        {
+            event.replyError("時間格式錯誤！ 正確格式：`1:02:23` `+1:10` `-90`, `1h10m`, `+90s`");
+            return;
+        }
 
-            if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-                if (!event.getMember().getRoles().contains(settings.getRole(event.getGuild()))) {
-                    if (currentTrack.getUserData(Long.class) != event.getAuthor().getIdLong()) {
-                        event.replyError("只有點播 **" + currentTrack.getInfo().title + "** 的用戶才能跳轉歌曲時間");
-                        return;
-                    }
-                }
+        long currentPosition = playingTrack.getPosition();
+        long trackDuration = playingTrack.getDuration();
+        long seekMilliseconds = seekTime.relative ? currentPosition + seekTime.milliseconds : seekTime.milliseconds;
+        if (seekMilliseconds > trackDuration)
+        {
+            event.replyError("無法跳轉至 `" + TimeUtil.formatTime(seekMilliseconds) + "` 因為現在的歌曲長度只有 `" + TimeUtil.formatTime(trackDuration));
+        }
+        else
+        {
+            try
+            {
+                playingTrack.setPosition(seekMilliseconds);
             }
-
-            String args = event.getArgs();
-            long track_duration = handler.getPlayer().getPlayingTrack().getDuration();
-            int seek_milliseconds = 0;
-            int seconds = 0;
-            int minutes = 0;
-            int hours = 0;
-
-            if (Pattern.matches("^([0-9]{1,2}):([0-5]\\d):([0-5]\\d)$", args)) {
-                hours = Integer.parseInt(args.split(":")[0]);
-                minutes = Integer.parseInt(args.split(":")[1]);
-                seconds = Integer.parseInt(args.split(":")[2]);
-            } else if (Pattern.matches("^([0-9]{1,2}):([0-5]\\d)$", args)) {
-                minutes = Integer.parseInt(args.split(":")[0]);
-                seconds = Integer.parseInt(args.split(":")[1]);
-            } else if (Pattern.matches("^([0-9]{1,2})$", args)) {
-                seconds = Integer.parseInt(args);
-            } else {
-                event.replyError("時間格式錯誤！ 正確格式：`<HH:MM:SS>|<MM:SS>|<SS>`");
+            catch (Exception e)
+            {
+                event.replyError("跳轉時發生錯誤");
+                e.printStackTrace();
                 return;
             }
-
-            minutes += seconds / 60;
-            seconds = seconds % 60;
-
-            hours += minutes / 60;
-            minutes = minutes % 60;
-
-            seek_milliseconds += hours * 3600000 + minutes * 60000 + seconds * 1000;
-            if (seek_milliseconds <= track_duration) {
-                handler.getPlayer().getPlayingTrack().setPosition(seek_milliseconds);
-                String responseTime = hours > 0 ? String.format("%d:%02d:%02d", hours, minutes, seconds)
-                        : String.format("%02d:%02d", minutes, seconds);
-                event.replySuccess("成功跳轉到 `" + responseTime + "`！");
-            } else {
-                event.replyError("目前歌曲沒有所指定的時間！");
-            }
-        } else {
-            event.replyError("此歌曲無法跳轉。");
         }
+        event.replySuccess("成功跳轉至 `" + TimeUtil.formatTime(playingTrack.getPosition()) + "/" + TimeUtil.formatTime(playingTrack.getDuration()) + "`!");
     }
 }
