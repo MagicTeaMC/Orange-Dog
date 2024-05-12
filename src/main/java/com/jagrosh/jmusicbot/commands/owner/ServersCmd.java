@@ -23,15 +23,12 @@ import net.dv8tion.jda.api.entities.Guild;
 import java.util.List;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class ServersCmd extends OwnerCommand
-{
+public class ServersCmd extends OwnerCommand {
     private final Bot bot;
 
-    public ServersCmd(Bot bot)
-    {
+    public ServersCmd(Bot bot) {
         this.bot = bot;
         this.name = "servers";
         this.help = "查看機器人所在的伺服器";
@@ -40,11 +37,10 @@ public class ServersCmd extends OwnerCommand
     }
 
     @Override
-    protected void execute(CommandEvent event)
-    {
+    protected void execute(CommandEvent event) {
         final List<Guild> guilds = event.getJDA().getGuilds();
         final StringBuilder sb = new StringBuilder("```\n");
-        for(Guild guild : guilds){
+        for (Guild guild : guilds) {
             sb.append(guild.getName()).append(" - ").append(guild.getId()).append("\n");
         }
         sb.append("\n```");

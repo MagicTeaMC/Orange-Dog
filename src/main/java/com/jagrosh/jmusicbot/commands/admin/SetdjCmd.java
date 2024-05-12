@@ -26,46 +26,37 @@ import net.dv8tion.jda.api.entities.Role;
 import java.util.List;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class SetdjCmd extends AdminCommand
-{
-    public SetdjCmd(Bot bot)
-    {
+public class SetdjCmd extends AdminCommand {
+    public SetdjCmd(Bot bot) {
         this.name = "setdj";
         this.help = "設定伺服器專用的 DJ 身分組";
         this.arguments = "<身分組名稱|NONE>";
         this.aliases = bot.getConfig().getAliases(this.name);
     }
-    
+
     @Override
-    protected void execute(CommandEvent event) 
-    {
-        if(event.getArgs().isEmpty())
-        {
-            event.reply(event.getClient().getError()+" 請輸入一個身分組名稱或是 NONE");
+    protected void execute(CommandEvent event) {
+        if (event.getArgs().isEmpty()) {
+            event.reply(event.getClient().getError() + " 請輸入一個身分組名稱或是 NONE");
             return;
         }
         Settings s = event.getClient().getSettingsFor(event.getGuild());
-        if(event.getArgs().equalsIgnoreCase("none"))
-        {
+        if (event.getArgs().equalsIgnoreCase("none")) {
             s.setDJRole(null);
-            event.reply(event.getClient().getSuccess()+" DJ身分組已清除，現在只有擁有管理權限的人可以使用DJ指令");
-        }
-        else
-        {
+            event.reply(event.getClient().getSuccess() + " DJ身分組已清除，現在只有擁有管理權限的人可以使用DJ指令");
+        } else {
             List<Role> list = FinderUtil.findRoles(event.getArgs(), event.getGuild());
-            if(list.isEmpty())
-                event.reply(event.getClient().getWarning()+" 找不到名為 \""+event.getArgs()+"\" 的身分組");
-            else if (list.size()>1)
-                event.reply(event.getClient().getWarning()+FormatUtil.listOfRoles(list, event.getArgs()));
-            else
-            {
+            if (list.isEmpty())
+                event.reply(event.getClient().getWarning() + " 找不到名為 \"" + event.getArgs() + "\" 的身分組");
+            else if (list.size() > 1)
+                event.reply(event.getClient().getWarning() + FormatUtil.listOfRoles(list, event.getArgs()));
+            else {
                 s.setDJRole(list.get(0));
-                event.reply(event.getClient().getSuccess()+"擁有 **"+list.get(0).getName()+"** 身分組的人現在可以使用 DJ 指令");
+                event.reply(event.getClient().getSuccess() + "擁有 **" + list.get(0).getName() + "** 身分組的人現在可以使用 DJ 指令");
             }
         }
     }
-    
+
 }

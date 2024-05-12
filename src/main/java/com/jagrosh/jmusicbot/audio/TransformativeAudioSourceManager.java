@@ -32,21 +32,17 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
-public class TransformativeAudioSourceManager extends YoutubeAudioSourceManager
-{
+public class TransformativeAudioSourceManager extends YoutubeAudioSourceManager {
     private final static Logger log = LoggerFactory.getLogger(TransformativeAudioSourceManager.class);
     private final String name, regex, replacement, selector, format;
-    
-    public TransformativeAudioSourceManager(String name, Config object)
-    {
+
+    public TransformativeAudioSourceManager(String name, Config object) {
         this(name, object.getString("regex"), object.getString("replacement"), object.getString("selector"), object.getString("format"));
     }
-    
-    public TransformativeAudioSourceManager(String name, String regex, String replacement, String selector, String format)
-    {
+
+    public TransformativeAudioSourceManager(String name, String regex, String replacement, String selector, String format) {
         this.name = name;
         this.regex = regex;
         this.replacement = replacement;
@@ -54,52 +50,39 @@ public class TransformativeAudioSourceManager extends YoutubeAudioSourceManager
         this.format = format;
     }
 
+    public static List<TransformativeAudioSourceManager> createTransforms(Config transforms) {
+        try {
+            return transforms.root().entrySet().stream()
+                    .map(e -> new TransformativeAudioSourceManager(e.getKey(), transforms.getConfig(e.getKey())))
+                    .collect(Collectors.toList());
+        } catch (Exception ex) {
+            log.warn("錯誤的轉場 ", ex);
+            return Collections.emptyList();
+        }
+    }
+
     @Override
-    public String getSourceName()
-    {
+    public String getSourceName() {
         return name;
     }
 
     @Override
-    public AudioItem loadItem(AudioPlayerManager apm, AudioReference ar)
-    {
-        if(ar.identifier == null || !ar.identifier.matches(regex))
+    public AudioItem loadItem(AudioPlayerManager apm, AudioReference ar) {
+        if (ar.identifier == null || !ar.identifier.matches(regex))
             return null;
-        try
-        {
+        try {
             String url = ar.identifier.replaceAll(regex, replacement);
             Document doc = Jsoup.connect(url).get();
             String value = doc.selectFirst(selector).ownText();
             String formattedValue = String.format(format, value);
             return super.loadItem(apm, new AudioReference(formattedValue, null));
-        }
-        catch (PatternSyntaxException ex)
-        {
+        } catch (PatternSyntaxException ex) {
             log.info(String.format("錯誤的語法 '%s' 於來源 '%s'", regex, name));
-        }
-        catch (IOException ex)
-        {
+        } catch (IOException ex) {
             log.warn(String.format("從來源轉換網址失敗: '%s': ", name), ex);
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             log.warn(String.format("來源錯誤: '%s'", name), ex);
         }
         return null;
-    }
-    
-    public static List<TransformativeAudioSourceManager> createTransforms(Config transforms)
-    {
-        try
-        {
-            return transforms.root().entrySet().stream()
-                    .map(e -> new TransformativeAudioSourceManager(e.getKey(), transforms.getConfig(e.getKey())))
-                    .collect(Collectors.toList());
-        }
-        catch (Exception ex)
-        {
-            log.warn("錯誤的轉場 ", ex);
-            return Collections.emptyList();
-        }
     }
 }

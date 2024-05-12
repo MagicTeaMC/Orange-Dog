@@ -15,16 +15,15 @@
  */
 package com.jagrosh.jmusicbot.entities;
 
-import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Scanner;
+
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
-public class Prompt
-{
+public class Prompt {
     private final String title;
     private final String noguiMessage;
 
@@ -32,33 +31,27 @@ public class Prompt
     private final boolean noprompt;
     private Scanner scanner;
 
-    public Prompt(String title)
-    {
+    public Prompt(String title) {
         this(title, null);
     }
 
-    public Prompt(String title, String noguiMessage)
-    {
+    public Prompt(String title, String noguiMessage) {
         this(title, noguiMessage, "true".equalsIgnoreCase(System.getProperty("noprompt")));
     }
 
-    private Prompt(String title, String noguiMessage, boolean noprompt)
-    {
+    private Prompt(String title, String noguiMessage, boolean noprompt) {
         this.title = title;
         this.noguiMessage = noguiMessage == null ? "無法開啟視窗，如果您的伺服器或電腦沒有螢幕，請使用 -Dnogui=true 來啟動機器人" : noguiMessage;
         this.noprompt = noprompt;
     }
 
-    public boolean isNoGUI()
-    {
+    public boolean isNoGUI() {
         return nogui;
     }
 
-    public void alert(Level level, String context, String message)
-    {
+    public void alert(Level level, String context, String message) {
         Logger log = LoggerFactory.getLogger(context);
-        switch(level)
-        {
+        switch (level) {
             case INFO:
                 log.info(message);
                 break;
@@ -74,29 +67,24 @@ public class Prompt
         }
     }
 
-    public String prompt(String content)
-    {
-        if(noprompt)
+    public String prompt(String content) {
+        if (noprompt)
             return null;
-        if(scanner==null)
+        if (scanner == null)
             scanner = new Scanner(System.in);
-        try
-        {
+        try {
             System.out.println(content);
-            if(scanner.hasNextLine())
+            if (scanner.hasNextLine())
                 return scanner.nextLine();
             return null;
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             alert(Level.ERROR, title, "無法從命令列讀取輸入");
             e.printStackTrace();
             return null;
         }
     }
 
-    public enum Level
-    {
+    public enum Level {
         INFO, WARNING, ERROR
     }
 }

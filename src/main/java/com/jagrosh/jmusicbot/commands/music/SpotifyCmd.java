@@ -30,18 +30,15 @@ import java.util.regex.Pattern;
 
 public class SpotifyCmd extends MusicCommand {
 
-    Logger log = LoggerFactory.getLogger(this.name);
     private static final HttpClient httpClient = HttpClient.newBuilder().build();
     private static final String SPOTIFY_AUTH_URL = "https://accounts.spotify.com/api/token";
-
     private final static String LOAD = "\uD83D\uDCE5"; // 📥
     private final static String CANCEL = "\uD83D\uDEAB"; // 🚫
-
-    private String accessToken = null;
-    private long accessTokenExpirationTime;
-
     private final OrderedMenu.Builder builder;
     private final String loadingEmoji;
+    Logger log = LoggerFactory.getLogger(this.name);
+    private String accessToken = null;
+    private long accessTokenExpirationTime;
 
     public SpotifyCmd(Bot bot) {
 
@@ -61,13 +58,26 @@ public class SpotifyCmd extends MusicCommand {
                 .setEventWaiter(bot.getWaiter())
                 .setTimeout(1, TimeUnit.MINUTES);
 
-        String clientId  = bot.getConfig().getSpotifyClientId();
-        String clientSecret  = bot.getConfig().getSpotifyClientSecret();
+        String clientId = bot.getConfig().getSpotifyClientId();
+        String clientSecret = bot.getConfig().getSpotifyClientSecret();
 
-        if(clientId.isEmpty() || clientSecret.isEmpty()){
+        if (clientId.isEmpty() || clientSecret.isEmpty()) {
             return;
         }
         accessToken = getAccessToken(clientId, clientSecret);
+    }
+
+    public static String extractTrackIdFromUrl(String url) {
+        String trackId = null;
+
+        Pattern pattern = Pattern.compile("track/(\\w+)");
+        Matcher matcher = pattern.matcher(url);
+
+        if (matcher.find()) {
+            trackId = matcher.group(1);
+        }
+
+        return trackId;
     }
 
     @Override
@@ -94,7 +104,7 @@ public class SpotifyCmd extends MusicCommand {
         String endpoint = "https://api.spotify.com/v1/tracks/" + trackId;
 
         HttpRequest request = HttpRequest.newBuilder()
-                .header("Authorization", "Bearer "+ accessToken)
+                .header("Authorization", "Bearer " + accessToken)
                 .header("Accept-Language", "en")
                 .GET()
                 .uri(URI.create(endpoint))
@@ -110,7 +120,7 @@ public class SpotifyCmd extends MusicCommand {
 
             endpoint = "https://api.spotify.com/v1/audio-features/" + trackId;
             request = HttpRequest.newBuilder()
-                    .header("Authorization", "Bearer "+ accessToken)
+                    .header("Authorization", "Bearer " + accessToken)
                     .GET()
                     .uri(URI.create(endpoint))
                     .build();
@@ -129,23 +139,10 @@ public class SpotifyCmd extends MusicCommand {
 
             event.getTextChannel().sendMessageEmbeds(embed.build()).queue();
 
-            event.reply("`[" + trackName + "]`載入中...", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "ytmsearch:"+trackName + " " + artistName, new ResultHandler(m, event)));
+            event.reply("`[" + trackName + "]`載入中...", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "ytmsearch:" + trackName + " " + artistName, new ResultHandler(m, event)));
         } catch (IOException | InterruptedException e) {
             event.reply(CANCEL + e.getMessage());
         }
-    }
-
-    public static String extractTrackIdFromUrl(String url) {
-        String trackId = null;
-
-        Pattern pattern = Pattern.compile("track/(\\w+)");
-        Matcher matcher = pattern.matcher(url);
-
-        if (matcher.find()) {
-            trackId = matcher.group(1);
-        }
-
-        return trackId;
     }
 
     public boolean isSpotifyTrackUrl(String url) {
@@ -230,7 +227,7 @@ public class SpotifyCmd extends MusicCommand {
 
         @Override
         public void noMatches() {
-            m.editMessage(FormatUtil.filter(event.getClient().getWarning() + "沒有找到歌曲 `"+event.getArgs()+"`")).queue();
+            m.editMessage(FormatUtil.filter(event.getClient().getWarning() + "沒有找到歌曲 `" + event.getArgs() + "`")).queue();
         }
 
         @Override

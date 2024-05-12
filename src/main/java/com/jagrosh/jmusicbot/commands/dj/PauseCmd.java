@@ -21,13 +21,10 @@ import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.commands.DJCommand;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class PauseCmd extends DJCommand 
-{
-    public PauseCmd(Bot bot)
-    {
+public class PauseCmd extends DJCommand {
+    public PauseCmd(Bot bot) {
         super(bot);
         this.name = "pause";
         this.help = "暫停歌曲";
@@ -36,15 +33,13 @@ public class PauseCmd extends DJCommand
     }
 
     @Override
-    public void doCommand(CommandEvent event) 
-    {
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-        if(handler.getPlayer().isPaused())
-        {
-            event.replyWarning("歌曲已經暫停了! 使用 `"+event.getClient().getPrefix()+"play` 來繼續播放!");
+    public void doCommand(CommandEvent event) {
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+        if (handler.getPlayer().isPaused()) {
+            event.replyWarning("歌曲已經暫停了! 使用 `" + event.getClient().getPrefix() + "play` 來繼續播放!");
             return;
         }
         handler.getPlayer().setPaused(true);
-        event.replySuccess("暫停 **"+handler.getPlayer().getPlayingTrack().getInfo().title+"** 輸入 `"+event.getClient().getPrefix()+"play` 來繼續播放!");
+        event.replySuccess("暫停 **" + handler.getPlayer().getPlayingTrack().getInfo().title + "** 輸入 `" + event.getClient().getPrefix() + "play` 來繼續播放!");
     }
 }

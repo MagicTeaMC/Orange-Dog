@@ -24,19 +24,15 @@ import net.dv8tion.jda.api.entities.Role;
 import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
-public abstract class DJCommand extends MusicCommand
-{
-    public DJCommand(Bot bot)
-    {
+public abstract class DJCommand extends MusicCommand {
+    public DJCommand(Bot bot) {
         super(bot);
         this.category = new Category("DJ", event -> checkDJPermission(event));
     }
-    
-    public static boolean checkDJPermission(CommandEvent event)
-    {
+
+    public static boolean checkDJPermission(CommandEvent event) {
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
         String authorId = event.getAuthor().getId();
         boolean authorCannotUseCommands = settings.getBlacklistedUsers().contains(authorId);
@@ -44,13 +40,13 @@ public abstract class DJCommand extends MusicCommand
             event.replyError(formatUsername(event.getAuthor().getName(), event.getAuthor().getDiscriminator()) + " 在黑名單中，所以無法使用此指令！");
             return false;
         }
-        if(event.getAuthor().getId().equals(event.getClient().getOwnerId()))
+        if (event.getAuthor().getId().equals(event.getClient().getOwnerId()))
             return true;
-        if(event.getGuild()==null)
+        if (event.getGuild() == null)
             return true;
-        if(event.getMember().hasPermission(Permission.MANAGE_SERVER))
+        if (event.getMember().hasPermission(Permission.MANAGE_SERVER))
             return true;
         Role dj = settings.getRole(event.getGuild());
-        return dj!=null && (event.getMember().getRoles().contains(dj) || dj.getIdLong()==event.getGuild().getIdLong());
+        return dj != null && (event.getMember().getRoles().contains(dj) || dj.getIdLong() == event.getGuild().getIdLong());
     }
 }

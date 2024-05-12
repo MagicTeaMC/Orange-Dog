@@ -33,15 +33,12 @@ import net.dv8tion.jda.api.entities.Message;
 import java.awt.*;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
-public class PlaynextCmd extends DJCommand
-{
+public class PlaynextCmd extends DJCommand {
     private final String loadingEmoji;
-    
-    public PlaynextCmd(Bot bot)
-    {
+
+    public PlaynextCmd(Bot bot) {
         super(bot);
         this.loadingEmoji = bot.getConfig().getLoading();
         this.name = "playnext";
@@ -51,29 +48,25 @@ public class PlaynextCmd extends DJCommand
         this.beListening = true;
         this.bePlaying = false;
     }
-    
+
     @Override
-    public void doCommand(CommandEvent event)
-    {
-        if(event.getArgs().isEmpty() && event.getMessage().getAttachments().isEmpty())
-        {
+    public void doCommand(CommandEvent event) {
+        if (event.getArgs().isEmpty() && event.getMessage().getAttachments().isEmpty()) {
             event.replyWarning("請輸入標題或網址!");
             return;
         }
-        String args = event.getArgs().startsWith("<") && event.getArgs().endsWith(">") 
-                ? event.getArgs().substring(1,event.getArgs().length()-1) 
+        String args = event.getArgs().startsWith("<") && event.getArgs().endsWith(">")
+                ? event.getArgs().substring(1, event.getArgs().length() - 1)
                 : event.getArgs().isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : event.getArgs();
-        event.reply(loadingEmoji+" 載入中... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), args, new ResultHandler(m,event,false)));
+        event.reply(loadingEmoji + " 載入中... `[" + args + "]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), args, new ResultHandler(m, event, false)));
     }
-    
-    private class ResultHandler implements AudioLoadResultHandler
-    {
+
+    private class ResultHandler implements AudioLoadResultHandler {
         private final Message m;
         private final CommandEvent event;
         private final boolean ytsearch;
-        
-        private ResultHandler(Message m, CommandEvent event, boolean ytsearch)
-        {
+
+        private ResultHandler(Message m, CommandEvent event, boolean ytsearch) {
             this.m = m;
             this.event = event;
             this.ytsearch = ytsearch;
@@ -86,34 +79,33 @@ public class PlaynextCmd extends DJCommand
                         + TimeUtil.formatTime(track.getDuration()) + "` > `" + TimeUtil.formatTime(bot.getConfig().getMaxSeconds() * 1000) + "`")).queue();
                 return;
             }
-            AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-            int pos = handler.addTrackToFront(new QueuedTrack(track, event.getAuthor()))+1;
+            AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+            int pos = handler.addTrackToFront(new QueuedTrack(track, event.getAuthor())) + 1;
             EmbedBuilder mb = new EmbedBuilder();
             mb.setTitle(event.getClient().getSuccess() + " " + trackTitle);
             mb.setColor(Color.pink);
-            if(track instanceof YoutubeAudioTrack) mb.setThumbnail("https://img.youtube.com/vi/"+track.getIdentifier()+"/mqdefault.jpg");
+            if (track instanceof YoutubeAudioTrack)
+                mb.setThumbnail("https://img.youtube.com/vi/" + track.getIdentifier() + "/mqdefault.jpg");
             mb.addField("時長", TimeUtil.formatTime(track.getDuration()), true);
-            mb.addField("序列", pos == 0 ? "立即播放" : "第 "+pos + " 序列", true);
-            mb.addField("歌曲連結", "[點我前往]("+track.getInfo().uri+")", true);
+            mb.addField("序列", pos == 0 ? "立即播放" : "第 " + pos + " 序列", true);
+            mb.addField("歌曲連結", "[點我前往](" + track.getInfo().uri + ")", true);
             mb.setFooter(event.getMember().getEffectiveName(), event.getMember().getEffectiveAvatarUrl());
 
             m.editMessage("♬").queue();
             m.editMessageEmbeds(mb.build()).queue();
         }
-        
+
         @Override
-        public void trackLoaded(AudioTrack track)
-        {
+        public void trackLoaded(AudioTrack track) {
             loadSingle(track);
         }
 
         @Override
-        public void playlistLoaded(AudioPlaylist playlist)
-        {
+        public void playlistLoaded(AudioPlaylist playlist) {
             AudioTrack single;
-            if(playlist.getTracks().size()==1 || playlist.isSearchResult())
-                single = playlist.getSelectedTrack()==null ? playlist.getTracks().get(0) : playlist.getSelectedTrack();
-            else if (playlist.getSelectedTrack()!=null)
+            if (playlist.getTracks().size() == 1 || playlist.isSearchResult())
+                single = playlist.getSelectedTrack() == null ? playlist.getTracks().get(0) : playlist.getSelectedTrack();
+            else if (playlist.getSelectedTrack() != null)
                 single = playlist.getSelectedTrack();
             else
                 single = playlist.getTracks().get(0);
@@ -121,21 +113,19 @@ public class PlaynextCmd extends DJCommand
         }
 
         @Override
-        public void noMatches()
-        {
-            if(ytsearch)
-                m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" 沒有符合 `"+event.getArgs()+"` 的搜尋結果")).queue();
+        public void noMatches() {
+            if (ytsearch)
+                m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 沒有符合 `" + event.getArgs() + "` 的搜尋結果")).queue();
             else
-                bot.getPlayerManager().loadItemOrdered(event.getGuild(), "ytsearch:"+event.getArgs(), new ResultHandler(m,event,true));
+                bot.getPlayerManager().loadItemOrdered(event.getGuild(), "ytsearch:" + event.getArgs(), new ResultHandler(m, event, true));
         }
 
         @Override
-        public void loadFailed(FriendlyException throwable)
-        {
-            if(throwable.severity==FriendlyException.Severity.COMMON)
-                m.editMessage(event.getClient().getError()+" 載入時發生錯誤: "+throwable.getMessage()).queue();
+        public void loadFailed(FriendlyException throwable) {
+            if (throwable.severity == FriendlyException.Severity.COMMON)
+                m.editMessage(event.getClient().getError() + " 載入時發生錯誤: " + throwable.getMessage()).queue();
             else
-                m.editMessage(event.getClient().getError()+" 載入歌曲時發生錯誤").queue();
+                m.editMessage(event.getClient().getError() + " 載入歌曲時發生錯誤").queue();
         }
     }
 }

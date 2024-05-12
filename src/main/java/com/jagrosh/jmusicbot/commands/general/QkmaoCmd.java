@@ -35,7 +35,7 @@ public class QkmaoCmd extends Command {
         String link = args[0];
         String customName = args.length > 1 ? args[1] : null;
 
-        if(customName == null) {
+        if (customName == null) {
             createRandomShortUrl(event, link);
         } else {
             createCustomShortUrl(event, link, customName);
@@ -97,7 +97,7 @@ public class QkmaoCmd extends Command {
                 JsonObject jsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
                 String message = jsonObject.get("message").getAsString();
 
-                if(message.equals("successful")) {
+                if (message.equals("successful")) {
                     String shortUrl = jsonObject.get("link").getAsString();
                     event.reply("您的短網址為：<" + shortUrl + ">");
                 } else {

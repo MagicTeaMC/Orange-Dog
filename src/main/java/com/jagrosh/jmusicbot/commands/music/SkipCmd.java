@@ -24,13 +24,10 @@ import com.jagrosh.jmusicbot.commands.MusicCommand;
 import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class SkipCmd extends MusicCommand 
-{
-    public SkipCmd(Bot bot)
-    {
+public class SkipCmd extends MusicCommand {
+    public SkipCmd(Bot bot) {
         super(bot);
         this.name = "skip";
         this.help = "投票跳過目前的歌曲";
@@ -40,39 +37,33 @@ public class SkipCmd extends MusicCommand
     }
 
     @Override
-    public void doCommand(CommandEvent event) 
-    {
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+    public void doCommand(CommandEvent event) {
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         RequestMetadata rm = handler.getRequestMetadata();
-        if(event.getAuthor().getIdLong() == rm.getOwner())
-        {
-            event.reply(event.getClient().getSuccess()+" 已跳過 **"+handler.getPlayer().getPlayingTrack().getInfo().title+"**");
+        if (event.getAuthor().getIdLong() == rm.getOwner()) {
+            event.reply(event.getClient().getSuccess() + " 已跳過 **" + handler.getPlayer().getPlayingTrack().getInfo().title + "**");
             handler.getPlayer().stopTrack();
-        }
-        else
-        {
-            int listeners = (int)event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
+        } else {
+            int listeners = (int) event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
                     .filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened()).count();
             String msg;
-            if(handler.getVotes().contains(event.getAuthor().getId())) {
-                msg = event.getClient().getWarning()+" 你已經投過票了 `[";
-            } else
-            {
-                msg = event.getClient().getSuccess()+" 投票跳過 `[";
+            if (handler.getVotes().contains(event.getAuthor().getId())) {
+                msg = event.getClient().getWarning() + " 你已經投過票了 `[";
+            } else {
+                msg = event.getClient().getSuccess() + " 投票跳過 `[";
                 handler.getVotes().add(event.getAuthor().getId());
             }
-            int skippers = (int)event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
+            int skippers = (int) event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
                     .filter(m -> handler.getVotes().contains(m.getUser().getId())).count();
-            int required = (int)Math.ceil(listeners * bot.getSettingsManager().getSettings(event.getGuild()).getSkipRatio());
+            int required = (int) Math.ceil(listeners * bot.getSettingsManager().getSettings(event.getGuild()).getSkipRatio());
             msg += skippers + " 個票，需要 " + required + "/" + listeners + " ]`";
-            if(skippers>=required)
-            {
+            if (skippers >= required) {
                 msg += "\n" + event.getClient().getSuccess() + " 已跳過 **" + handler.getPlayer().getPlayingTrack().getInfo().title
-                    + "** " + (rm.getOwner() == 0L ? "(自動播放)" : "(由 **" + formatUsername(rm.user.username, rm.user.discrim) + "**點播)");
+                        + "** " + (rm.getOwner() == 0L ? "(自動播放)" : "(由 **" + formatUsername(rm.user.username, rm.user.discrim) + "**點播)");
                 handler.getPlayer().stopTrack();
             }
             event.reply(msg);
         }
     }
-    
+
 }

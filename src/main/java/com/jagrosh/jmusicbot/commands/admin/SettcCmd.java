@@ -26,46 +26,37 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import java.util.List;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class SettcCmd extends AdminCommand 
-{
-    public SettcCmd(Bot bot)
-    {
+public class SettcCmd extends AdminCommand {
+    public SettcCmd(Bot bot) {
         this.name = "settc";
         this.help = "設置音樂指令的文字頻道";
         this.arguments = "<文字頻道|NONE>";
         this.aliases = bot.getConfig().getAliases(this.name);
     }
-    
+
     @Override
-    protected void execute(CommandEvent event) 
-    {
-        if(event.getArgs().isEmpty())
-        {
-            event.reply(event.getClient().getError()+" 請標記一個文字頻道或是 NONE");
+    protected void execute(CommandEvent event) {
+        if (event.getArgs().isEmpty()) {
+            event.reply(event.getClient().getError() + " 請標記一個文字頻道或是 NONE");
             return;
         }
         Settings s = event.getClient().getSettingsFor(event.getGuild());
-        if(event.getArgs().equalsIgnoreCase("none"))
-        {
+        if (event.getArgs().equalsIgnoreCase("none")) {
             s.setTextChannel(null);
-            event.reply(event.getClient().getSuccess()+" 現在可以在任何頻道中使用音樂指令");
-        }
-        else
-        {
+            event.reply(event.getClient().getSuccess() + " 現在可以在任何頻道中使用音樂指令");
+        } else {
             List<TextChannel> list = FinderUtil.findTextChannels(event.getArgs(), event.getGuild());
-            if(list.isEmpty())
-                event.reply(event.getClient().getWarning()+" 找不到名為 \""+event.getArgs()+"\" 的文字頻道");
-            else if (list.size()>1)
-                event.reply(event.getClient().getWarning()+FormatUtil.listOfTChannels(list, event.getArgs()));
-            else
-            {
+            if (list.isEmpty())
+                event.reply(event.getClient().getWarning() + " 找不到名為 \"" + event.getArgs() + "\" 的文字頻道");
+            else if (list.size() > 1)
+                event.reply(event.getClient().getWarning() + FormatUtil.listOfTChannels(list, event.getArgs()));
+            else {
                 s.setTextChannel(list.get(0));
-                event.reply(event.getClient().getSuccess()+" 音樂指令現在只能在 <#"+list.get(0).getId()+"> 中使用");
+                event.reply(event.getClient().getSuccess() + " 音樂指令現在只能在 <#" + list.get(0).getId() + "> 中使用");
             }
         }
     }
-    
+
 }

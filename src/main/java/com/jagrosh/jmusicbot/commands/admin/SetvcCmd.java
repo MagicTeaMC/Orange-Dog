@@ -26,44 +26,35 @@ import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import java.util.List;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class SetvcCmd extends AdminCommand 
-{
-    public SetvcCmd(Bot bot)
-    {
+public class SetvcCmd extends AdminCommand {
+    public SetvcCmd(Bot bot) {
         this.name = "setvc";
         this.help = "設置播放音樂的語音頻道";
         this.arguments = "<語音頻道|NONE>";
         this.aliases = bot.getConfig().getAliases(this.name);
     }
-    
+
     @Override
-    protected void execute(CommandEvent event) 
-    {
-        if(event.getArgs().isEmpty())
-        {
-            event.reply(event.getClient().getError()+" 請輸入一個語音頻道或是 NONE");
+    protected void execute(CommandEvent event) {
+        if (event.getArgs().isEmpty()) {
+            event.reply(event.getClient().getError() + " 請輸入一個語音頻道或是 NONE");
             return;
         }
         Settings s = event.getClient().getSettingsFor(event.getGuild());
-        if(event.getArgs().equalsIgnoreCase("none"))
-        {
+        if (event.getArgs().equalsIgnoreCase("none")) {
             s.setVoiceChannel(null);
-            event.reply(event.getClient().getSuccess()+" 現在音樂可以在任何頻道中播放");
-        }
-        else
-        {
+            event.reply(event.getClient().getSuccess() + " 現在音樂可以在任何頻道中播放");
+        } else {
             List<VoiceChannel> list = FinderUtil.findVoiceChannels(event.getArgs(), event.getGuild());
-            if(list.isEmpty())
-                event.reply(event.getClient().getWarning()+" 找不到名為 \""+event.getArgs()+"\" 的語音頻道");
-            else if (list.size()>1)
-                event.reply(event.getClient().getWarning()+FormatUtil.listOfVChannels(list, event.getArgs()));
-            else
-            {
+            if (list.isEmpty())
+                event.reply(event.getClient().getWarning() + " 找不到名為 \"" + event.getArgs() + "\" 的語音頻道");
+            else if (list.size() > 1)
+                event.reply(event.getClient().getWarning() + FormatUtil.listOfVChannels(list, event.getArgs()));
+            else {
                 s.setVoiceChannel(list.get(0));
-                event.reply(event.getClient().getSuccess()+" 音樂現在只能在 "+list.get(0).getAsMention()+" 中播放");
+                event.reply(event.getClient().getSuccess() + " 音樂現在只能在 " + list.get(0).getAsMention() + " 中播放");
             }
         }
     }

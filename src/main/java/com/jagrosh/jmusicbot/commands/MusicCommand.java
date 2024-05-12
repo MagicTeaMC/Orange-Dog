@@ -29,25 +29,21 @@ import net.dv8tion.jda.api.exceptions.PermissionException;
 import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public abstract class MusicCommand extends Command 
-{
+public abstract class MusicCommand extends Command {
     protected final Bot bot;
     protected boolean bePlaying;
     protected boolean beListening;
-    
-    public MusicCommand(Bot bot)
-    {
+
+    public MusicCommand(Bot bot) {
         this.bot = bot;
         this.guildOnly = true;
         this.category = new Category("音樂");
     }
-    
+
     @Override
-    protected void execute(CommandEvent event) 
-    {
+    protected void execute(CommandEvent event) {
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
         String authorId = event.getAuthor().getId();
         boolean authorCannotUseCommands = settings.getBlacklistedUsers().contains(authorId);
@@ -57,57 +53,48 @@ public abstract class MusicCommand extends Command
             return;
         }
         TextChannel tchannel = settings.getTextChannel(event.getGuild());
-        if(tchannel!=null && !event.getTextChannel().equals(tchannel))
-        {
-            try 
-            {
+        if (tchannel != null && !event.getTextChannel().equals(tchannel)) {
+            try {
                 event.getMessage().delete().queue();
-            } catch(PermissionException ignore){}
-            event.replyInDm(event.getClient().getError()+" 你只能在 "+tchannel.getAsMention()+" 中使用這個指令！");
+            } catch (PermissionException ignore) {
+            }
+            event.replyInDm(event.getClient().getError() + " 你只能在 " + tchannel.getAsMention() + " 中使用這個指令！");
             return;
         }
         bot.getPlayerManager().setUpHandler(event.getGuild()); // no point constantly checking for this later
-        if(bePlaying && !((AudioHandler)event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA()))
-        {
-            event.reply(event.getClient().getError()+" 必須正在播放音樂！");
+        if (bePlaying && !((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA())) {
+            event.reply(event.getClient().getError() + " 必須正在播放音樂！");
             return;
         }
-        if(beListening)
-        {
+        if (beListening) {
             AudioChannel current = event.getGuild().getSelfMember().getVoiceState().getChannel();
-            if(current==null)
+            if (current == null)
                 current = settings.getVoiceChannel(event.getGuild());
             GuildVoiceState userState = event.getMember().getVoiceState();
-            if(!userState.inAudioChannel() || userState.isDeafened() || (current!=null && !userState.getChannel().equals(current)))
-            {
-                event.replyError("你必須在 "+(current==null ? "語音頻道中" : current.getAsMention())+" 才能使用這個指令！");
+            if (!userState.inAudioChannel() || userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
+                event.replyError("你必須在 " + (current == null ? "語音頻道中" : current.getAsMention()) + " 才能使用這個指令！");
                 return;
             }
 
             VoiceChannel afkChannel = userState.getGuild().getAfkChannel();
-            if(afkChannel != null && afkChannel.equals(userState.getChannel()))
-            {
+            if (afkChannel != null && afkChannel.equals(userState.getChannel())) {
                 event.replyError("你不能在閒置頻道中使用這個指令！");
                 return;
             }
 
-            if(!event.getGuild().getSelfMember().getVoiceState().inAudioChannel())
-            {
-                try 
-                {
+            if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) {
+                try {
                     event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
                     event.getGuild().getAudioManager().setSelfDeafened(true);
-                }
-                catch(PermissionException ex) 
-                {
-                    event.reply(event.getClient().getError()+" 我無法加入 "+userState.getChannel().getAsMention()+" ！");
+                } catch (PermissionException ex) {
+                    event.reply(event.getClient().getError() + " 我無法加入 " + userState.getChannel().getAsMention() + " ！");
                     return;
                 }
             }
         }
-        
+
         doCommand(event);
     }
-    
+
     public abstract void doCommand(CommandEvent event);
 }

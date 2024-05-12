@@ -7,7 +7,6 @@ import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ApplicationInfo;
@@ -23,13 +22,13 @@ import java.awt.*;
 )
 @Author("John Grosh (jagrosh)")
 public class AboutCommand extends Command {
-    private boolean IS_AUTHOR = true;
-    private String REPLACEMENT_ICON = "+";
     private final Color color;
     private final String description;
     private final Permission[] perms;
-    private String oauthLink;
     private final String[] features;
+    private boolean IS_AUTHOR = true;
+    private String REPLACEMENT_ICON = "+";
+    private String oauthLink;
 
     public AboutCommand(Color color, String description, String[] features, Permission... perms) {
         this.color = color;
@@ -67,8 +66,8 @@ public class AboutCommand extends Command {
         builder.setAuthor(event.getSelfUser().getName() + " 的資訊！", null, event.getSelfUser().getAvatarUrl());
         String author = event.getJDA().getUserById(event.getClient().getOwnerId()) == null ? "<@" + event.getClient().getOwnerId() + ">" : event.getJDA().getUserById(event.getClient().getOwnerId()).getName();
         StringBuilder descr = (new StringBuilder()).append("你好！ 我是 **").append(event.getSelfUser().getName()).append("** (v" + OtherUtil.getCurrentVersion() + ")。 ").append(this.IS_AUTHOR ? "使用Java寫成" : "我的擁有者是").append(" **").append(author).append("** ，本機器人依賴於 [JDA-Chewtils](https://github.com/Chew/JDA-Chewtils) (").append(JDAUtilitiesInfo.VERSION_MAJOR).append(".").append(JDAUtilitiesInfo.VERSION_MINOR).append(") 以及 [JDA wrapper](https://github.com/discord-jda/JDA) (").append(JDAInfo.VERSION).append(")\n\n請輸入 `").append(event.getClient().getTextualPrefix()).append(event.getClient().getHelpWord())
-                .append("` 來查看我的指令!").append("\n請 [`邀請`](" + this.oauthLink + ")"+ "我到你的伺服器!");
-            descr.append("\n").append(event.getClient().getSuccess().startsWith("<") ? REPLACEMENT_ICON : event.getClient().getSuccess()).append(" ");
+                .append("` 來查看我的指令!").append("\n請 [`邀請`](" + this.oauthLink + ")" + "我到你的伺服器!");
+        descr.append("\n").append(event.getClient().getSuccess().startsWith("<") ? REPLACEMENT_ICON : event.getClient().getSuccess()).append(" ");
 
         builder.setDescription(descr);
         event.getJDA().getShardInfo();

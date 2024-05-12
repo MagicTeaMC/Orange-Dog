@@ -24,13 +24,10 @@ import com.jagrosh.jmusicbot.commands.DJCommand;
 import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class ForceskipCmd extends DJCommand 
-{
-    public ForceskipCmd(Bot bot)
-    {
+public class ForceskipCmd extends DJCommand {
+    public ForceskipCmd(Bot bot) {
         super(bot);
         this.name = "forceskip";
         this.help = "強制跳過目前的歌曲";
@@ -39,12 +36,11 @@ public class ForceskipCmd extends DJCommand
     }
 
     @Override
-    public void doCommand(CommandEvent event) 
-    {
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+    public void doCommand(CommandEvent event) {
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         RequestMetadata rm = handler.getRequestMetadata();
-        event.reply(event.getClient().getSuccess()+" 已跳過 **"+handler.getPlayer().getPlayingTrack().getInfo().title
-                +"** "+(rm.getOwner() == 0L ? "(自動播放)" : "(由 **" + formatUsername(rm.user.username, rm.user.discrim) + "** 點播)"));
+        event.reply(event.getClient().getSuccess() + " 已跳過 **" + handler.getPlayer().getPlayingTrack().getInfo().title
+                + "** " + (rm.getOwner() == 0L ? "(自動播放)" : "(由 **" + formatUsername(rm.user.username, rm.user.discrim) + "** 點播)"));
         handler.getPlayer().stopTrack();
     }
 }

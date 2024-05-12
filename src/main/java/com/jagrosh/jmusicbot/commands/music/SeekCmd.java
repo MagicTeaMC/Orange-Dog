@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.jagrosh.jmusicbot.commands.music;
+
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
@@ -21,13 +22,12 @@ import com.jagrosh.jmusicbot.commands.DJCommand;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
 import com.jagrosh.jmusicbot.utils.TimeUtil;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+
 /**
  * @author Whew., Inc.
  */
-public class SeekCmd extends MusicCommand
-{
-    public SeekCmd(Bot bot)
-    {
+public class SeekCmd extends MusicCommand {
+    public SeekCmd(Bot bot) {
         super(bot);
         this.name = "seek";
         this.help = "跳轉至歌曲的特定時間";
@@ -36,25 +36,22 @@ public class SeekCmd extends MusicCommand
         this.beListening = true;
         this.bePlaying = true;
     }
+
     @Override
-    public void doCommand(CommandEvent event)
-    {
+    public void doCommand(CommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         AudioTrack playingTrack = handler.getPlayer().getPlayingTrack();
-        if (!playingTrack.isSeekable())
-        {
+        if (!playingTrack.isSeekable()) {
             event.replyError("此歌曲無法跳轉");
             return;
         }
-        if (!DJCommand.checkDJPermission(event) && playingTrack.getUserData(Long.class) != event.getAuthor().getIdLong())
-        {
+        if (!DJCommand.checkDJPermission(event) && playingTrack.getUserData(Long.class) != event.getAuthor().getIdLong()) {
             event.replyError("只有點播 **" + playingTrack.getInfo().title + "** 的用戶才能跳轉歌曲時間");
             return;
         }
         String args = event.getArgs();
         TimeUtil.SeekTime seekTime = TimeUtil.parseTime(args);
-        if (seekTime == null)
-        {
+        if (seekTime == null) {
             event.replyError("時間格式錯誤！ 正確格式：`1:02:23` `+1:10` `-90`, `1h10m`, `+90s`");
             return;
         }
@@ -62,18 +59,12 @@ public class SeekCmd extends MusicCommand
         long currentPosition = playingTrack.getPosition();
         long trackDuration = playingTrack.getDuration();
         long seekMilliseconds = seekTime.relative ? currentPosition + seekTime.milliseconds : seekTime.milliseconds;
-        if (seekMilliseconds > trackDuration)
-        {
+        if (seekMilliseconds > trackDuration) {
             event.replyError("無法跳轉至 `" + TimeUtil.formatTime(seekMilliseconds) + "` 因為現在的歌曲長度只有 `" + TimeUtil.formatTime(trackDuration));
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 playingTrack.setPosition(seekMilliseconds);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 event.replyError("跳轉時發生錯誤");
                 e.printStackTrace();
                 return;

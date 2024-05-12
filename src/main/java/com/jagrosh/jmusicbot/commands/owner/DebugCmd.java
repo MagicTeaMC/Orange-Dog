@@ -27,18 +27,15 @@ import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
-public class DebugCmd extends OwnerCommand 
-{
-    private final static String[] PROPERTIES = {"java.version", "java.vm.name", "java.vm.specification.version", 
-        "java.runtime.name", "java.runtime.version", "java.specification.version",  "os.arch", "os.name"};
-    
+public class DebugCmd extends OwnerCommand {
+    private final static String[] PROPERTIES = {"java.version", "java.vm.name", "java.vm.specification.version",
+            "java.runtime.name", "java.runtime.version", "java.specification.version", "os.arch", "os.name"};
+
     private final Bot bot;
-    
-    public DebugCmd(Bot bot)
-    {
+
+    public DebugCmd(Bot bot) {
         this.bot = bot;
         this.name = "debug";
         this.help = "顯示偵錯資訊";
@@ -47,11 +44,10 @@ public class DebugCmd extends OwnerCommand
     }
 
     @Override
-    protected void execute(CommandEvent event)
-    {
+    protected void execute(CommandEvent event) {
         StringBuilder sb = new StringBuilder();
         sb.append("系統資訊:");
-        for(String key: PROPERTIES)
+        for (String key : PROPERTIES)
             sb.append("\n  ").append(key).append(" = ").append(System.getProperty(key));
         sb.append("\n\n機器人資訊:")
                 .append("\n  版本 = ").append(OtherUtil.getCurrentVersion())
@@ -78,8 +74,8 @@ public class DebugCmd extends OwnerCommand
                 .append("\n  伺服器數量 = ").append(event.getJDA().getGuildCache().size())
                 .append("\n  使用者數量 = ").append(event.getJDA().getUserCache().size());
         sb.append("\n");
-        
-        if(event.isFromType(ChannelType.PRIVATE) 
+
+        if (event.isFromType(ChannelType.PRIVATE)
                 || event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ATTACH_FILES))
             event.getEvent().getChannel().sendFiles(FileUpload.fromData(sb.toString().getBytes(), "debug_information.txt")).queue();
         else

@@ -15,12 +15,6 @@
  */
 package com.jagrosh.jmusicbot.commands.music;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import java.util.concurrent.TimeUnit;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.OrderedMenu;
 import com.jagrosh.jmusicbot.Bot;
@@ -28,22 +22,26 @@ import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
+import com.jagrosh.jmusicbot.utils.TimeUtil;
+import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
+import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
-import com.jagrosh.jmusicbot.utils.TimeUtil;
+
+import java.util.concurrent.TimeUnit;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class SearchCmd extends MusicCommand 
-{
-    protected String searchPrefix = "ytsearch:";
+public class SearchCmd extends MusicCommand {
     private final OrderedMenu.Builder builder;
     private final String searchingEmoji;
-    
-    public SearchCmd(Bot bot)
-    {
+    protected String searchPrefix = "ytsearch:";
+
+    public SearchCmd(Bot bot) {
         super(bot);
         this.searchingEmoji = bot.getConfig().getSearching();
         this.name = "search";
@@ -60,29 +58,26 @@ public class SearchCmd extends MusicCommand
                 .setEventWaiter(bot.getWaiter())
                 .setTimeout(1, TimeUnit.MINUTES);
     }
+
     @Override
-    public void doCommand(CommandEvent event) 
-    {
-        if(event.getArgs().isEmpty())
-        {
+    public void doCommand(CommandEvent event) {
+        if (event.getArgs().isEmpty()) {
             event.replyError("請輸入搜尋字串");
             return;
         }
-        event.reply(searchingEmoji+" 正在搜尋... `["+event.getArgs()+"]`", 
-                m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), searchPrefix + event.getArgs(), new ResultHandler(m,event)));
+        event.reply(searchingEmoji + " 正在搜尋... `[" + event.getArgs() + "]`",
+                m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), searchPrefix + event.getArgs(), new ResultHandler(m, event)));
     }
-    
-    private class ResultHandler implements AudioLoadResultHandler 
-    {
+
+    private class ResultHandler implements AudioLoadResultHandler {
         private final Message m;
         private final CommandEvent event;
-        
-        private ResultHandler(Message m, CommandEvent event)
-        {
+
+        private ResultHandler(Message m, CommandEvent event) {
             this.m = m;
             this.event = event;
         }
-        
+
         @Override
         public void trackLoaded(AudioTrack track) {
             if (bot.getConfig().isTooLong(track)) {
@@ -90,58 +85,54 @@ public class SearchCmd extends MusicCommand
                         + TimeUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`")).queue();
                 return;
             }
-            AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-            int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor()))+1;
-            m.editMessage(FormatUtil.filter(event.getClient().getSuccess()+" 已新增 **"+track.getInfo().title
-                    +"** (`"+TimeUtil.formatTime(track.getDuration())+"`) "+(pos==0 ? "稍後即將開始播放"
-                        : " 到位置 "+pos))).queue();
+            AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+            int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
+            m.editMessage(FormatUtil.filter(event.getClient().getSuccess() + " 已新增 **" + track.getInfo().title
+                    + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "稍後即將開始播放"
+                    : " 到位置 " + pos))).queue();
         }
 
         @Override
-        public void playlistLoaded(AudioPlaylist playlist)
-        {
+        public void playlistLoaded(AudioPlaylist playlist) {
             builder.setColor(event.getSelfMember().getColor())
-                    .setText(FormatUtil.filter(event.getClient().getSuccess()+" `"+event.getArgs()+"` 的搜尋節果:"))
+                    .setText(FormatUtil.filter(event.getClient().getSuccess() + " `" + event.getArgs() + "` 的搜尋節果:"))
                     .setChoices()
-                    .setSelection((msg,i) -> 
+                    .setSelection((msg, i) ->
                     {
-                        AudioTrack track = playlist.getTracks().get(i-1);
-                        if(bot.getConfig().isTooLong(track))
-                        {
-                            event.replyWarning("這首歌曲 (**"+track.getInfo().title+"**) 比可播放的總時間還長: `"
-                                    +TimeUtil.formatTime(track.getDuration())+"` > `"+bot.getConfig().getMaxTime()+"`");
+                        AudioTrack track = playlist.getTracks().get(i - 1);
+                        if (bot.getConfig().isTooLong(track)) {
+                            event.replyWarning("這首歌曲 (**" + track.getInfo().title + "**) 比可播放的總時間還長: `"
+                                    + TimeUtil.formatTime(track.getDuration()) + "` > `" + bot.getConfig().getMaxTime() + "`");
                             return;
                         }
-                        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-                        int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor()))+1;
+                        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+                        int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
                         event.replySuccess("已新增 **" + FormatUtil.filter(track.getInfo().title)
-                                + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos==0 ? "稍後即將開始播放"
-                                    : " 到位置 "+pos));
+                                + "** (`" + TimeUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "稍後即將開始播放"
+                                : " 到位置 " + pos));
                     })
-                    .setCancel((msg) -> {})
+                    .setCancel((msg) -> {
+                    })
                     .setUsers(event.getAuthor())
-                    ;
-            for(int i=0; i<4 && i<playlist.getTracks().size(); i++)
-            {
+            ;
+            for (int i = 0; i < 4 && i < playlist.getTracks().size(); i++) {
                 AudioTrack track = playlist.getTracks().get(i);
-                builder.addChoices("`["+TimeUtil.formatTime(track.getDuration())+"]` [**"+track.getInfo().title+"**]("+track.getInfo().uri+")");
+                builder.addChoices("`[" + TimeUtil.formatTime(track.getDuration()) + "]` [**" + track.getInfo().title + "**](" + track.getInfo().uri + ")");
             }
             builder.build().display(m);
         }
 
         @Override
-        public void noMatches() 
-        {
-            m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" 沒有找到 `"+event.getArgs()+"` 的搜尋結果")).queue();
+        public void noMatches() {
+            m.editMessage(FormatUtil.filter(event.getClient().getWarning() + " 沒有找到 `" + event.getArgs() + "` 的搜尋結果")).queue();
         }
 
         @Override
-        public void loadFailed(FriendlyException throwable) 
-        {
-            if(throwable.severity==Severity.COMMON)
-                m.editMessage(event.getClient().getError()+" 載入時發生錯誤: "+throwable.getMessage()).queue();
+        public void loadFailed(FriendlyException throwable) {
+            if (throwable.severity == Severity.COMMON)
+                m.editMessage(event.getClient().getError() + " 載入時發生錯誤: " + throwable.getMessage()).queue();
             else
-                m.editMessage(event.getClient().getError()+" 載入歌曲時發生錯誤").queue();
+                m.editMessage(event.getClient().getError() + " 載入歌曲時發生錯誤").queue();
         }
     }
 }

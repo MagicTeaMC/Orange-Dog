@@ -16,29 +16,27 @@
 package com.jagrosh.jmusicbot;
 
 import com.jagrosh.jmusicbot.entities.Prompt;
-import com.jagrosh.jmusicbot.utils.TimeUtil;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
+import com.jagrosh.jmusicbot.utils.TimeUtil;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.typesafe.config.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Collections;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigException;
+import com.typesafe.config.ConfigFactory;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 /**
- *
- *
  * @author John Grosh (jagrosh)
  */
-public class BotConfig
-{
-    private final Prompt prompt;
+public class BotConfig {
     private final static String CONTEXT = "配置";
     private final static String START_TOKEN = "/// START OF JMUSICBOT CONFIG ///";
     private final static String END_TOKEN = "/// END OF JMUSICBOT CONFIG ///";
-
+    private final Prompt prompt;
     private Path path = null;
     private String token, prefix, altprefix, helpWord, playlistsFolder, logLevel,
             successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji, spClientId, spClientSecret;
@@ -50,23 +48,19 @@ public class BotConfig
 
     private boolean valid = false;
 
-    public BotConfig(Prompt prompt)
-    {
+    public BotConfig(Prompt prompt) {
         this.prompt = prompt;
     }
 
-    public void load()
-    {
+    public void load() {
         valid = false;
 
         // read config from file
-        try
-        {
+        try {
             // get the path to the config, default config.txt
             path = OtherUtil.getPath(System.getProperty("config.file", System.getProperty("config", "config.txt")));
-            if(path.toFile().exists())
-            {
-                if(System.getProperty("config.file") == null)
+            if (path.toFile().exists()) {
+                if (System.getProperty("config.file") == null)
                     System.setProperty("config.file", System.getProperty("config", path.toAbsolutePath().toString()));
                 ConfigFactory.invalidateCaches();
             }
@@ -107,235 +101,191 @@ public class BotConfig
             boolean write = false;
 
             // validate bot token
-            if(token==null || token.isEmpty() || token.equalsIgnoreCase("BOT_TOKEN_HERE"))
-            {
+            if (token == null || token.isEmpty() || token.equalsIgnoreCase("BOT_TOKEN_HERE")) {
                 token = prompt.prompt("請提供機器人Token"
                         + "\n取得機器人Token的教學可以在以下網址查看"
                         + "\nhttps://github.com/jagrosh/MusicBot/wiki/Getting-a-Bot-Token."
                         + "\n目前的機器人Token: ");
-                if(token==null)
-                {
+                if (token == null) {
                     prompt.alert(Prompt.Level.WARNING, CONTEXT, "沒有提供Token! 關閉程式中...\n\n配置文件路徑: " + path.toAbsolutePath());
                     return;
-                }
-                else
-                {
+                } else {
                     write = true;
                 }
             }
 
             // validate bot owner
-            if(owner<=0)
-            {
-                try
-                {
+            if (owner <= 0) {
+                try {
                     owner = Long.parseLong(prompt.prompt("擁有者ID沒有提供，或者是ID是無效的"
                             + "\n請提供機器人擁有者的ID"
                             + "\n取得擁有者ID的教學可以在以下網址查看"
                             + "\nhttps://github.com/jagrosh/MusicBot/wiki/Finding-Your-User-ID"
                             + "\nOwner User ID: "));
-                }
-                catch(NumberFormatException | NullPointerException ex)
-                {
+                } catch (NumberFormatException | NullPointerException ex) {
                     owner = 0;
                 }
-                if(owner<=0)
-                {
+                if (owner <= 0) {
                     prompt.alert(Prompt.Level.ERROR, CONTEXT, "無效的用戶ID! 關閉程式中...\n\n配置文件路徑: " + path.toAbsolutePath());
                     return;
-                }
-                else
-                {
+                } else {
                     write = true;
                 }
             }
 
-            if(write)
+            if (write)
                 writeToFile();
 
             // if we get through the whole config, it's good to go
             valid = true;
-        }
-        catch (ConfigException ex)
-        {
+        } catch (ConfigException ex) {
             prompt.alert(Prompt.Level.ERROR, CONTEXT, ex + ": " + ex.getMessage() + "\n\n配置文件路徑: " + path.toAbsolutePath());
         }
     }
 
-    private void writeToFile()
-    {
+    private void writeToFile() {
         String original = OtherUtil.loadResource(this, "/reference.conf");
         byte[] bytes;
-        if(original==null)
-        {
-            bytes = ("token = "+token+"\r\nowner = "+owner).getBytes();
-        }
-        else
-        {
-            bytes = original.substring(original.indexOf(START_TOKEN)+START_TOKEN.length(), original.indexOf(END_TOKEN))
+        if (original == null) {
+            bytes = ("token = " + token + "\r\nowner = " + owner).getBytes();
+        } else {
+            bytes = original.substring(original.indexOf(START_TOKEN) + START_TOKEN.length(), original.indexOf(END_TOKEN))
                     .replace("BOT_TOKEN_HERE", token)
                     .replace("0 // OWNER ID", Long.toString(owner))
                     .trim().getBytes();
         }
-        try
-        {
+        try {
             Files.write(path, bytes);
-        }
-        catch(IOException ex)
-        {
-            prompt.alert(Prompt.Level.WARNING, CONTEXT, "寫入Config.txt失敗: "+ex
+        } catch (IOException ex) {
+            prompt.alert(Prompt.Level.WARNING, CONTEXT, "寫入Config.txt失敗: " + ex
                     + "\n請確認您不是在桌面或者其它被限制的資料夾內\n\n配置文件路徑: "
                     + path.toAbsolutePath());
         }
     }
 
-    public boolean isValid()
-    {
+    public boolean isValid() {
         return valid;
     }
 
-    public String getConfigLocation()
-    {
+    public String getConfigLocation() {
         return path.toFile().getAbsolutePath();
     }
 
-    public String getPrefix()
-    {
+    public String getPrefix() {
         return prefix;
     }
 
-    public String getAltPrefix()
-    {
+    public String getAltPrefix() {
         return "NONE".equalsIgnoreCase(altprefix) ? null : altprefix;
     }
 
-    public String getToken()
-    {
+    public String getToken() {
         return token;
     }
 
-    public long getOwnerId()
-    {
+    public long getOwnerId() {
         return owner;
     }
 
-    public String getSuccess()
-    {
+    public String getSuccess() {
         return successEmoji;
     }
 
-    public String getWarning()
-    {
+    public String getWarning() {
         return warningEmoji;
     }
 
-    public String getError()
-    {
+    public String getError() {
         return errorEmoji;
     }
 
-    public String getLoading()
-    {
+    public String getLoading() {
         return loadingEmoji;
     }
 
-    public String getSearching()
-    {
+    public String getSearching() {
         return searchingEmoji;
     }
 
-    public Activity getGame()
-    {
+    public Activity getGame() {
         return game;
     }
 
-    public OnlineStatus getStatus()
-    {
+    public OnlineStatus getStatus() {
         return status;
     }
 
-    public String getHelp()
-    {
+    public String getHelp() {
         return helpWord;
     }
 
-    public boolean getStay()
-    {
+    public boolean getStay() {
         return stayInChannel;
     }
 
-    public boolean getSongInStatus()
-    {
+    public boolean getSongInStatus() {
         return songInGame;
     }
 
-    public String getPlaylistsFolder()
-    {
+    public String getPlaylistsFolder() {
         return playlistsFolder;
     }
 
-    public boolean getDBots()
-    {
+    public boolean getDBots() {
         return dbots;
     }
 
-    public boolean useUpdateAlerts()
-    {
+    public boolean useUpdateAlerts() {
         return updatealerts;
     }
 
-    public String getLogLevel()
-    {
+    public String getLogLevel() {
         return logLevel;
     }
 
-    public boolean useEval()
-    {
+    public boolean useEval() {
         return useEval;
     }
 
-    public boolean useNPImages()
-    {
+    public boolean useNPImages() {
         return npImages;
     }
 
-    public long getMaxSeconds()
-    {
+    public long getMaxSeconds() {
         return maxSeconds;
     }
 
-    public String getMaxTime()
-    {
+    public String getMaxTime() {
         return TimeUtil.formatTime(maxSeconds * 1000);
     }
 
-    public long getAloneTimeUntilStop()
-    {
+    public long getAloneTimeUntilStop() {
         return aloneTimeUntilStop;
     }
 
-    public boolean isTooLong(AudioTrack track)
-    {
-        if(maxSeconds<=0)
+    public boolean isTooLong(AudioTrack track) {
+        if (maxSeconds <= 0)
             return false;
-        return Math.round(track.getDuration()/1000.0) > maxSeconds;
+        return Math.round(track.getDuration() / 1000.0) > maxSeconds;
     }
 
-    public String[] getAliases(String command)
-    {
-        try
-        {
+    public String[] getAliases(String command) {
+        try {
             return aliases.getStringList(command).toArray(new String[0]);
-        }
-        catch(NullPointerException | ConfigException.Missing e)
-        {
+        } catch (NullPointerException | ConfigException.Missing e) {
             return new String[0];
         }
     }
 
-    public Config getTransforms()
-    {
+    public Config getTransforms() {
         return transforms;
     }
-    public String getSpotifyClientId(){return spClientId;}
-    public String getSpotifyClientSecret(){return spClientSecret;}}
+
+    public String getSpotifyClientId() {
+        return spClientId;
+    }
+
+    public String getSpotifyClientSecret() {
+        return spClientSecret;
+    }
+}

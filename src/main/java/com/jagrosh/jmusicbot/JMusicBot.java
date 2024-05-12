@@ -43,23 +43,21 @@ import java.awt.*;
 import java.util.Arrays;
 
 /**
- *
  * @author John Grosh (jagrosh)
  */
-public class JMusicBot
-{
-    public final static String PLAY_EMOJI  = "\u25B6"; // ▶
+public class JMusicBot {
+    public final static String PLAY_EMOJI = "\u25B6"; // ▶
     public final static String PAUSE_EMOJI = "\u23F8"; // ⏸
-    public final static String STOP_EMOJI  = "\u23F9"; // ⏹
+    public final static String STOP_EMOJI = "\u23F9"; // ⏹
     public final static Permission[] RECOMMENDED_PERMS = {Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND, Permission.MESSAGE_HISTORY, Permission.MESSAGE_ADD_REACTION,
             Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_MANAGE, Permission.MESSAGE_EXT_EMOJI,
             Permission.MANAGE_CHANNEL, Permission.VOICE_CONNECT, Permission.VOICE_SPEAK, Permission.NICKNAME_CHANGE, Permission.VOICE_SET_STATUS};
     public final static GatewayIntent[] INTENTS = {GatewayIntent.MESSAGE_CONTENT, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.SCHEDULED_EVENTS, GatewayIntent.GUILD_MEMBERS};
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         ShutdownListener listener = new ShutdownListener();
         listener.start();
         String[] pattern = {
@@ -79,29 +77,29 @@ public class JMusicBot
         }
         System.out.println
                 (
-                "\n" +
-                "╔════════════════════════════════════════════════════════════════╗\n" +
-                "║                          _ooOoo_                               ║\n" +
-                "║                         o8888888o                              ║ \n" +
-                "║                         88\" . \"88                              ║\n" +
-                "║                         (| ^_^ |)                              ║\n" +
-                "║                         O\\  =  /O                              ║\n" +
-                "║                      ____/`---'\\____                           ║\n" +
-                "║                    .'  \\|     |//   '.                         ║\n" +
-                "║                   /  \\|||  :  |||//   \\                        ║\n" +
-                "║                  /  _||||| -:- |||||-  \\                       ║\n" +
-                "║                  |   | \\\\  -  ///  |   |                       ║\n" +
-                "║                  | \\_|  ''\\---/''  |   |                       ║\n" +
-                "║                  \\  .-\\__  `-`  ___/-. /                       ║\n" +
-                "║                ___`. .'  /--.--\\  `. . ___                     ║\n" +
-                "║              .\"\"\"<  `.___\\_<|>_/___.`  >\"\"\".                   ║\n" +
-                "║            | | :  `- \\`.;`\\ _ /`;.`/ - ` : | |                 ║\n" +
-                "║            \\  \\ `-.   \\_ __\\ /__ _/   .-` /  /                 ║\n" +
-                "║      ========`-.____`-.___\\_____/___.-`____.-'========         ║\n" +
-                "║                           `=---='                              ║ \n" +
-                "║      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ║\n" +
-                "║            佛祖保佑       永不崩潰     永不抱錯                ║\n" +
-                "╚════════════════════════════════════════════════════════════════╝\n"
+                        "\n" +
+                                "╔════════════════════════════════════════════════════════════════╗\n" +
+                                "║                          _ooOoo_                               ║\n" +
+                                "║                         o8888888o                              ║ \n" +
+                                "║                         88\" . \"88                              ║\n" +
+                                "║                         (| ^_^ |)                              ║\n" +
+                                "║                         O\\  =  /O                              ║\n" +
+                                "║                      ____/`---'\\____                           ║\n" +
+                                "║                    .'  \\|     |//   '.                         ║\n" +
+                                "║                   /  \\|||  :  |||//   \\                        ║\n" +
+                                "║                  /  _||||| -:- |||||-  \\                       ║\n" +
+                                "║                  |   | \\\\  -  ///  |   |                       ║\n" +
+                                "║                  | \\_|  ''\\---/''  |   |                       ║\n" +
+                                "║                  \\  .-\\__  `-`  ___/-. /                       ║\n" +
+                                "║                ___`. .'  /--.--\\  `. . ___                     ║\n" +
+                                "║              .\"\"\"<  `.___\\_<|>_/___.`  >\"\"\".                   ║\n" +
+                                "║            | | :  `- \\`.;`\\ _ /`;.`/ - ` : | |                 ║\n" +
+                                "║            \\  \\ `-.   \\_ __\\ /__ _/   .-` /  /                 ║\n" +
+                                "║      ========`-.____`-.___\\_____/___.-`____.-'========         ║\n" +
+                                "║                           `=---='                              ║ \n" +
+                                "║      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ║\n" +
+                                "║            佛祖保佑       永不崩潰     永不抱錯                ║\n" +
+                                "╚════════════════════════════════════════════════════════════════╝\n"
                 );
         // startup log
         Logger log = LoggerFactory.getLogger("啟動");
@@ -111,13 +109,13 @@ public class JMusicBot
 
 
         // check for valid java version
-        if(!System.getProperty("java.vm.name").contains("64"))
+        if (!System.getProperty("java.vm.name").contains("64"))
             prompt.alert(Prompt.Level.WARNING, "Java版本", "您的Java可能無法跟此程式相容，請使用64位元的Java");
 
         // load config
         BotConfig config = new BotConfig(prompt);
         config.load();
-        if(!config.isValid())
+        if (!config.isValid())
             return;
 
         // set log level from config
@@ -195,51 +193,42 @@ public class JMusicBot
                         new LeaveServerCmd(bot),
                         new ServersCmd(bot)
                 );
-        if(config.useEval())
+        if (config.useEval())
             cb.addCommand(new EvalCmd(bot));
         boolean nogame = false;
-        if(config.getStatus()!=OnlineStatus.UNKNOWN)
+        if (config.getStatus() != OnlineStatus.UNKNOWN)
             cb.setStatus(config.getStatus());
-        if(config.getGame()==null)
+        if (config.getGame() == null)
             cb.useDefaultGame();
-        else if(config.getGame().getName().equalsIgnoreCase("none"))
-        {
+        else if (config.getGame().getName().equalsIgnoreCase("none")) {
             cb.setActivity(null);
             nogame = true;
-        }
-        else
+        } else
             cb.setActivity(config.getGame());
 
         log.info("成功從 " + config.getConfigLocation() + " 讀取配置");
 
         // attempt to log in and start
-        try
-        {
+        try {
             JDA jda = JDABuilder.create(config.getToken(), Arrays.asList(INTENTS))
                     .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                     .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOJI, CacheFlag.ONLINE_STATUS)
                     .setActivity(nogame ? null : Activity.playing("載入中..."))
-                    .setStatus(config.getStatus()==OnlineStatus.INVISIBLE || config.getStatus()==OnlineStatus.OFFLINE
+                    .setStatus(config.getStatus() == OnlineStatus.INVISIBLE || config.getStatus() == OnlineStatus.OFFLINE
                             ? OnlineStatus.INVISIBLE : OnlineStatus.DO_NOT_DISTURB)
                     .addEventListeners(cb.build(), waiter, new Listener(bot))
                     .setBulkDeleteSplittingEnabled(true)
                     .build();
             bot.setJDA(jda);
-        }
-        catch (InvalidTokenException ex)
-        {
+        } catch (InvalidTokenException ex) {
             prompt.alert(Prompt.Level.ERROR, "機器人", ex + "\n請確定您更改了正確的配置文件，並且放置了正確的機器人Token (不是secret)"
                     + "\n配置文件路徑: " + config.getConfigLocation());
             System.exit(1);
-        }
-        catch(IllegalArgumentException ex)
-        {
+        } catch (IllegalArgumentException ex) {
             prompt.alert(Prompt.Level.ERROR, "機器人", "部分配置文件語法錯誤: "
                     + ex + "\n配置文件路徑: " + config.getConfigLocation());
             System.exit(1);
-        }
-        catch(ErrorResponseException ex)
-        {
+        } catch (ErrorResponseException ex) {
             prompt.alert(Prompt.Level.ERROR, "JMusicBot", ex + "\nInvalid reponse returned when "
                     + "attempting to connect, please make sure you're connected to the internet");
             System.exit(1);

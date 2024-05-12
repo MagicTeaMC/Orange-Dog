@@ -28,13 +28,10 @@ import java.util.regex.Matcher;
 import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
 
 /**
- *
  * @author Michaili K.
  */
-public class ForceRemoveCmd extends DJCommand
-{
-    public ForceRemoveCmd(Bot bot)
-    {
+public class ForceRemoveCmd extends DJCommand {
+    public ForceRemoveCmd(Bot bot) {
         super(bot);
         this.name = "forceremove";
         this.help = "移除所有由該使用者加入的歌曲";
@@ -46,17 +43,14 @@ public class ForceRemoveCmd extends DJCommand
     }
 
     @Override
-    public void doCommand(CommandEvent event)
-    {
-        if (event.getArgs().isEmpty())
-        {
+    public void doCommand(CommandEvent event) {
+        if (event.getArgs().isEmpty()) {
             event.replyError("你必須標記一個成員!");
             return;
         }
 
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-        if (handler.getQueue().isEmpty())
-        {
+        if (handler.getQueue().isEmpty()) {
             event.replyError("序列中沒有任何歌曲!");
             return;
         }
@@ -64,8 +58,7 @@ public class ForceRemoveCmd extends DJCommand
 
         User target = findUser(event.getArgs());
 
-        if (target == null)
-        {
+        if (target == null) {
             event.replyError("找不到該使用者!");
             return;
         }
@@ -74,35 +67,25 @@ public class ForceRemoveCmd extends DJCommand
 
     }
 
-    private User findUser(String query)
-    {
+    private User findUser(String query) {
         Matcher userMention = FinderUtil.USER_MENTION.matcher(query);
         Matcher fullRefMatch = FinderUtil.FULL_USER_REF.matcher(query);
         Matcher discordIdMatch = FinderUtil.DISCORD_ID.matcher(query);
-        if(userMention.matches() || discordIdMatch.matches())
-        {
+        if (userMention.matches() || discordIdMatch.matches()) {
             String stringId;
-            if (userMention.matches())
-            {
+            if (userMention.matches()) {
                 stringId = query.replaceAll("[^0-9]", "");
-            }
-            else
-            {
+            } else {
                 stringId = query;
             }
             long userId;
-            try
-            {
+            try {
                 userId = Long.parseLong(stringId);
-            }
-            catch (NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 return null;
             }
             return bot.getJDA().retrieveUserById(userId).complete();
-        }
-        else if(fullRefMatch.matches())
-        {
+        } else if (fullRefMatch.matches()) {
             String username = fullRefMatch.group(1).toLowerCase() + "#" + fullRefMatch.group(2);
 
             return bot.getJDA().getUserByTag(username);
@@ -110,17 +93,13 @@ public class ForceRemoveCmd extends DJCommand
         return null;
     }
 
-    private void removeAllEntries(User target, CommandEvent event)
-    {
+    private void removeAllEntries(User target, CommandEvent event) {
         int count = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).getQueue().removeAll(target.getIdLong());
         String discriminator = target.getDiscriminator();
 
-        if (count == 0)
-        {
+        if (count == 0) {
             event.replyWarning("**" + target.getName() + "** 沒有加入任何歌曲!");
-        }
-        else
-        {
+        } else {
             event.replySuccess("成功移除 `" + count + "` 首由 " + formatUsername(target.getName(), discriminator) + " 新增的歌曲");
         }
     }

@@ -16,11 +16,9 @@
 package com.jagrosh.jmusicbot.settings;
 
 /**
- *
  * @author Michaili K
  */
-public enum RepeatMode
-{
+public enum RepeatMode {
     OFF(null, "關閉"),
     ALL("\uD83D\uDD01", "全部"), // 🔁
     SINGLE("\uD83D\uDD02", "單首"); // 🔂
@@ -28,19 +26,16 @@ public enum RepeatMode
     private final String emoji;
     private final String userFriendlyName;
 
-    RepeatMode(String emoji, String userFriendlyName)
-    {
+    RepeatMode(String emoji, String userFriendlyName) {
         this.emoji = emoji;
         this.userFriendlyName = userFriendlyName;
     }
 
-    public String getEmoji()
-    {
+    public String getEmoji() {
         return emoji;
     }
 
-    public String getUserFriendlyName()
-    {
+    public String getUserFriendlyName() {
         return userFriendlyName;
     }
 }

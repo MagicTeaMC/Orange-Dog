@@ -21,13 +21,10 @@ import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.commands.DJCommand;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class SkiptoCmd extends DJCommand 
-{
-    public SkiptoCmd(Bot bot)
-    {
+public class SkiptoCmd extends DJCommand {
+    public SkiptoCmd(Bot bot) {
         super(bot);
         this.name = "skipto";
         this.help = "跳至指定的歌曲";
@@ -37,26 +34,21 @@ public class SkiptoCmd extends DJCommand
     }
 
     @Override
-    public void doCommand(CommandEvent event) 
-    {
+    public void doCommand(CommandEvent event) {
         int index = 0;
-        try
-        {
+        try {
             index = Integer.parseInt(event.getArgs());
-        }
-        catch(NumberFormatException e)
-        {
-            event.reply(event.getClient().getError()+" `"+event.getArgs()+"` 不是一個有效的整數!");
+        } catch (NumberFormatException e) {
+            event.reply(event.getClient().getError() + " `" + event.getArgs() + "` 不是一個有效的整數!");
             return;
         }
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-        if(index<1 || index>handler.getQueue().size())
-        {
-            event.reply(event.getClient().getError()+" 位置必須為介於 1 ~ "+handler.getQueue().size()+" 的有效整數!");
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+        if (index < 1 || index > handler.getQueue().size()) {
+            event.reply(event.getClient().getError() + " 位置必須為介於 1 ~ " + handler.getQueue().size() + " 的有效整數!");
             return;
         }
-        handler.getQueue().skip(index-1);
-        event.reply(event.getClient().getSuccess()+" 跳至 **"+handler.getQueue().get(0).getTrack().getInfo().title+"**");
+        handler.getQueue().skip(index - 1);
+        event.reply(event.getClient().getSuccess() + " 跳至 **" + handler.getQueue().get(0).getTrack().getInfo().title + "**");
         handler.getPlayer().stopTrack();
     }
 }

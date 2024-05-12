@@ -64,7 +64,7 @@ public class UserInfo extends Command {
         EmbedBuilder eb = new EmbedBuilder().setColor(memb.getColor());
         String NAME = memb.getEffectiveName();
         String TAG;
-        if (!memb.getUser().getDiscriminator().equals("0000")){
+        if (!memb.getUser().getDiscriminator().equals("0000")) {
             TAG = "#" + memb.getUser().getDiscriminator();
         } else {
             TAG = null;
@@ -96,7 +96,7 @@ public class UserInfo extends Command {
         if (AVATAR == null) {
             AVATAR = "沒有頭像";
         }
-        if (TAG!=null) {
+        if (TAG != null) {
             eb.setAuthor(memb.getUser().getName() + TAG + " 的資訊", null, null)
                     .addField(":pencil2: 暱稱", "**" + NAME + "**", true)
                     .addField(":link: Discord 標籤", "**" + TAG + "**", true)

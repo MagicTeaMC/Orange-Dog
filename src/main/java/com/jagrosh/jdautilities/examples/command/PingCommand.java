@@ -25,10 +25,9 @@ import java.awt.*;
 import java.time.temporal.ChronoUnit;
 
 /**
- *
  * @author John Grosh (jagrosh)
  */
-@CommandInfo(name = { "Ping", "Pong" }, description = "查看機器人延遲")
+@CommandInfo(name = {"Ping", "Pong"}, description = "查看機器人延遲")
 @Author("John Grosh (jagrosh)")
 public class PingCommand extends Command {
 
@@ -36,7 +35,7 @@ public class PingCommand extends Command {
         this.name = "ping";
         this.help = "查看機器人延遲";
         this.guildOnly = false;
-        this.aliases = new String[] { "pong" };
+        this.aliases = new String[]{"pong"};
     }
 
     @Override

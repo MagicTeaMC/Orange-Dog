@@ -22,13 +22,10 @@ import com.jagrosh.jmusicbot.settings.RepeatMode;
 import com.jagrosh.jmusicbot.settings.Settings;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class RepeatCmd extends DJCommand
-{
-    public RepeatCmd(Bot bot)
-    {
+public class RepeatCmd extends DJCommand {
+    public RepeatCmd(Bot bot) {
         super(bot);
         this.name = "repeat";
         this.help = "切換重複播放功能";
@@ -36,40 +33,30 @@ public class RepeatCmd extends DJCommand
         this.aliases = bot.getConfig().getAliases(this.name);
         this.guildOnly = true;
     }
-    
+
     // override musiccommand's execute because we don't actually care where this is used
     @Override
-    protected void execute(CommandEvent event) 
-    {
+    protected void execute(CommandEvent event) {
         String args = event.getArgs();
         RepeatMode value;
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
-        if(args.isEmpty())
-        {
-            if(settings.getRepeatMode() == RepeatMode.OFF)
+        if (args.isEmpty()) {
+            if (settings.getRepeatMode() == RepeatMode.OFF)
                 value = RepeatMode.ALL;
             else
                 value = RepeatMode.OFF;
-        }
-        else if(args.equalsIgnoreCase("false") || args.equalsIgnoreCase("off"))
-        {
+        } else if (args.equalsIgnoreCase("false") || args.equalsIgnoreCase("off")) {
             value = RepeatMode.OFF;
-        }
-        else if(args.equalsIgnoreCase("true") || args.equalsIgnoreCase("on") || args.equalsIgnoreCase("all"))
-        {
+        } else if (args.equalsIgnoreCase("true") || args.equalsIgnoreCase("on") || args.equalsIgnoreCase("all")) {
             value = RepeatMode.ALL;
-        }
-        else if(args.equalsIgnoreCase("one") || args.equalsIgnoreCase("single"))
-        {
+        } else if (args.equalsIgnoreCase("one") || args.equalsIgnoreCase("single")) {
             value = RepeatMode.SINGLE;
-        }
-        else
-        {
+        } else {
             event.replyError("可以使用的參數有: `off(關閉), all(全部)或single(單曲)，沒有輸入時會在關閉及全部之間切換`");
             return;
         }
         settings.setRepeatMode(value);
-        event.replySuccess("重複播放狀態目前為: `"+value.getUserFriendlyName()+"`");
+        event.replySuccess("重複播放狀態目前為: `" + value.getUserFriendlyName() + "`");
     }
 
     @Override

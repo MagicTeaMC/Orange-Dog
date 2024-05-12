@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
 public class SettingsManager implements GuildSettingsManager<Settings> {

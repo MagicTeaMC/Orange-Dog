@@ -25,7 +25,7 @@ public class skipSegCmd extends MusicCommand {
         this.name = "skipsegment";
         this.help = "從 SponsorBlock 資料庫獲取無音樂片段並且自動跳過";
         this.aliases = bot.getConfig().getAliases(this.name);
-        this.botPermissions = new Permission[] { Permission.MESSAGE_EMBED_LINKS };
+        this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
         this.beListening = true;
         this.bePlaying = true;
     }
@@ -69,7 +69,7 @@ public class skipSegCmd extends MusicCommand {
      * @param jsonString Raw string of API response
      * @param curTime    current time of track
      * @return returns end of current skippable segment in milliseconds. If no
-     *         segment is currently playing, return -1
+     * segment is currently playing, return -1
      */
 
     private long parseMusicJSON(String jsonString, long curTime) {
@@ -96,8 +96,8 @@ public class skipSegCmd extends MusicCommand {
      * @param handler audio handler to get current time
      * @param event   message event to send error responses
      * @return either returns the end of the current segment in milliseconds, -2 if
-     *         no segments were found, or -1 if segments were found but
-     *         the track is not currently within a segment.
+     * no segments were found, or -1 if segments were found but
+     * the track is not currently within a segment.
      * @throws UnsupportedEncodingException
      * @throws IOException
      */
@@ -164,7 +164,7 @@ public class skipSegCmd extends MusicCommand {
                     long minutes = absSeconds / 60;
                     long modSeconds = absSeconds % 60;
                     String formattedSeconds = String.format("%02d", modSeconds);
-                    String msg = "自動跳到 `"+ minutes + ":" + formattedSeconds + "`！";
+                    String msg = "自動跳到 `" + minutes + ":" + formattedSeconds + "`！";
                     event.replySuccess(msg);
                 }
             } else {

@@ -28,13 +28,10 @@ import java.util.List;
 import static com.jagrosh.jmusicbot.utils.FormatUtil.formatUsername;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class BlacklistUserCmd extends AdminCommand
-{
-    public BlacklistUserCmd(Bot bot)
-    {
+public class BlacklistUserCmd extends AdminCommand {
+    public BlacklistUserCmd(Bot bot) {
         this.name = "blacklist";
         this.help = "把用戶加入黑名單";
         this.arguments = "<use|none>";
@@ -42,16 +39,13 @@ public class BlacklistUserCmd extends AdminCommand
     }
 
     @Override
-    protected void execute(CommandEvent event)
-    {
-        if(event.getArgs().isEmpty())
-        {
+    protected void execute(CommandEvent event) {
+        if (event.getArgs().isEmpty()) {
             event.replyError("你需要標記一個用戶");
             return;
         }
         Settings s = event.getClient().getSettingsFor(event.getGuild());
-        if(event.getArgs().equalsIgnoreCase("none"))
-        {
+        if (event.getArgs().equalsIgnoreCase("none")) {
             s.clearBlacklistedUsers();
             event.replySuccess("成功清空黑名單列表");
             return;
@@ -59,24 +53,18 @@ public class BlacklistUserCmd extends AdminCommand
 
         User target;
         List<Member> found = FinderUtil.findMembers(event.getArgs(), event.getGuild());
-        if(found.isEmpty())
-        {
+        if (found.isEmpty()) {
             event.replyError("找不到此用戶！");
             return;
-        }
-        else if(found.size()>1)
-        {
+        } else if (found.size() > 1) {
             StringBuilder builder = new StringBuilder();
-            for(int i=0; i<found.size() && i<4; i++)
-            {
+            for (int i = 0; i < found.size() && i < 4; i++) {
                 Member member = found.get(i);
-                builder.append("\n**"+ formatUsername(member.getUser().getName(), member.getUser().getDiscriminator()));
+                builder.append("\n**" + formatUsername(member.getUser().getName(), member.getUser().getDiscriminator()));
             }
             event.replyWarning("找到多個用戶 " + builder);
             return;
-        }
-        else
-        {
+        } else {
             target = found.get(0).getUser();
         }
         handleBlacklistUser(target, event);
@@ -84,12 +72,10 @@ public class BlacklistUserCmd extends AdminCommand
 
     private void handleBlacklistUser(User target, CommandEvent event) {
         Settings s = event.getClient().getSettingsFor(event.getGuild());
-        if (s.getBlacklistedUsers().contains(target.getId()))
-        {
+        if (s.getBlacklistedUsers().contains(target.getId())) {
             s.removeBlacklistedUser(target.getId());
             event.replySuccess(event.getArgs() + " 已經從黑名單移除！");
-        } else
-        {
+        } else {
             s.setBlacklistedUser(target.getId());
             event.replySuccess(event.getArgs() + " 已經被加入黑名單！");
         }

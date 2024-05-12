@@ -24,13 +24,10 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import net.dv8tion.jda.api.utils.messages.MessageEditData;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class NowplayingCmd extends MusicCommand 
-{
-    public NowplayingCmd(Bot bot)
-    {
+public class NowplayingCmd extends MusicCommand {
+    public NowplayingCmd(Bot bot) {
         super(bot);
         this.name = "nowplaying";
         this.help = "顯示目前正在播放的歌曲";
@@ -39,17 +36,13 @@ public class NowplayingCmd extends MusicCommand
     }
 
     @Override
-    public void doCommand(CommandEvent event) 
-    {
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+    public void doCommand(CommandEvent event) {
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         MessageEditData m = handler.getNowPlaying(event.getJDA());
-        if(m==null)
-        {
+        if (m == null) {
             event.reply(MessageCreateData.fromEditData(handler.getNoMusicPlaying(event.getJDA())));
             bot.getNowplayingHandler().clearLastNPMessage(event.getGuild());
-        }
-        else
-        {
+        } else {
             event.reply(MessageCreateData.fromEditData(m), msg -> bot.getNowplayingHandler().setLastNPMessage(msg));
         }
     }

@@ -21,36 +21,27 @@ import com.jagrosh.jmusicbot.commands.OwnerCommand;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class SetnameCmd extends OwnerCommand
-{
-    public SetnameCmd(Bot bot)
-    {
+public class SetnameCmd extends OwnerCommand {
+    public SetnameCmd(Bot bot) {
         this.name = "setname";
         this.help = "設定機器人名稱";
         this.arguments = "<名稱>";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.guildOnly = false;
     }
-    
+
     @Override
-    protected void execute(CommandEvent event) 
-    {
-        try 
-        {
+    protected void execute(CommandEvent event) {
+        try {
             String oldname = event.getSelfUser().getName();
             event.getSelfUser().getManager().setName(event.getArgs()).complete(false);
-            event.reply(event.getClient().getSuccess()+" 成功將名稱從 `"+oldname+"` 變更成 `"+event.getArgs()+"`");
-        } 
-        catch(RateLimitedException e) 
-        {
-            event.reply(event.getClient().getError()+" 一個小時只能變更兩次名稱!");
-        }
-        catch(Exception e) 
-        {
-            event.reply(event.getClient().getError()+" 無效的名稱!");
+            event.reply(event.getClient().getSuccess() + " 成功將名稱從 `" + oldname + "` 變更成 `" + event.getArgs() + "`");
+        } catch (RateLimitedException e) {
+            event.reply(event.getClient().getError() + " 一個小時只能變更兩次名稱!");
+        } catch (Exception e) {
+            event.reply(event.getClient().getError() + " 無效的名稱!");
         }
     }
 }

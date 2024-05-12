@@ -21,38 +21,31 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.User;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class QueuedTrack implements Queueable
-{
+public class QueuedTrack implements Queueable {
     private final AudioTrack track;
-    
-    public QueuedTrack(AudioTrack track, User owner)
-    {
+
+    public QueuedTrack(AudioTrack track, User owner) {
         this(track, new RequestMetadata(owner));
     }
-    
-    public QueuedTrack(AudioTrack track, RequestMetadata rm)
-    {
+
+    public QueuedTrack(AudioTrack track, RequestMetadata rm) {
         this.track = track;
         this.track.setUserData(rm == null ? RequestMetadata.EMPTY : rm);
     }
-    
+
     @Override
-    public long getIdentifier() 
-    {
+    public long getIdentifier() {
         return track.getUserData() == null ? 0L : track.getUserData(RequestMetadata.class).getOwner();
     }
-    
-    public AudioTrack getTrack()
-    {
+
+    public AudioTrack getTrack() {
         return track;
     }
 
     @Override
-    public String toString() 
-    {
+    public String toString() {
         return "`[" + TimeUtil.formatTime(track.getDuration()) + "]` **" + track.getInfo().title + "** - <@" + track.getUserData(RequestMetadata.class).getOwner() + ">";
     }
 }

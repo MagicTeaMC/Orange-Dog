@@ -21,13 +21,10 @@ import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class ShuffleCmd extends MusicCommand 
-{
-    public ShuffleCmd(Bot bot)
-    {
+public class ShuffleCmd extends MusicCommand {
+    public ShuffleCmd(Bot bot) {
         super(bot);
         this.name = "shuffle";
         this.help = "打亂序列中的歌曲";
@@ -37,12 +34,10 @@ public class ShuffleCmd extends MusicCommand
     }
 
     @Override
-    public void doCommand(CommandEvent event) 
-    {
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+    public void doCommand(CommandEvent event) {
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         int s = handler.getQueue().shuffle(event.getAuthor().getIdLong(), false);
-        switch (s) 
-        {
+        switch (s) {
             case 0:
                 event.replyError("序列裡面沒有任何歌曲可以打亂!");
                 break;
@@ -54,5 +49,5 @@ public class ShuffleCmd extends MusicCommand
                 break;
         }
     }
-    
+
 }

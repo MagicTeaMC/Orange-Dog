@@ -26,17 +26,15 @@ public class ShutdownListener extends Thread {
                     jda.getGuilds().stream().forEach(g ->
                     {
                         g.getAudioManager().closeAudioConnection();
-                        AudioHandler ah = (AudioHandler)g.getAudioManager().getSendingHandler();
-                        if(ah!=null)
-                        {
+                        AudioHandler ah = (AudioHandler) g.getAudioManager().getSendingHandler();
+                        if (ah != null) {
                             ah.stopAndClear();
                             ah.getPlayer().destroy();
                             nowplaying.updateTopic(g.getIdLong(), ah, true);
                         }
                     });
                 }
-                if (jda != null)
-                {
+                if (jda != null) {
                     jda.shutdown();
                 }
                 System.exit(0);

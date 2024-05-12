@@ -23,13 +23,10 @@ import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class VolumeCmd extends DJCommand
-{
-    public VolumeCmd(Bot bot)
-    {
+public class VolumeCmd extends DJCommand {
+    public VolumeCmd(Bot bot) {
         super(bot);
         this.name = "volume";
         this.aliases = bot.getConfig().getAliases(this.name);
@@ -38,32 +35,27 @@ public class VolumeCmd extends DJCommand
     }
 
     @Override
-    public void doCommand(CommandEvent event)
-    {
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+    public void doCommand(CommandEvent event) {
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
         int volume = handler.getPlayer().getVolume();
-        if(event.getArgs().isEmpty())
-        {
-            event.reply(FormatUtil.volumeIcon(volume)+" 目前的音量是 `"+volume+"`");
-        }
-        else
-        {
+        if (event.getArgs().isEmpty()) {
+            event.reply(FormatUtil.volumeIcon(volume) + " 目前的音量是 `" + volume + "`");
+        } else {
             int nvolume;
-            try{
+            try {
                 nvolume = Integer.parseInt(event.getArgs());
-            }catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 nvolume = -1;
             }
-            if(nvolume<0 || nvolume>150)
-                event.reply(event.getClient().getError()+" 音量必須為介於 1 ~ 150 之間的有效整數!");
-            else
-            {
+            if (nvolume < 0 || nvolume > 150)
+                event.reply(event.getClient().getError() + " 音量必須為介於 1 ~ 150 之間的有效整數!");
+            else {
                 handler.getPlayer().setVolume(nvolume);
                 settings.setVolume(nvolume);
-                event.reply(FormatUtil.volumeIcon(nvolume)+" 音量從 `"+volume+"` 變更為 `"+nvolume+"`");
+                event.reply(FormatUtil.volumeIcon(nvolume) + " 音量從 `" + volume + "` 變更為 `" + nvolume + "`");
             }
         }
     }
-    
+
 }

@@ -68,12 +68,12 @@ tasks.jar {
     archiveFileName = "originalOrangeDog-$version.jar"
     manifest {
         attributes(
-            "Main-Class" to "com.jagrosh.jmusicbot.JMusicBot",
-            "Specification-Title" to project.name,
-            "Specification-Version" to project.version,
-            "Implementation-Title" to project.name,
-            "Implementation-Version" to project.version,
-            "Implementation-Vendor-Id" to project.group
+                "Main-Class" to "com.jagrosh.jmusicbot.JMusicBot",
+                "Specification-Title" to project.name,
+                "Specification-Version" to project.version,
+                "Implementation-Title" to project.name,
+                "Implementation-Version" to project.version,
+                "Implementation-Vendor-Id" to project.group
         )
     }
 }

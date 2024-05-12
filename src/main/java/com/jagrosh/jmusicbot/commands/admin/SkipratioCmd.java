@@ -21,36 +21,28 @@ import com.jagrosh.jmusicbot.commands.AdminCommand;
 import com.jagrosh.jmusicbot.settings.Settings;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
-public class SkipratioCmd extends AdminCommand
-{
-    public SkipratioCmd(Bot bot)
-    {
+public class SkipratioCmd extends AdminCommand {
+    public SkipratioCmd(Bot bot) {
         this.name = "setskip";
         this.help = "設置投票跳過歌曲須達到的百分比";
         this.arguments = "<0 - 100>";
         this.aliases = bot.getConfig().getAliases(this.name);
     }
-    
+
     @Override
-    protected void execute(CommandEvent event) 
-    {
-        try
-        {
-            int val = Integer.parseInt(event.getArgs().endsWith("%") ? event.getArgs().substring(0,event.getArgs().length()-1) : event.getArgs());
-            if( val < 0 || val > 100)
-            {
+    protected void execute(CommandEvent event) {
+        try {
+            int val = Integer.parseInt(event.getArgs().endsWith("%") ? event.getArgs().substring(0, event.getArgs().length() - 1) : event.getArgs());
+            if (val < 0 || val > 100) {
                 event.replyError("數值必須在 1 ~ 100 之間!");
                 return;
             }
             Settings s = event.getClient().getSettingsFor(event.getGuild());
             s.setSkipRatio(val / 100.0);
             event.replySuccess("跳過百分比設置為 `" + val + "%`");
-        }
-        catch(NumberFormatException ex)
-        {
+        } catch (NumberFormatException ex) {
             event.replyError("請輸入一個 1 ~ 100 (預設為55) 的數字。當在語音頻道內想跳過歌曲的人數百分比超過設定的百分比後，機器人將會跳過歌曲");
         }
     }
