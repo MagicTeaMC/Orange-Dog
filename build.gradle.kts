@@ -34,7 +34,7 @@ dependencies {
     api("com.typesafe:config:1.4.3")
     api("org.jsoup:jsoup:1.17.2")
     api("com.squareup.okhttp3:okhttp:4.12.0")
-    api("com.google.code.gson:gson:2.10.1")
+    api("com.google.code.gson:gson:2.11.0")
     api("org.slf4j:slf4j-nop:2.0.13")
     api("org.slf4j:slf4j-api:2.0.13")
     api("me.scarsz.jdaappender:jda5:1.2.0")
