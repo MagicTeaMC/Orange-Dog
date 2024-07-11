@@ -47,7 +47,7 @@ public class DownloadCmd extends MusicCommand {
             String videoId = track.getInfo().identifier;
             String title = track.getInfo().title;
 
-            event.reply("找到影片： `" + title + "`\n[點此下載](https://aweirddev-yt.hf.space/mp4?q=" + videoId + ") MP4 檔案");
+            event.reply("找到影片： `" + title + "`\n[點此下載](https://aweirddev-yt.hf.space/mp4?q=https://youtube.com/watch?v=" + videoId + ") MP4 檔案");
         }
 
         @Override
