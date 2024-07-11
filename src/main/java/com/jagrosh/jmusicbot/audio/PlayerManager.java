@@ -31,6 +31,7 @@ import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.AndroidTestsuiteWithThumbnail;
 import dev.lavalink.youtube.clients.MusicWithThumbnail;
+import dev.lavalink.youtube.clients.TvHtml5EmbeddedWithThumbnail;
 import dev.lavalink.youtube.clients.WebWithThumbnail;
 import dev.lavalink.youtube.clients.skeleton.Client;
 import net.dv8tion.jda.api.entities.Guild;
@@ -48,7 +49,7 @@ public class PlayerManager extends DefaultAudioPlayerManager {
     public void init() {
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(this::registerSourceManager);
 
-        registerSourceManager(new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] { new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidTestsuiteWithThumbnail() }));
+        registerSourceManager(new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] { new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidTestsuiteWithThumbnail(), new TvHtml5EmbeddedWithThumbnail() }));
 
         registerSourceManager(SoundCloudAudioSourceManager.createDefault());
         registerSourceManager(new BandcampAudioSourceManager());
