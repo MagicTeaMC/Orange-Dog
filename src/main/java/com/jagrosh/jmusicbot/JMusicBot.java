@@ -150,6 +150,7 @@ public class JMusicBot {
                         new SettingsCmd(bot),
                         new UserInfo(),
 
+                        new BilibiliCmd(bot),
                         new DownloadCmd(bot),
                         new LyricsCmd(bot),
                         new NowplayingCmd(bot),
