@@ -34,7 +34,7 @@ public class BlacklistUserCmd extends AdminCommand {
     public BlacklistUserCmd(Bot bot) {
         this.name = "blacklist";
         this.help = "把用戶加入黑名單";
-        this.arguments = "<use|none>";
+        this.arguments = "<@用戶|NONE>";
         this.aliases = bot.getConfig().getAliases(this.name);
     }
 

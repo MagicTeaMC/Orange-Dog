@@ -74,7 +74,7 @@ public class PlayCmd extends MusicCommand {
                 return;
             }
             StringBuilder builder = new StringBuilder(event.getClient().getWarning() + " 播放指令:\n");
-            builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" <標題>` - 播放YouTube上的音樂");
+            builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" <標題>` - 播放音樂");
             builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" <網址>` - 播放歌曲,播放清單或直播音樂");
             for (Command cmd : children)
                 builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" ").append(cmd.getName()).append(" ").append(cmd.getArguments()).append("` - ").append(cmd.getHelp());
@@ -84,11 +84,6 @@ public class PlayCmd extends MusicCommand {
         String args = event.getArgs().startsWith("<") && event.getArgs().endsWith(">")
                 ? event.getArgs().substring(1, event.getArgs().length() - 1)
                 : event.getArgs().isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : event.getArgs();
-        if (args.startsWith("https://open.spotify.com")) {
-            SpotifyCmd spotifyCmd = new SpotifyCmd(bot);
-            spotifyCmd.doCommand(event);
-            return;
-        }
         event.reply(loadingEmoji + " 載入中... `[" + args + "]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), args, new ResultHandler(m, event, false)));
     }
 

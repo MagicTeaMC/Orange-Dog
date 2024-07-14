@@ -8,6 +8,8 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 
+import com.jagrosh.jmusicbot.utils.FormatUtil;
+
 public class DownloadCmd extends MusicCommand {
 
     public DownloadCmd(Bot bot) {
@@ -47,7 +49,7 @@ public class DownloadCmd extends MusicCommand {
             String videoId = track.getInfo().identifier;
             String title = track.getInfo().title;
 
-            event.reply("找到影片： `" + title + "`\n[點此下載](https://yt-api.maoyue.tw/" + videoId + ") MP4 檔案");
+            event.reply("找到影片： **" + FormatUtil.filter(title) + "**\n[點此下載](https://yt-api.maoyue.tw/" + videoId + ") MP4 檔案");
         }
 
         @Override

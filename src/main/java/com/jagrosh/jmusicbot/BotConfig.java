@@ -39,7 +39,7 @@ public class BotConfig {
     private final Prompt prompt;
     private Path path = null;
     private String token, prefix, altprefix, helpWord, playlistsFolder, logLevel,
-            successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji, spClientId, spClientSecret;
+            successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji, spClientId, spClientSecret, spDc;
     private boolean stayInChannel, songInGame, npImages, updatealerts, useEval, dbots;
     private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
@@ -96,6 +96,7 @@ public class BotConfig {
             dbots = owner == 113156185389092864L;
             spClientId = config.getString("spclient");
             spClientSecret = config.getString("spsecret");
+            spDc = config.getString("spDc");
 
             // we may need to write a new config file
             boolean write = false;
@@ -287,5 +288,9 @@ public class BotConfig {
 
     public String getSpotifyClientSecret() {
         return spClientSecret;
+    }
+
+    public String getSpDc() {
+        return spDc;
     }
 }

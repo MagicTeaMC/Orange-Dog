@@ -15,9 +15,15 @@
  */
 package com.jagrosh.jmusicbot.audio;
 
+import com.github.topi314.lavasrc.applemusic.AppleMusicSourceManager;
+import com.github.topi314.lavasrc.deezer.DeezerAudioSourceManager;
+import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
+import com.github.topi314.lavasrc.yandexmusic.YandexMusicSourceManager;
 import com.jagrosh.jmusicbot.Bot;
+import com.jagrosh.jmusicbot.BotConfig;
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager;
@@ -28,12 +34,14 @@ import com.sedmelluq.discord.lavaplayer.source.nico.NicoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
+
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.AndroidTestsuiteWithThumbnail;
 import dev.lavalink.youtube.clients.MusicWithThumbnail;
 import dev.lavalink.youtube.clients.TvHtml5EmbeddedWithThumbnail;
 import dev.lavalink.youtube.clients.WebWithThumbnail;
 import dev.lavalink.youtube.clients.skeleton.Client;
+import me.allvaa.lpsources.bilibili.BilibiliAudioSourceManager;
 import net.dv8tion.jda.api.entities.Guild;
 
 /**
@@ -46,12 +54,20 @@ public class PlayerManager extends DefaultAudioPlayerManager {
         this.bot = bot;
     }
 
+    String clientId = "f5c61bf239ec41e18756db119436c418";
+    String clientSecret = "2c2e6b4926204f2cb1ad0b2d8c2fca51";
+    String spDc = "AQASquIDa6JW3xiRbm3tvM9JFXt8gglWPHelVa89aAIbRp5JNVV7BX2RDF0dU5fb27Ei6WRFCcnHO9gZDNAUYhSjd5n_PQ0nk-p1dPOmMdehfSXZOsYHpl5heMkfjtyJ7qlA_LYbOvqb07gajDdFrcKkTi2BZUXYadb3OWezd9CJJJ7gWWmeQbtO0h0P6i_KStVmBVAGGTGOaDQiBROW8mF5Ljoc";
+
     public void init() {
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(this::registerSourceManager);
 
         registerSourceManager(new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] { new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidTestsuiteWithThumbnail(), new TvHtml5EmbeddedWithThumbnail() }));
 
+        registerSourceManager(new SpotifySourceManager(null, clientId, clientSecret, spDc, this));
+        registerSourceManager(new BilibiliAudioSourceManager());
         registerSourceManager(SoundCloudAudioSourceManager.createDefault());
+        registerSourceManager(new YandexMusicSourceManager("y0_AgAAAABEEHcTAAG8XgAAAAEKQo81AACsCV7u0e1EfoQw5NEaIUX--zquxQ"));
+        registerSourceManager(new DeezerAudioSourceManager("a25a28ccd212536fed8e6002f51787c569338909e3f9a2e364dd41b26d0bdd003282aa658570852c1114bf675592abbcc6d65dbbe6f3791137095d008f3600bfce269eccb6133bb2e1c240a2311603a78d7b0524ac61629a575489fcf0be67d8"));
         registerSourceManager(new BandcampAudioSourceManager());
         registerSourceManager(new VimeoAudioSourceManager());
         registerSourceManager(new TwitchStreamAudioSourceManager());

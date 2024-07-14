@@ -16,6 +16,7 @@
 package com.jagrosh.jmusicbot;
 
 import ch.qos.logback.classic.Level;
+import com.github.topi314.lavalyrics.LyricsManager;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jdautilities.examples.command.PingCommand;
@@ -144,13 +145,11 @@ public class JMusicBot {
                 .setLinkedCacheSize(200)
                 .setGuildSettingsManager(settings)
                 .addCommands(aboutCommand,
-                        new QkmaoCmd(bot),
                         new ServerInfo(bot),
                         new PingCommand(),
                         new SettingsCmd(bot),
                         new UserInfo(),
 
-                        new BilibiliCmd(bot),
                         new DownloadCmd(bot),
                         new LyricsCmd(bot),
                         new NowplayingCmd(bot),
@@ -164,7 +163,6 @@ public class JMusicBot {
                         new SkipCmd(bot),
                         new SeekCmd(bot),
                         new skipSegCmd(bot),
-                        new SpotifyCmd(bot),
 
                         new ForceRemoveCmd(bot),
                         new ForceskipCmd(bot),

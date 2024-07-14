@@ -25,6 +25,9 @@ repositories {
     maven {
         url = uri("https://maven.lavalink.dev/releases")
     }
+    maven {
+        url = uri("https://maven.topi.wtf/releases")
+    }
 }
 
 dependencies {
@@ -43,6 +46,11 @@ dependencies {
     api("org.slf4j:slf4j-api:2.0.13")
     api("me.scarsz.jdaappender:jda5:1.2.1")
     api("com.github.oshi:oshi-core:6.6.1")
+    api("com.github.topi314.lavasrc:lavasrc:4.1.1")
+    api("com.github.topi314.lavasrc:lavasrc-protocol:4.1.1")
+    api("com.github.topi314.lavalyrics:lavalyrics:1.0.0")
+    api("com.github.topi314.lavalyrics:lavalyrics-protocol:1.0.0")
+    api(files("./bilbili-test/main-0.1.0.jar"))
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest-core:2.2")
 }
