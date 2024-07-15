@@ -15,15 +15,12 @@
  */
 package com.jagrosh.jmusicbot.audio;
 
-import com.github.topi314.lavasrc.applemusic.AppleMusicSourceManager;
 import com.github.topi314.lavasrc.deezer.DeezerAudioSourceManager;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
 import com.github.topi314.lavasrc.yandexmusic.YandexMusicSourceManager;
 import com.jagrosh.jmusicbot.Bot;
-import com.jagrosh.jmusicbot.BotConfig;
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager;
@@ -34,6 +31,7 @@ import com.sedmelluq.discord.lavaplayer.source.nico.NicoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
+import tw.maoyue.lavaplayer.suno.SunoAudioSourceManager;
 
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.AndroidTestsuiteWithThumbnail;
@@ -66,6 +64,7 @@ public class PlayerManager extends DefaultAudioPlayerManager {
         registerSourceManager(new SpotifySourceManager(null, clientId, clientSecret, spDc, this));
         registerSourceManager(new BilibiliAudioSourceManager());
         registerSourceManager(SoundCloudAudioSourceManager.createDefault());
+        registerSourceManager(new SunoAudioSourceManager());
         registerSourceManager(new YandexMusicSourceManager("y0_AgAAAABEEHcTAAG8XgAAAAEKQo81AACsCV7u0e1EfoQw5NEaIUX--zquxQ"));
         registerSourceManager(new DeezerAudioSourceManager("a25a28ccd212536fed8e6002f51787c569338909e3f9a2e364dd41b26d0bdd003282aa658570852c1114bf675592abbcc6d65dbbe6f3791137095d008f3600bfce269eccb6133bb2e1c240a2311603a78d7b0524ac61629a575489fcf0be67d8"));
         registerSourceManager(new BandcampAudioSourceManager());

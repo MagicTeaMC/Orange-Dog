@@ -51,6 +51,7 @@ dependencies {
     api("com.github.topi314.lavalyrics:lavalyrics:1.0.0")
     api("com.github.topi314.lavalyrics:lavalyrics-protocol:1.0.0")
     api(files("./bilbili-test/main-0.1.0.jar"))
+    api(files("./suno-test/lavaplayer-suno-1.0-SNAPSHOT.jar"))
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest-core:2.2")
 }

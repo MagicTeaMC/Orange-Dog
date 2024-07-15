@@ -40,7 +40,7 @@ public class BotConfig {
     private Path path = null;
     private String token, prefix, altprefix, helpWord, playlistsFolder, logLevel,
             successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji, spClientId, spClientSecret, spDc;
-    private boolean stayInChannel, songInGame, npImages, updatealerts, useEval, dbots;
+    private boolean stayInChannel, songInGame, npImages, updatealerts, useEval;
     private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
     private Activity game;
@@ -93,7 +93,6 @@ public class BotConfig {
             playlistsFolder = config.getString("playlistsfolder");
             aliases = config.getConfig("aliases");
             transforms = config.getConfig("transforms");
-            dbots = owner == 113156185389092864L;
             spClientId = config.getString("spclient");
             spClientSecret = config.getString("spsecret");
             spDc = config.getString("spDc");
@@ -230,10 +229,6 @@ public class BotConfig {
 
     public String getPlaylistsFolder() {
         return playlistsFolder;
-    }
-
-    public boolean getDBots() {
-        return dbots;
     }
 
     public boolean useUpdateAlerts() {
