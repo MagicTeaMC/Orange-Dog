@@ -20,7 +20,7 @@ repositories {
         url = uri("https://nexus.scarsz.me/content/repositories/releases/")
     }
     maven {
-        url = uri("https://m2.chew.pro/snapshots")
+        url = uri("https://m2.chew.pro/releases")
     }
     maven {
         url = uri("https://maven.lavalink.dev/releases")
@@ -34,7 +34,7 @@ dependencies {
     api("net.dv8tion:JDA:5.0.0")
     api("dev.arbjerg:lavaplayer:2.2.1")
     api("dev.lavalink.youtube:v2:1.4.0")
-    api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
+    api("pw.chew:jda-chewtils:2.0")
     api("com.github.MagicTeaMC:MaoLyrics:b74346f")
     api("ch.qos.logback:logback-classic:1.5.6")
     api("com.typesafe:config:1.4.3")
