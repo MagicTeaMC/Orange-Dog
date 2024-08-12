@@ -30,7 +30,7 @@ repositories {
 dependencies {
     api("net.dv8tion:JDA:5.0.0")
     api("dev.arbjerg:lavaplayer:2.2.1")
-    api("dev.lavalink.youtube:v2:1.5.0")
+    api("dev.lavalink.youtube:v2:1.5.2")
     api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
     api("com.github.MagicTeaMC:MaoLyrics:b74346f")
     api("ch.qos.logback:logback-classic:1.5.6")
