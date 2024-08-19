@@ -44,7 +44,7 @@ dependencies {
     api("me.scarsz.jdaappender:jda5:1.2.1")
     api("com.github.oshi:oshi-core:6.6.2")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.hamcrest:hamcrest-core:2.2")
+    testImplementation("org.hamcrest:hamcrest-core:3.0")
 }
 
 publishing {
