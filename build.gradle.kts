@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    api("net.dv8tion:JDA:5.0.0")
+    api("net.dv8tion:JDA:5.0.2")
     api("dev.arbjerg:lavaplayer:2.2.1")
     api("dev.lavalink.youtube:v2:1.6.0")
     api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
