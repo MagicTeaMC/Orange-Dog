@@ -33,7 +33,7 @@ dependencies {
     api("dev.lavalink.youtube:v2:1.7.1")
     api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
     api("com.github.MagicTeaMC:MaoLyrics:b74346f")
-    api("ch.qos.logback:logback-classic:1.5.6")
+    api("ch.qos.logback:logback-classic:1.5.7")
     api("com.typesafe:config:1.4.3")
     api("org.jsoup:jsoup:1.18.1")
     api("com.squareup.okhttp3:okhttp:4.12.0")
