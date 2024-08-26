@@ -34,10 +34,7 @@ import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import tw.maoyue.lavaplayer.suno.SunoAudioSourceManager;
 
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
-import dev.lavalink.youtube.clients.AndroidTestsuiteWithThumbnail;
-import dev.lavalink.youtube.clients.MusicWithThumbnail;
-import dev.lavalink.youtube.clients.TvHtml5EmbeddedWithThumbnail;
-import dev.lavalink.youtube.clients.WebWithThumbnail;
+import dev.lavalink.youtube.clients.*;
 import dev.lavalink.youtube.clients.skeleton.Client;
 import me.allvaa.lpsources.bilibili.BilibiliAudioSourceManager;
 import net.dv8tion.jda.api.entities.Guild;
@@ -59,7 +56,15 @@ public class PlayerManager extends DefaultAudioPlayerManager {
     public void init() {
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(this::registerSourceManager);
 
-        registerSourceManager(new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] { new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidTestsuiteWithThumbnail(), new TvHtml5EmbeddedWithThumbnail() }));
+        registerSourceManager(new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] {
+                new MusicWithThumbnail(),
+                new WebWithThumbnail(),
+                new WebEmbeddedWithThumbnail(),
+                new AndroidTestsuiteWithThumbnail(),
+                new TvHtml5EmbeddedWithThumbnail(),
+                new AndroidMusicWithThumbnail(),
+                new IosWithThumbnail()
+        }));
 
         registerSourceManager(new SpotifySourceManager(null, clientId, clientSecret, spDc, this));
         registerSourceManager(new BilibiliAudioSourceManager());

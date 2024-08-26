@@ -72,7 +72,7 @@ public class TransformativeAudioSourceManager extends YoutubeAudioSourceManager 
             return null;
         try {
             String url = ar.identifier.replaceAll(regex, replacement);
-            Document doc = Jsoup.connect(url).get();
+            Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1").get();
             String value = doc.selectFirst(selector).ownText();
             String formattedValue = String.format(format, value);
             return super.loadItem(apm, new AudioReference(formattedValue, null));

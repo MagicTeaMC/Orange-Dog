@@ -20,34 +20,31 @@ repositories {
         url = uri("https://nexus.scarsz.me/content/repositories/releases/")
     }
     maven {
-        url = uri("https://m2.chew.pro/releases")
+        url = uri("https://m2.chew.pro/snapshots")
     }
     maven {
         url = uri("https://maven.lavalink.dev/releases")
     }
-    maven {
-        url = uri("https://maven.topi.wtf/releases")
-    }
 }
 
 dependencies {
-    api("net.dv8tion:JDA:5.0.0")
+    api("net.dv8tion:JDA:5.1.0")
     api("dev.arbjerg:lavaplayer:2.2.1")
-    api("dev.lavalink.youtube:v2:1.5.0")
-    api("pw.chew:jda-chewtils:2.0")
+    api("dev.lavalink.youtube:v2:1.7.1")
+    api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
     api("com.github.MagicTeaMC:MaoLyrics:b74346f")
-    api("ch.qos.logback:logback-classic:1.5.6")
+    api("ch.qos.logback:logback-classic:1.5.7")
     api("com.typesafe:config:1.4.3")
     api("org.jsoup:jsoup:1.18.1")
     api("com.squareup.okhttp3:okhttp:4.12.0")
     api("com.google.code.gson:gson:2.11.0")
     api("org.json:json:20240303")
-    api("org.slf4j:slf4j-nop:2.0.13")
-    api("org.slf4j:slf4j-api:2.0.13")
-    api("me.scarsz.jdaappender:jda5:1.2.1")
-    api("com.github.oshi:oshi-core:6.6.2")
+    api("org.slf4j:slf4j-nop:2.0.16")
+    api("org.slf4j:slf4j-api:2.0.16")
+    api("me.scarsz.jdaappender:jda5:1.2.2")
+    api("com.github.oshi:oshi-core:6.6.3")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.hamcrest:hamcrest-core:2.2")
+    testImplementation("org.hamcrest:hamcrest-core:3.0")
 }
 
 publishing {
