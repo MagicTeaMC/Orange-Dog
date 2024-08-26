@@ -16,7 +16,6 @@
 package com.jagrosh.jmusicbot;
 
 import ch.qos.logback.classic.Level;
-import com.github.topi314.lavalyrics.LyricsManager;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jdautilities.examples.command.PingCommand;

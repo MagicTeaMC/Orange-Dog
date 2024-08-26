@@ -25,6 +25,9 @@ repositories {
     maven {
         url = uri("https://maven.lavalink.dev/releases")
     }
+    maven {
+        url = uri("https://maven.topi.wtf/releases")
+    }
 }
 
 dependencies {
@@ -38,11 +41,14 @@ dependencies {
     api("org.jsoup:jsoup:1.18.1")
     api("com.squareup.okhttp3:okhttp:4.12.0")
     api("com.google.code.gson:gson:2.11.0")
+    api("com.github.topi314.lavasrc:lavasrc:4.1.1")
+    api("com.github.topi314.lavasrc:lavasrc-protocol:4.1.1")
     api("org.json:json:20240303")
     api("org.slf4j:slf4j-nop:2.0.16")
     api("org.slf4j:slf4j-api:2.0.16")
     api("me.scarsz.jdaappender:jda5:1.2.2")
     api("com.github.oshi:oshi-core:6.6.3")
+    api(files("./bin/main-0.1.0.jar"))
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest-core:3.0")
 }
