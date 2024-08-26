@@ -42,7 +42,7 @@ dependencies {
     api("org.slf4j:slf4j-nop:2.0.13")
     api("org.slf4j:slf4j-api:2.0.13")
     api("me.scarsz.jdaappender:jda5:1.2.2")
-    api("com.github.oshi:oshi-core:6.6.2")
+    api("com.github.oshi:oshi-core:6.6.3")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest-core:3.0")
 }
