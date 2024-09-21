@@ -19,6 +19,7 @@ import com.github.topi314.lavasrc.deezer.DeezerAudioSourceManager;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
 import com.github.topi314.lavasrc.yandexmusic.YandexMusicSourceManager;
 import com.jagrosh.jmusicbot.Bot;
+import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -37,12 +38,19 @@ import dev.lavalink.youtube.clients.*;
 import dev.lavalink.youtube.clients.skeleton.Client;
 import me.allvaa.lpsources.bilibili.BilibiliAudioSourceManager;
 import net.dv8tion.jda.api.entities.Guild;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 
 /**
  * @author John Grosh (john.a.grosh@gmail.com)
  */
 public class PlayerManager extends DefaultAudioPlayerManager {
     private final Bot bot;
+    private final static Logger LOGGER = LoggerFactory.getLogger(PlayerManager.class);
 
     public PlayerManager(Bot bot) {
         this.bot = bot;
@@ -55,7 +63,7 @@ public class PlayerManager extends DefaultAudioPlayerManager {
     public void init() {
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(this::registerSourceManager);
 
-        registerSourceManager(new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] {
+        YoutubeAudioSourceManager yt = new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] {
                 new MusicWithThumbnail(),
                 new WebWithThumbnail(),
                 new WebEmbeddedWithThumbnail(),
@@ -63,8 +71,32 @@ public class PlayerManager extends DefaultAudioPlayerManager {
                 new TvHtml5EmbeddedWithThumbnail(),
                 new AndroidMusicWithThumbnail(),
                 new IosWithThumbnail()
-        }));
+        });
 
+        String token = null;
+        try
+        {
+            token = Files.readString(OtherUtil.getPath("youtubetoken.txt"));
+        }
+        catch (NoSuchFileException e)
+        {
+            /* ignored */
+        }
+        catch (IOException e)
+        {
+            LOGGER.warn("Failed to read YouTube OAuth2 token file: {}",e.getMessage());
+        }
+        LOGGER.debug("Using YouTube OAuth2 refresh token {}", token);
+        try
+        {
+            yt.useOauth2(token, false);
+        }
+        catch (Exception e)
+        {
+            LOGGER.warn("Failed to authorize with YouTube. If this issue persists, delete the youtubetoken.txt file to reauthorize.", e);
+        }
+
+        registerSourceManager(yt);
         registerSourceManager(new SpotifySourceManager(null, clientId, clientSecret, spDc, this));
         registerSourceManager(new BilibiliAudioSourceManager());
         registerSourceManager(SoundCloudAudioSourceManager.createDefault());
