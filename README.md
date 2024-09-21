@@ -13,7 +13,7 @@
 - [x] 可使用指令跳轉到影片的特定時間
 - [ ] 反應改為使用按鈕的方式
 - [x] 支援 Spotify
-- [ ] 支援 bilibili
+- [x] 支援 bilibili
 - [x] 透過 SponsorBlock API 跳過影片部分片段
 - [x] 支援 YouTube 中有年齡限制的影片
 - [x] 基於 JDA v5  
