@@ -56,7 +56,7 @@ public class LyricsCmd extends MusicCommand {
     }
 
     private void searchSong(String query, CommandEvent event) {
-        bot.getPlayerManager().loadItemOrdered(event.getGuild(), "ytsearch:" + query, new AudioLoadResultHandler() {
+        bot.getPlayerManager().loadItemOrdered(event.getGuild(), "spsearch:" + query, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 handleLyrics(track, event);
