@@ -15,13 +15,16 @@
  */
 package com.jagrosh.jmusicbot.audio;
 
+import com.github.topi314.lavalyrics.LyricsManager;
 import com.github.topi314.lavasrc.deezer.DeezerAudioSourceManager;
+import com.github.topi314.lavasrc.mirror.DefaultMirroringAudioTrackResolver;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
 import com.github.topi314.lavasrc.yandexmusic.YandexMusicSourceManager;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager;
@@ -44,6 +47,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
+import java.util.function.Function;
 
 /**
  * @author John Grosh (john.a.grosh@gmail.com)
@@ -51,6 +55,7 @@ import java.nio.file.NoSuchFileException;
 public class PlayerManager extends DefaultAudioPlayerManager {
     private final Bot bot;
     private final static Logger LOGGER = LoggerFactory.getLogger(PlayerManager.class);
+    LyricsManager lyricsManager = new LyricsManager();
 
     public PlayerManager(Bot bot) {
         this.bot = bot;
@@ -96,8 +101,14 @@ public class PlayerManager extends DefaultAudioPlayerManager {
             LOGGER.warn("Failed to authorize with YouTube. If this issue persists, delete the youtubetoken.txt file to reauthorize.", e);
         }
 
+        Function<Void, AudioPlayerManager> audioPlayerManagerFunction = (v) -> this;
+
+        SpotifySourceManager spotifyly = new SpotifySourceManager(clientId, clientSecret, spDc, "us", audioPlayerManagerFunction, new DefaultMirroringAudioTrackResolver(new String[]{"ytsearch:"}));
+
+        lyricsManager.registerLyricsManager(spotifyly);
+
         registerSourceManager(yt);
-        registerSourceManager(new SpotifySourceManager(null, clientId, clientSecret, spDc, this));
+        registerSourceManager(new SpotifySourceManager(null, clientId, clientSecret, "us", this));
         registerSourceManager(new BilibiliAudioSourceManager());
         registerSourceManager(SoundCloudAudioSourceManager.createDefault());
         registerSourceManager(new YandexMusicSourceManager("y0_AgAAAABEEHcTAAG8XgAAAAEKQo81AACsCV7u0e1EfoQw5NEaIUX--zquxQ"));
@@ -113,6 +124,10 @@ public class PlayerManager extends DefaultAudioPlayerManager {
         AudioSourceManagers.registerLocalSource(this);
 
         source(YoutubeAudioSourceManager.class).setPlaylistPageCount(10);
+    }
+
+    public LyricsManager getLyricsManager() {
+        return lyricsManager;
     }
 
     public Bot getBot() {

@@ -15,20 +15,21 @@
  */
 package com.jagrosh.jmusicbot.commands.music;
 
+import com.github.topi314.lavalyrics.lyrics.AudioLyrics;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jlyrics.LyricsClient;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
+import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
+import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 
-/**
- * @author John Grosh (john.a.grosh@gmail.com)
- */
-public class LyricsCmd extends MusicCommand {
-    private final LyricsClient client = new LyricsClient();
+import java.util.List;
 
+public class LyricsCmd extends MusicCommand {
     public LyricsCmd(Bot bot) {
         super(bot);
         this.name = "lyrics";
@@ -40,48 +41,89 @@ public class LyricsCmd extends MusicCommand {
 
     @Override
     public void doCommand(CommandEvent event) {
-        String title;
         if (event.getArgs().isEmpty()) {
             AudioHandler sendingHandler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-            if (sendingHandler.isMusicPlaying(event.getJDA()))
-                title = sendingHandler.getPlayer().getPlayingTrack().getInfo().title;
-            else {
+            if (sendingHandler.isMusicPlaying(event.getJDA())) {
+                AudioTrack track = sendingHandler.getPlayer().getPlayingTrack();
+                handleLyrics(track, event);
+            } else {
                 event.replyError("必須要有音樂正在播放才能使用這個指令!");
-                return;
             }
-        } else
-            title = event.getArgs();
-        event.getChannel().sendTyping().queue();
-        client.getLyrics(title).thenAccept(lyrics ->
-        {
-            if (lyrics == null) {
-                event.replyError("無法找到 `" + title + "` 的歌詞!" + (event.getArgs().isEmpty() ? " 請嘗試使用 (`lyrics [歌曲名稱]`)" : ""));
-                return;
+        } else {
+            String query = event.getArgs();
+            searchSong(query, event);
+        }
+    }
+
+    private void searchSong(String query, CommandEvent event) {
+        bot.getPlayerManager().loadItemOrdered(event.getGuild(), "ytsearch:" + query, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack track) {
+                handleLyrics(track, event);
             }
 
-            EmbedBuilder eb = new EmbedBuilder()
-                    .setAuthor(lyrics.getAuthor())
-                    .setColor(event.getSelfMember().getColor())
-                    .setTitle(lyrics.getTitle(), lyrics.getURL());
-            if (lyrics.getContent().length() > 15000) {
-                event.replyWarning("找到了 `" + title + "` 的歌詞，但是看起來歌詞是錯誤的: " + lyrics.getURL());
-            } else if (lyrics.getContent().length() > 2000) {
-                String content = lyrics.getContent().trim();
-                while (content.length() > 2000) {
-                    int index = content.lastIndexOf("\n\n", 2000);
-                    if (index == -1)
-                        index = content.lastIndexOf("\n", 2000);
-                    if (index == -1)
-                        index = content.lastIndexOf(" ", 2000);
-                    if (index == -1)
-                        index = 2000;
-                    event.reply(eb.setDescription(content.substring(0, index).trim()).build());
-                    content = content.substring(index).trim();
-                    eb.setAuthor(null).setTitle(null, null);
-                }
-                event.reply(eb.setDescription(content).build());
-            } else
-                event.reply(eb.setDescription(lyrics.getContent()).build());
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+                AudioTrack track = playlist.getSelectedTrack() != null ? playlist.getSelectedTrack() : playlist.getTracks().get(0);
+                handleLyrics(track, event);
+            }
+
+            @Override
+            public void noMatches() {
+                event.replyError("找不到符合的歌曲: " + query);
+            }
+
+            @Override
+            public void loadFailed(FriendlyException throwable) {
+                event.replyError("載入歌曲時發生錯誤: " + throwable.getMessage());
+            }
         });
+    }
+
+    private void handleLyrics(AudioTrack track, CommandEvent event) {
+        event.getChannel().sendTyping().queue();
+
+        AudioLyrics audioLyrics = bot.getPlayerManager().getLyricsManager().loadLyrics(track, true);
+        if (audioLyrics == null) {
+            event.replyError("無法找到 `" + track.getInfo().title + "` 的歌詞!");
+            return;
+        }
+
+        List<AudioLyrics.Line> lines = audioLyrics.getLines();
+        if (lines == null || lines.isEmpty()) {
+            event.replyError("無法解析 `" + track.getInfo().title + "` 的歌詞!");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (AudioLyrics.Line line : lines) {
+            sb.append(line.getLine()).append("\n");
+        }
+
+        EmbedBuilder eb = new EmbedBuilder()
+                .setAuthor(track.getInfo().author)
+                .setColor(event.getSelfMember().getColor())
+                .setTitle(track.getInfo().title, track.getInfo().uri);
+
+        if (sb.length() > 15000) {
+            event.replyWarning("找到了 `" + track.getInfo().title + "` 的歌詞，但是看起來歌詞是錯誤的");
+        } else if (sb.length() > 2000) {
+            String content = sb.toString().trim();
+            while (content.length() > 2000) {
+                int index = content.lastIndexOf("\n\n", 2000);
+                if (index == -1)
+                    index = content.lastIndexOf("\n", 2000);
+                if (index == -1)
+                    index = content.lastIndexOf(" ", 2000);
+                if (index == -1)
+                    index = 2000;
+                event.reply(eb.setDescription(content.substring(0, index).trim()).build());
+                content = content.substring(index).trim();
+                eb.setAuthor(null).setTitle(null, null);
+            }
+            event.reply(eb.setDescription(content).build());
+        } else {
+            event.reply(eb.setDescription(sb.toString()).build());
+        }
     }
 }
