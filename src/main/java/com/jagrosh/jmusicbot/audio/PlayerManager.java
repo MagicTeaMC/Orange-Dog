@@ -43,6 +43,7 @@ import me.allvaa.lpsources.bilibili.BilibiliAudioSourceManager;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tw.maoyue.lavaodysee.OdyseeAudioSourceManager;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -110,6 +111,7 @@ public class PlayerManager extends DefaultAudioPlayerManager {
         registerSourceManager(yt);
         registerSourceManager(new SpotifySourceManager(null, clientId, clientSecret, "us", this));
         registerSourceManager(new BilibiliAudioSourceManager());
+        registerSourceManager(new OdyseeAudioSourceManager());
         registerSourceManager(SoundCloudAudioSourceManager.createDefault());
         registerSourceManager(new YandexMusicSourceManager("y0_AgAAAABEEHcTAAG8XgAAAAEKQo81AACsCV7u0e1EfoQw5NEaIUX--zquxQ"));
         registerSourceManager(new DeezerAudioSourceManager("a25a28ccd212536fed8e6002f51787c569338909e3f9a2e364dd41b26d0bdd003282aa658570852c1114bf675592abbcc6d65dbbe6f3791137095d008f3600bfce269eccb6133bb2e1c240a2311603a78d7b0524ac61629a575489fcf0be67d8"));
