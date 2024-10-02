@@ -39,10 +39,10 @@ import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.*;
 import dev.lavalink.youtube.clients.skeleton.Client;
-import me.allvaa.lpsources.bilibili.BilibiliAudioSourceManager;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tw.maoyue.lavabilibili.BilibiliAudioSourceManager;
 import tw.maoyue.lavaodysee.OdyseeAudioSourceManager;
 
 import java.io.IOException;

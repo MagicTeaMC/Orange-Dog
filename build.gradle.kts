@@ -1,12 +1,12 @@
 group = "tw.maoyue"
 version = "1.2.0"
 description = "My Discord music bot, base on JMusicBot"
-java.sourceCompatibility = JavaVersion.VERSION_11
 
 plugins {
     `java-library`
     `maven-publish`
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    kotlin("jvm")
 }
 
 repositories {
@@ -48,9 +48,9 @@ dependencies {
     api("org.slf4j:slf4j-nop:2.0.16")
     api("org.slf4j:slf4j-api:2.0.16")
     api("me.scarsz.jdaappender:jda5:1.2.2")
-    api(files("./bin/main-0.1.0.jar"))
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest-core:3.0")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 publishing {
@@ -87,4 +87,7 @@ tasks.jar {
                 "Implementation-Vendor-Id" to project.group
         )
     }
+}
+kotlin {
+    jvmToolchain(11)
 }
