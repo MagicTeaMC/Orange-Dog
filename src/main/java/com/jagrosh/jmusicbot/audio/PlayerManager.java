@@ -62,10 +62,6 @@ public class PlayerManager extends DefaultAudioPlayerManager {
         this.bot = bot;
     }
 
-    String clientId = "f5c61bf239ec41e18756db119436c418";
-    String clientSecret = "2c2e6b4926204f2cb1ad0b2d8c2fca51";
-    String spDc = "AQASquIDa6JW3xiRbm3tvM9JFXt8gglWPHelVa89aAIbRp5JNVV7BX2RDF0dU5fb27Ei6WRFCcnHO9gZDNAUYhSjd5n_PQ0nk-p1dPOmMdehfSXZOsYHpl5heMkfjtyJ7qlA_LYbOvqb07gajDdFrcKkTi2BZUXYadb3OWezd9CJJJ7gWWmeQbtO0h0P6i_KStVmBVAGGTGOaDQiBROW8mF5Ljoc";
-
     public void init() {
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(this::registerSourceManager);
 
@@ -104,12 +100,12 @@ public class PlayerManager extends DefaultAudioPlayerManager {
 
         Function<Void, AudioPlayerManager> audioPlayerManagerFunction = (v) -> this;
 
-        SpotifySourceManager spotifyly = new SpotifySourceManager(clientId, clientSecret, spDc, "us", audioPlayerManagerFunction, new DefaultMirroringAudioTrackResolver(new String[]{"ytsearch:"}));
+        SpotifySourceManager spotifyly = new SpotifySourceManager(bot.getConfig().getSpotifyClientId(), bot.getConfig().getSpotifyClientSecret(), bot.getConfig().getSpDc(), "us", audioPlayerManagerFunction, new DefaultMirroringAudioTrackResolver(new String[]{"ytsearch:"}));
 
         lyricsManager.registerLyricsManager(spotifyly);
 
         registerSourceManager(yt);
-        registerSourceManager(new SpotifySourceManager(null, clientId, clientSecret, "us", this));
+        registerSourceManager(new SpotifySourceManager(null, bot.getConfig().getSpotifyClientId(), bot.getConfig().getSpotifyClientSecret(), "us", this));
         registerSourceManager(new BilibiliAudioSourceManager());
         registerSourceManager(new OdyseeAudioSourceManager());
         registerSourceManager(SoundCloudAudioSourceManager.createDefault());

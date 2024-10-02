@@ -164,6 +164,7 @@ public class JMusicBot {
                         new SeekCmd(bot),
                         new skipSegCmd(bot),
 
+                        new BassBoostCmd(bot),
                         new ForceRemoveCmd(bot),
                         new ForceskipCmd(bot),
                         new MoveTrackCmd(bot),
