@@ -47,7 +47,7 @@ dependencies {
     api("org.json:json:20240303")
     api("org.slf4j:slf4j-nop:2.0.16")
     api("org.slf4j:slf4j-api:2.0.16")
-    api("me.scarsz.jdaappender:jda5:1.2.2")
+    api("me.scarsz.jdaappender:jda5:1.2.3")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest-core:3.0")
     implementation(kotlin("stdlib-jdk8"))
