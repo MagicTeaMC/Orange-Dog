@@ -67,11 +67,13 @@ public class PlayerManager extends DefaultAudioPlayerManager {
 
         YoutubeAudioSourceManager yt = new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] {
                 new MusicWithThumbnail(),
+                new AndroidVrWithThumbnail(),
                 new WebWithThumbnail(),
                 new WebEmbeddedWithThumbnail(),
                 new AndroidTestsuiteWithThumbnail(),
-                new TvHtml5EmbeddedWithThumbnail(),
                 new AndroidMusicWithThumbnail(),
+                new TvHtml5EmbeddedWithThumbnail(),
+                new MediaConnectWithThumbnail(),
                 new IosWithThumbnail()
         });
 
