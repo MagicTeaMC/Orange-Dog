@@ -21,7 +21,6 @@ import com.github.topi314.lavasrc.mirror.DefaultMirroringAudioTrackResolver;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
 import com.github.topi314.lavasrc.yandexmusic.YandexMusicSourceManager;
 import com.jagrosh.jmusicbot.Bot;
-import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -43,9 +42,6 @@ import org.slf4j.LoggerFactory;
 import tw.maoyue.lavabilibili.BilibiliAudioSourceManager;
 import tw.maoyue.lavaodysee.OdyseeAudioSourceManager;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.util.function.Function;
 
 /**
@@ -67,36 +63,13 @@ public class PlayerManager extends DefaultAudioPlayerManager {
                 new MusicWithThumbnail(),
                 new AndroidVrWithThumbnail(),
                 new WebWithThumbnail(),
+                new MWebWithThumbnail(),
                 new WebEmbeddedWithThumbnail(),
-                new AndroidTestsuiteWithThumbnail(),
                 new AndroidMusicWithThumbnail(),
+                new Tv(),
                 new TvHtml5EmbeddedWithThumbnail(),
-                new MediaConnectWithThumbnail(),
                 new IosWithThumbnail()
         });
-
-        String token = null;
-        try
-        {
-            token = Files.readString(OtherUtil.getPath("youtubetoken.txt"));
-        }
-        catch (NoSuchFileException e)
-        {
-            /* ignored */
-        }
-        catch (IOException e)
-        {
-            LOGGER.warn("Failed to read YouTube OAuth2 token file: {}",e.getMessage());
-        }
-        LOGGER.debug("Using YouTube OAuth2 refresh token {}", token);
-        try
-        {
-            yt.useOauth2(token, false);
-        }
-        catch (Exception e)
-        {
-            LOGGER.warn("Failed to authorize with YouTube. If this issue persists, delete the youtubetoken.txt file to reauthorize.", e);
-        }
 
         Function<Void, AudioPlayerManager> audioPlayerManagerFunction = (v) -> this;
 
