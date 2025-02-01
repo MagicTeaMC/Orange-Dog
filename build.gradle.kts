@@ -34,7 +34,7 @@ dependencies {
     api("net.dv8tion:JDA:5.1.2")
     api("dev.arbjerg:lavaplayer:2.2.2")
     api("dev.lavalink.youtube:v2:1.11.4")
-    api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
+    api("pw.chew:jda-chewtils:2.1-SNAPSHOT")
     api("com.github.MagicTeaMC:MaoLyrics:b74346f")
     api("ch.qos.logback:logback-classic:1.5.12")
     api("com.typesafe:config:1.4.3")
