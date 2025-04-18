@@ -31,12 +31,12 @@ repositories {
 }
 
 dependencies {
-    api("net.dv8tion:JDA:5.1.2")
-    api("dev.arbjerg:lavaplayer:2.2.2")
-    api("dev.lavalink.youtube:v2:1.11.4")
-    api("pw.chew:jda-chewtils:2.0-SNAPSHOT")
+    api("net.dv8tion:JDA:5.3.2")
+    api("dev.arbjerg:lavaplayer:2.2.3")
+    api("dev.lavalink.youtube:v2:1.12.0")
+    api("pw.chew:jda-chewtils:2.1-SNAPSHOT")
     api("com.github.MagicTeaMC:MaoLyrics:b74346f")
-    api("ch.qos.logback:logback-classic:1.5.12")
+    api("ch.qos.logback:logback-classic:1.5.17")
     api("com.typesafe:config:1.4.3")
     api("org.jsoup:jsoup:1.18.3")
     api("com.squareup.okhttp3:okhttp:4.12.0")
@@ -44,7 +44,7 @@ dependencies {
     api("com.github.topi314.lavasrc:lavasrc:4.3.0")
     api("com.github.topi314.lavasrc:lavasrc-protocol:4.3.0")
     api("com.github.topi314.lavalyrics:lavalyrics:1.0.0")
-    api("org.json:json:20240303")
+    api("org.json:json:20250107")
     api("org.slf4j:slf4j-nop:2.0.16")
     api("org.slf4j:slf4j-api:2.0.16")
     api("me.scarsz.jdaappender:jda5:1.2.3")
