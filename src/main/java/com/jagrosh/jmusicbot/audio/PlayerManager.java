@@ -16,7 +16,6 @@
 package com.jagrosh.jmusicbot.audio;
 
 import com.github.topi314.lavalyrics.LyricsManager;
-import com.github.topi314.lavasrc.deezer.DeezerAudioSourceManager;
 import com.github.topi314.lavasrc.mirror.DefaultMirroringAudioTrackResolver;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
 import com.github.topi314.lavasrc.yandexmusic.YandexMusicSourceManager;
@@ -83,7 +82,6 @@ public class PlayerManager extends DefaultAudioPlayerManager {
         registerSourceManager(new OdyseeAudioSourceManager());
         registerSourceManager(SoundCloudAudioSourceManager.createDefault());
         registerSourceManager(new YandexMusicSourceManager("y0_AgAAAABEEHcTAAG8XgAAAAEKQo81AACsCV7u0e1EfoQw5NEaIUX--zquxQ"));
-        registerSourceManager(new DeezerAudioSourceManager("a25a28ccd212536fed8e6002f51787c569338909e3f9a2e364dd41b26d0bdd003282aa658570852c1114bf675592abbcc6d65dbbe6f3791137095d008f3600bfce269eccb6133bb2e1c240a2311603a78d7b0524ac61629a575489fcf0be67d8"));
         registerSourceManager(new BandcampAudioSourceManager());
         registerSourceManager(new VimeoAudioSourceManager());
         registerSourceManager(new TwitchStreamAudioSourceManager());
