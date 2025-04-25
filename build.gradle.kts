@@ -26,6 +26,9 @@ repositories {
         url = uri("https://maven.lavalink.dev/releases")
     }
     maven {
+        url = uri("https://maven.lavalink.dev/snapshots")
+    }
+    maven {
         url = uri("https://maven.topi.wtf/releases")
     }
 }
@@ -33,9 +36,8 @@ repositories {
 dependencies {
     api("net.dv8tion:JDA:5.3.2")
     api("dev.arbjerg:lavaplayer:2.2.3")
-    api("dev.lavalink.youtube:v2:1.12.0")
+    api("dev.lavalink.youtube:v2:130561e2d2f76605eb08b2c9cc4facbf400caccb-SNAPSHOT")
     api("pw.chew:jda-chewtils:2.1-SNAPSHOT")
-    api("com.github.MagicTeaMC:MaoLyrics:b74346f")
     api("ch.qos.logback:logback-classic:1.5.17")
     api("com.typesafe:config:1.4.3")
     api("org.jsoup:jsoup:1.18.3")
