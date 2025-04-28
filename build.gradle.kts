@@ -39,7 +39,7 @@ dependencies {
     api("pw.chew:jda-chewtils:2.1-SNAPSHOT")
     api("ch.qos.logback:logback-classic:1.5.18")
     api("com.typesafe:config:1.4.3")
-    api("org.jsoup:jsoup:1.18.3")
+    api("org.jsoup:jsoup:1.19.1")
     api("com.squareup.okhttp3:okhttp:4.12.0")
     api("com.google.code.gson:gson:2.11.0")
     api("com.github.topi314.lavasrc:lavasrc:4.6.0")
