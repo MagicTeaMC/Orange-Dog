@@ -47,7 +47,7 @@ dependencies {
     api("com.github.topi314.lavalyrics:lavalyrics:1.0.0")
     api("org.json:json:20250107")
     api("org.slf4j:slf4j-nop:2.0.16")
-    api("org.slf4j:slf4j-api:2.0.16")
+    api("org.slf4j:slf4j-api:2.0.17")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest-core:3.0")
     implementation(kotlin("stdlib-jdk8"))
