@@ -1,4 +1,4 @@
-name: "Pre-release"
+name: "Build"
 
 on:
   push:
@@ -6,17 +6,17 @@ on:
       - "*"
 
 jobs:
-  pre-release:
-    name: "Build"
-    runs-on: "ubuntu-latest"
-
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
-        with:
-          distribution: "temurin"
-          java-version: "17"
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      - name: Build Jar file
-        run: ./gradlew clean build shadowJar
+    - name: Checkout sources
+      uses: actions/checkout@v4
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 17
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+    - name: Build with Gradle
+      run: ./gradlew build
