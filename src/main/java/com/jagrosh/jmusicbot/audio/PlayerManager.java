@@ -19,7 +19,7 @@ import com.github.topi314.lavalyrics.LyricsManager;
 import com.github.topi314.lavasrc.mirror.DefaultMirroringAudioTrackResolver;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
 import com.github.topi314.lavasrc.yandexmusic.YandexMusicSourceManager;
-import com.github.topi314.lavasrc.ytdlp.YTDLPSourceManager;
+import com.github.topi314.lavasrc.ytdlp.YtdlpAudioSourceManager;
 import com.jagrosh.jmusicbot.Bot;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -89,7 +89,7 @@ public class PlayerManager extends DefaultAudioPlayerManager {
         registerSourceManager(new BeamAudioSourceManager());
         registerSourceManager(new GetyarnAudioSourceManager());
         registerSourceManager(new NicoAudioSourceManager());
-        registerSourceManager(new YTDLPSourceManager());
+        registerSourceManager(new YtdlpAudioSourceManager());
 
         AudioSourceManagers.registerLocalSource(this);
 
