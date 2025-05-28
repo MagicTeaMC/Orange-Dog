@@ -78,6 +78,7 @@ public class PlayerManager extends DefaultAudioPlayerManager {
         lyricsManager.registerLyricsManager(spotifyly);
 
         registerSourceManager(yt);
+        registerSourceManager(new YtdlpAudioSourceManager("./yt-dlp"));
         registerSourceManager(new SpotifySourceManager(null, bot.getConfig().getSpotifyClientId(), bot.getConfig().getSpotifyClientSecret(), "us", this));
         registerSourceManager(new BilibiliAudioSourceManager());
         registerSourceManager(new OdyseeAudioSourceManager());
@@ -89,7 +90,6 @@ public class PlayerManager extends DefaultAudioPlayerManager {
         registerSourceManager(new BeamAudioSourceManager());
         registerSourceManager(new GetyarnAudioSourceManager());
         registerSourceManager(new NicoAudioSourceManager());
-        registerSourceManager(new YtdlpAudioSourceManager());
 
         AudioSourceManagers.registerLocalSource(this);
 
