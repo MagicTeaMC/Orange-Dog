@@ -31,6 +31,7 @@ import com.sedmelluq.discord.lavaplayer.source.nico.NicoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.vimeo.YTDLPSourceManager;
 
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.*;
@@ -88,6 +89,7 @@ public class PlayerManager extends DefaultAudioPlayerManager {
         registerSourceManager(new BeamAudioSourceManager());
         registerSourceManager(new GetyarnAudioSourceManager());
         registerSourceManager(new NicoAudioSourceManager());
+        registerSourceManager(new YTDLPSourceManager());
 
         AudioSourceManagers.registerLocalSource(this);
 
