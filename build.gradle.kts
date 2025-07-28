@@ -5,7 +5,7 @@ description = "My Discord music bot, base on JMusicBot"
 plugins {
     `java-library`
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "8.3.8"
     kotlin("jvm")
 }
 
@@ -42,8 +42,8 @@ dependencies {
     api("org.jsoup:jsoup:1.21.1")
     api("com.squareup.okhttp3:okhttp:5.1.0")
     api("com.google.code.gson:gson:2.13.1")
-    api("com.github.topi314.lavasrc:lavasrc:4.7.2")
-    api("com.github.topi314.lavasrc:lavasrc-protocol:4.7.2")
+    api("com.github.topi314.lavasrc:lavasrc:4.7.3")
+    api("com.github.topi314.lavasrc:lavasrc-protocol:4.7.3")
     api("com.github.topi314.lavalyrics:lavalyrics:1.0.0")
     api("org.json:json:20250517")
     api("org.slf4j:slf4j-nop:2.0.17")
