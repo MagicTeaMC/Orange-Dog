@@ -73,7 +73,15 @@ public class PlayerManager extends DefaultAudioPlayerManager {
 
         Function<Void, AudioPlayerManager> audioPlayerManagerFunction = (v) -> this;
 
-        SpotifySourceManager spotifyly = new SpotifySourceManager(bot.getConfig().getSpotifyClientId(), bot.getConfig().getSpotifyClientSecret(), bot.getConfig().getSpDc(), "us", audioPlayerManagerFunction, new DefaultMirroringAudioTrackResolver(new String[]{"ytsearch:"}));
+        SpotifySourceManager spotifyly = new SpotifySourceManager(
+                bot.getConfig().getSpotifyClientId(),
+                bot.getConfig().getSpotifyClientSecret(),
+                false,
+                bot.getConfig().getSpDc(),
+                "us",
+                audioPlayerManagerFunction,
+                new DefaultMirroringAudioTrackResolver(new String[]{"ytsearch:"})
+        );
 
         lyricsManager.registerLyricsManager(spotifyly);
 
