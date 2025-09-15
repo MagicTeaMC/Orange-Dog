@@ -38,7 +38,7 @@ dependencies {
     api("dev.lavalink.youtube:v2:2f7a4d4bcb7fac0ff21c6fe19469ced558df33ad-SNAPSHOT")
     api("pw.chew:jda-chewtils:2.1-SNAPSHOT")
     api("ch.qos.logback:logback-classic:1.5.18")
-    api("com.typesafe:config:1.4.3")
+    api("com.typesafe:config:1.4.5")
     api("org.jsoup:jsoup:1.21.1")
     api("com.squareup.okhttp3:okhttp:5.1.0")
     api("com.google.code.gson:gson:2.13.1")
