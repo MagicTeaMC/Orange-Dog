@@ -40,7 +40,7 @@ dependencies {
     api("ch.qos.logback:logback-classic:1.5.18")
     api("com.typesafe:config:1.4.5")
     api("org.jsoup:jsoup:1.21.1")
-    api("com.squareup.okhttp3:okhttp:5.1.0")
+    api("com.squareup.okhttp3:okhttp:5.2.1")
     api("com.google.code.gson:gson:2.13.1")
     api("com.github.topi314.lavasrc:lavasrc:4.7.3")
     api("com.github.topi314.lavasrc:lavasrc-protocol:4.7.3")
