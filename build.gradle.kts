@@ -5,7 +5,7 @@ description = "My Discord music bot, base on JMusicBot"
 plugins {
     `java-library`
     `maven-publish`
-    id("com.gradleup.shadow") version "8.3.8"
+    id("com.gradleup.shadow") version "9.2.2"
     kotlin("jvm")
 }
 
