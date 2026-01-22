@@ -41,7 +41,7 @@ dependencies {
     api("com.typesafe:config:1.4.5")
     api("org.jsoup:jsoup:1.21.1")
     api("com.squareup.okhttp3:okhttp:5.2.1")
-    api("com.google.code.gson:gson:2.13.1")
+    api("com.google.code.gson:gson:2.13.2")
     api("com.github.topi314.lavasrc:lavasrc:4.8.1")
     api("com.github.topi314.lavasrc:lavasrc-protocol:4.8.1")
     api("com.github.topi314.lavalyrics:lavalyrics:1.1.0")
