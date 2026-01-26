@@ -34,7 +34,7 @@ repositories {
 
 dependencies {
     api("net.dv8tion:JDA:6.1.0")
-    api("dev.arbjerg:lavaplayer:2.2.4")
+    api("dev.arbjerg:lavaplayer:2.2.6")
     api("dev.lavalink.youtube:v2:2f7a4d4bcb7fac0ff21c6fe19469ced558df33ad-SNAPSHOT")
     api("pw.chew:jda-chewtils:2.1-SNAPSHOT")
     api("ch.qos.logback:logback-classic:1.5.18")
